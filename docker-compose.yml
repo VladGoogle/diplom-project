@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file: '.env'
+    networks:
+      - appnet
+    depends_on:
+      - database
+    ports:
+      - '3001:3001'
+    command: yarn run start:dev
+
+  test-server:
+    container_name: test-server
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file: '.env.test'
+    networks:
+      - test-appnet
+    depends_on:
+      - test-database
+    ports:
+      - '3000:3000'
+    command: yarn run start:test
+
+  database:
+    container_name: database
+    image: postgres:15
+    restart: always
+    networks:
+      - appnet
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_val:/var/lib/postgresql/data
+    env_file: '.env'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  test-database:
+    container_name: test-database
+    image: postgres:15
+    restart: always
+    networks:
+      - test-appnet
+    ports:
+      - '5435:5435'
+    env_file: '.env.test'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+networks:
+  appnet:
+  test-appnet:
+
+volumes:
+  db_val:
+    driver: local
