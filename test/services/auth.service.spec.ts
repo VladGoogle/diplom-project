@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
-import { AuthService } from '../../src/services/auth.service';
-import { PrismaService } from '../../src/services/prisma.service';
-import { AppModule } from '../../src/app.module';
-import { UserDto } from '../../src/dtos/user.dto';
-import { Role } from '../../src/enums/role.enum';
+import { AuthService } from '../../backend/src/services/auth.service';
+import { PrismaService } from '../../backend/src/services/prisma.service';
+import { AppModule } from '../../backend/src/app.module';
+import { UserDto } from '../../backend/src/dtos/user.dto';
+import { Role } from '../../backend/src/enums/role.enum';
 
 describe('The AuthenticationService', () => {
   let prisma: PrismaService;

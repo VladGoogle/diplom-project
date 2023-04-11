@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src", "prisma", "test"],
+  "include": [
+    "backend/src", "prisma", "test"],
   "exclude": ["node_modules"]
 }

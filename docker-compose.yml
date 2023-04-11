@@ -70,3 +70,5 @@ networks:
 volumes:
   db_val:
     driver: local
+  app:
+    driver: local
