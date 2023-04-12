@@ -1,0 +1,31 @@
+import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
+import { PasswordService } from '../services/password.service';
+
+@Controller('password')
+export class PasswordController {
+  constructor(private passwordService: PasswordService) {}
+
+  @Post('forgot')
+  async forgotPassword(@Body('email') email: string) {
+    await this.passwordService.createPasswordResetToken(email);
+    return { message: 'Password reset email sent' };
+  }
+
+  @Get('reset/:token')
+  async getPasswordResetToken(@Param('token') token: string) {
+    return { token };
+  }
+
+  @Patch('reset/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body('password') password: string,
+  ) {
+    await this.passwordService.resetPassword(token, password);
+    return { message: 'Password reset successful' };
+  }
+}
+
+// - `/password/forgot`: Sends a password reset email to the user's email address.
+// - `/password/reset/:token`: Displays a form for the user to enter their new password. The `:token` parameter is the password reset token.
+// - `/password/reset/:token` (with HTTP method `PATCH`): Resets the user's password using the provided `:token` and the new password from the request body.

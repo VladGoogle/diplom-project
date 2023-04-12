@@ -1,0 +1,275 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                 @id @default(autoincrement())
+  firstName          String?
+  lastName           String?
+  email              String?             @unique
+  password           String?
+  phone              String?
+  roles              Role[]              @default([CUSTOMER])
+  isBanned           Boolean?            @default(false)
+  customerToken      String?
+  passwordResetToken PasswordResetToken?
+  card               Card?
+  comments           Comment[]
+  wishlists          Wishlist?
+  cart               Cart?
+  orders             Order[]
+  address            Address?
+  payments           Payment[]
+  createdAt          DateTime?           @default(now())
+  updatedAt          DateTime?           @updatedAt
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Address {
+  id            Int       @id @default(autoincrement())
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int?      @unique
+  address_line1 String?
+  address_line2 String?
+  city          String?
+  postal_code   String?
+  country       String?
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Card {
+  id         Int              @id @default(autoincrement())
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int              @unique
+  number     String
+  expMonth   Int
+  expYear    Int
+  cvc        Int
+  currency   ChargeCurrency[]
+  cardToken  String?
+  cardSource String?
+  payments   Payment[]
+  createdAt  DateTime?        @default(now())
+  updatedAt  DateTime?        @updatedAt
+}
+
+model Category {
+  id             Int           @id @default(autoincrement())
+  name           String?       @unique
+  categoryIcon   CategoryIcon? @relation(fields: [categoryIconId], references: [id], onDelete: Cascade)
+  categoryIconId Int?          @unique
+  subcategories  Subcategory[]
+  products       Product[]
+  createdAt      DateTime?     @default(now())
+  updatedAt      DateTime?     @updatedAt
+}
+
+model CategoryIcon {
+  id        Int       @id @default(autoincrement())
+  url       String?
+  key       String?
+  category  Category?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Subcategory {
+  id                Int             @id @default(autoincrement())
+  name              String          @unique
+  subcategoryIcon   SubcategoryIcon @relation(fields: [subcategoryIconId], references: [id], onDelete: Cascade)
+  subcategoryIconId Int             @unique
+  category          Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId        Int
+  products          Product[]
+  createdAt         DateTime?       @default(now())
+  updatedAt         DateTime?       @updatedAt
+}
+
+model SubcategoryIcon {
+  id          Int          @id @default(autoincrement())
+  url         String?
+  key         String?
+  subcategory Subcategory?
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+}
+
+model ProductImage {
+  id        Int       @id @default(autoincrement())
+  url       String?
+  key       String?
+  product   Product?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int?
+  rate      Rate[]
+  text      String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Discount {
+  id               Int       @id @default(autoincrement())
+  name             String?   @unique
+  description      String?
+  discount_percent Int?
+  isActive         Boolean?
+  products         Product[]
+  createdAt        DateTime? @default(now())
+  updatedAt        DateTime? @updatedAt
+}
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  name           String?        @unique
+  price          Float?
+  productImage   ProductImage?  @relation(fields: [productImageId], references: [id], onDelete: Cascade)
+  productImageId Int?           @unique
+  description    String?
+  subcategory    Subcategory?   @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  subcategoryId  Int?
+  category       Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId     Int?
+  qtyInStock     Int?
+  discount       Discount?      @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  discountId     Int?
+  comments       Comment[]
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+  wishlistItems  WishlistItem[]
+  createdAt      DateTime?      @default(now())
+  updatedAt      DateTime?      @updatedAt
+}
+
+model Wishlist {
+  id            Int            @id @default(autoincrement())
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int            @unique
+  wishlistItems WishlistItem[]
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @updatedAt
+}
+
+model WishlistItem {
+  id         Int       @id @default(autoincrement())
+  wishlist   Wishlist  @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  wishlistId Int
+  product    Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int        @unique
+  cartItems  CartItem[]
+  totalPrice Float?     @default(0.00)
+  createdAt  DateTime?  @default(now())
+  updatedAt  DateTime?  @updatedAt
+}
+
+model CartItem {
+  id            Int       @id @default(autoincrement())
+  cart          Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId        Int
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     Int
+  quantity      Int
+  subTotalPrice Float     @default(0.00)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Order {
+  id          Int           @id @default(autoincrement())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  orderItems  OrderItem[]
+  amount      Float
+  payment     Payment?
+  orderStatus OrderStatus[] @default([RECEIVED])
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @updatedAt
+}
+
+model OrderItem {
+  id            Int       @id @default(autoincrement())
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId       Int
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     Int
+  quantity      Int
+  subTotalPrice Float     @default(0.00)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model Payment {
+  id           Int            @id @default(autoincrement())
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       Int
+  order        Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      Int            @unique
+  card         Card           @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId       Int
+  chargeStatus ChargeStatus[] @default([SUCCEEDED])
+  chargeToken  String?
+  refundToken  String?
+  createdAt    DateTime?      @default(now())
+  updatedAt    DateTime?      @updatedAt
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  NETWORK_ADMIN
+}
+
+enum ChargeStatus {
+  SUCCEEDED
+  REFUNDED
+}
+
+enum OrderStatus {
+  RECEIVED
+  RETURNED
+}
+
+enum ChargeCurrency {
+  USD
+  UAH
+}
+
+enum Rate {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
