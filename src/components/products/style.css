@@ -1,0 +1,24 @@
+.products {
+    background-color: #F9F9F9;
+}
+
+.products__title {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 77px;
+    color: #050630;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.products-card-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 90px;
+    align-items: center;
+    justify-content: center;
+}   
+
+
