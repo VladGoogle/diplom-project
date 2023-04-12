@@ -1,69 +1,69 @@
 .carousel__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .swiper-slide-1 {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .slide__text {
-    position: absolute;
-    text-align: center;
+  position: absolute;
+  text-align: center;
 }
 
 .carousel {
-    position: relative;
+  position: relative;
 }
 
 .carousel-title {
-    font-family: 'Sedan SC';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 64px;
-    line-height: 90px;
-    color: #FDFDFD;
-    margin-top: 75px;
-    margin-bottom: 58px;
-    white-space: pre-line;
+  font-family: 'Sedan SC';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 90px;
+  color: #fdfdfd;
+  margin-top: 75px;
+  margin-bottom: 58px;
+  white-space: pre-line;
 }
 
 .carousel-button {
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 25px;
-    line-height: 30px;
-    color: #FDFDFD;
-    padding: 23px 50px;
-    background-color: transparent;
-    border: 4px solid #FDEB46;
-    border-radius: 5px;
-    cursor: pointer;
-    pointer-events: auto;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 30px;
+  color: #fdfdfd;
+  padding: 23px 50px;
+  background-color: transparent;
+  border: 4px solid #fdeb46;
+  border-radius: 5px;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .carousel-button:hover {
-    background-color: #FDEB46;
-    color: #050630;
+  background-color: #fdeb46;
+  color: #050630;
 }
 
 .swiper-button-prev-1 {
-    padding-left: 80px;
-    color: #FDFDFD !important;
+  padding-left: 80px;
+  color: #fdfdfd !important;
 }
 
 .swiper-button-next-1 {
-    padding-right: 80px;
-    color: #FDFDFD !important;
+  padding-right: 80px;
+  color: #fdfdfd !important;
 }
 
 .swiper-container-1 {
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    touch-action: pan-y;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  touch-action: pan-y;
 }

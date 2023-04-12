@@ -4,9 +4,11 @@
   "sourceRoot": "backend/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "assets": [{
-      "include": "**/*.pug",
-      "outDir": "dist/backend/src"
-    }]
+    "assets": [
+      {
+        "include": "**/*.pug",
+        "outDir": "dist/backend/src"
+      }
+    ]
   }
 }

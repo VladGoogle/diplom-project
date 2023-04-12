@@ -28,8 +28,6 @@ import * as path from 'path';
     MailerModule.forRoot({
       transport: {
         host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT),
-        secure: false, // upgrade later with STARTTLS
         auth: {
           user: process.env.SMTP_USERNAME,
           pass: process.env.SMTP_PASSWORD,

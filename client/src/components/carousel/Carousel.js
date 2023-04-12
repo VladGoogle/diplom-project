@@ -1,10 +1,16 @@
-import SwiperCore, { Navigation, Pagination, Autoplay, Mousewheel, Keyboard } from 'swiper';
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Autoplay,
+  Mousewheel,
+  Keyboard,
+} from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import carousel from "./../../img/Carousel_1.png";
-import "./style.css";
+import carousel from '../../img/Carousel_1.png';
+import './style.css';
 
 SwiperCore.use([Navigation, Pagination, Autoplay, Mousewheel, Keyboard]);
 
@@ -35,11 +41,11 @@ function Carousel() {
       <Swiper
         className="swiper-container swiper-container-1"
         navigation={{
-          nextEl: ".swiper-button-next-1",
-          prevEl: ".swiper-button-prev-1",
+          nextEl: '.swiper-button-next-1',
+          prevEl: '.swiper-button-prev-1',
         }}
         pagination={{
-          el: ".swiper-pagination",
+          el: '.swiper-pagination',
           clickable: true,
         }}
         autoplay={{ delay: 5000 }}
@@ -49,14 +55,14 @@ function Carousel() {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div className="swiper-slide swiper-slide-1">
-              <img src={slide.img} alt="carousel__image" className="carousel__image" />
+              <img
+                src={slide.img}
+                alt="carousel__image"
+                className="carousel__image"
+              />
               <div className="slide__text">
-                <h1 className="carousel-title">
-                  {slide.title}
-                </h1>
-                <button className="carousel-button">
-                  {slide.button}
-                </button>
+                <h1 className="carousel-title">{slide.title}</h1>
+                <button className="carousel-button">{slide.button}</button>
               </div>
             </div>
           </SwiperSlide>

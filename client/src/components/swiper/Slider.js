@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import "./style.css"
-import product1_big from "./../../img/product1-big.png";
-import product2_big from "./../../img/product2-big.png";
-import product1_small from "./../../img/product1-small.png";
-import product2_small from "./../../img/product2-small.png";
+import './style.css';
+import product1_big from '../../img/product1-big.png';
+import product2_big from '../../img/product2-big.png';
+import product1_small from '../../img/product1-small.png';
+import product2_small from '../../img/product2-small.png';
 
-import { ReactComponent as PrevIcon } from "./../../img/Arrow_prev.svg";
-import { ReactComponent as NextIcon } from "./../../img/Arrow-next.svg";
-
+import { ReactComponent as PrevIcon } from '../../img/Arrow_prev.svg';
+import { ReactComponent as NextIcon } from '../../img/Arrow-next.svg';
 
 const products = [
   { id: 1, imgBig: product1_big, imgSmall: product1_small },
@@ -25,18 +24,22 @@ const Slider = () => {
 
   const onThumbnailClick = (index) => {
     setCurrentSlide(index);
-  }
+  };
 
   const onPrevClick = () => {
-    setCurrentSlide(currentSlide === 0 ? products.length - 1 : currentSlide - 1);
-  }
+    setCurrentSlide(
+      currentSlide === 0 ? products.length - 1 : currentSlide - 1,
+    );
+  };
 
   const onNextClick = () => {
-    setCurrentSlide(currentSlide === products.length - 1 ? 0 : currentSlide + 1);
-  }
+    setCurrentSlide(
+      currentSlide === products.length - 1 ? 0 : currentSlide + 1,
+    );
+  };
 
   return (
-    <div className='slider-container'>
+    <div className="slider-container">
       <div className="slider">
         <img src={products[currentSlide].imgBig} alt="Product" />
         <div className="slider-controls">
@@ -58,9 +61,9 @@ const Slider = () => {
             />
           ))}
         </div>
-        </div>
       </div>
-      );
+    </div>
+  );
 };
 
-      export default Slider;
+export default Slider;
