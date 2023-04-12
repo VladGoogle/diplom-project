@@ -19,6 +19,6 @@
     "noFallthroughCasesInSwitch": false
   },
   "include": [
-    "backend/src", "prisma", "test"],
+    "backend/src", "prisma", "test", "client/src"],
   "exclude": ["node_modules"]
 }
