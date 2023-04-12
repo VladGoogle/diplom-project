@@ -1,0 +1,145 @@
+.popup-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    
+}
+
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    background-color: #FDFDFD;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 44px 60px;
+    border-radius: 5px;
+}   
+
+.sign__up-form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.popup__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.popup__bottom {
+    display: flex;
+    width: 100%;
+}
+
+.sign__up-name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input__field-sign_up {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    color: #050630;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    padding: 18px 0 18px 20px;
+    margin-bottom: 20px;
+}
+
+.input__field-sign_up--small {
+    width: 275px;
+}
+
+.close-popup {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.sign__up-button {
+    background-color: #FDEB46;
+    border-radius: 5px;
+    padding: 28px 0;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.sign__up-login-link {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.sign__up-login-link_medium{
+    font-weight: 500;
+    color: #1C7FF3;
+    cursor: pointer;
+}
+
+.sign__up-social_logins {
+    display: flex;
+    justify-content: space-between; 
+    flex-direction: row;
+}
+
+.google__login-button, .facebook__login-button {
+    border: none;
+    background-color: #FDFDFD;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.25);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23px;
+    font-family: 'Roboto';
+}
+
+.google__login-button {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 28px 37px 28px 12px;
+    margin-right: 15px;
+}
+
+.facebook__login-button {
+    color: #1877F2;
+    padding: 28px 18px 28px 8px;
+    margin-left: 15px;
+}
+
+.google__login-button-icon, .facebook__login-button-icon {
+    margin-right: 22px;
+}
+
+.sign__up-text {
+    display: flex;
+    justify-content: space-between;
+}
