@@ -1,8 +1,6 @@
 import './styles/style.css';
 import './styles/reset.css';
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 import Footer from './components/footer/Footer.js';
 import Home from './pages/Home';
 import Product from './pages/Product.js';
