@@ -8,7 +8,7 @@ import {
   MinLength,
   MaxLength,
   IsStrongPassword,
-  minLength,
+  minLength, IsOptional,
 } from 'class-validator';
 import { Role } from '../enums/role.enum';
 
@@ -43,8 +43,10 @@ export class UserDto {
   @IsNotEmpty()
   password: string;
 
+  @IsOptional()
   @IsMobilePhone('uk-UA')
   phone: string;
 
+  @IsOptional()
   roles: Role;
 }

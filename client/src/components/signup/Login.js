@@ -10,17 +10,14 @@ const Login = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        'https://64359a0683a30bc9ad654654.mockapi.io/login',
-        {
-          email,
-          password,
-        },
-      );
-      const { token } = response.data;
+      const response = await axios.post('http://localhost/3001/login', {
+        email,
+        password,
+      });
+      const body = response.data;
       // сохраняем токен в локальном хранилище
-      localStorage.setItem('authToken', token);
-      console.log(token);
+      localStorage.setItem('authToken', body.access_token);
+      console.log(body.access_token);
     } catch (error) {
       console.log(error);
     }

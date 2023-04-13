@@ -13,12 +13,17 @@ const Registration = (props) => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        'https://64359a0683a30bc9ad654654.mockapi.io/registration',
+        'http://127.0.0.1:3001/signup',
         {
           firstName,
           lastName,
           email,
           password,
+        },
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
         },
       );
       console.log(response.data);
