@@ -15,11 +15,10 @@
     "format": "prettier --write \\\"backend/src/**/*.ts\\\" \\\"test/**/*.ts\\\" \\\"client/**/**/*.js\\\"",
     "start": "nest start",
     "start:test": "yarn run migration:dev && nest start --watch",
-
     "start:dev": "nest start --watch",
     "start:server:dev": "yarn migration:dev && nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main.js",
     "migration:dev": "yarn prisma migrate dev",
     "migration:reset": "yarn prisma migrate reset --force",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

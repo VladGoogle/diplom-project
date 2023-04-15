@@ -9,7 +9,7 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./prisma/
 
-RUN yarn install --production=false
+RUN yarn install --only=production
 
 COPY . .
 
@@ -29,7 +29,7 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./prisma/
 
-COPY --from=development /app/ .
+COPY --from=development /app/dist ./dist
 
 EXPOSE 3001
 
