@@ -14,7 +14,7 @@ const Login = (props) => {
         email,
         password,
       });
-      const body = response.data;
+      const { token } = response.data;
       // сохраняем токен в локальном хранилище
       localStorage.setItem('authToken', body.access_token);
       console.log(body.access_token);
