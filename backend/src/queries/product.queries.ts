@@ -119,7 +119,7 @@ export class ProductQueries {
 
   async findProductByName(name: string) {
     try {
-      const product = await this.prisma.product.findUniqueOrThrow({
+      return await this.prisma.product.findUniqueOrThrow({
         where: { name: name },
         include: {
           productImage: true,

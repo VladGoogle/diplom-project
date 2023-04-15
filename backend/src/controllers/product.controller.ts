@@ -23,20 +23,29 @@ import { Role } from '../enums/role.enum';
 import { Roles } from '../decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
 import { Prisma } from '@prisma/client';
+import { PrismaService } from '../services/prisma.service';
+import { ProductQueries } from '../queries/product.queries';
+import { ProductImageQueries } from '../queries/productImage.queries';
 
 @Controller()
-export class ProductController {
-  constructor(private productService: ProductService) {}
+export class ProductController extends ProductService {
+  constructor(
+    prisma: PrismaService,
+    productQueries: ProductQueries,
+    productImageQueries: ProductImageQueries,
+  ) {
+    super(prisma, productQueries, productImageQueries);
+  }
 
   @Get('search')
   async getAllProductsBySearchQuery(
     @Query() search: SearchInterface,
     @Query('sortBy') sortBy: 'name' | 'price' = 'name',
-    @Query('skip') skip: number = 0,
-    @Query('take') take: number = 10,
+    @Query('skip') skip = 0,
+    @Query('take') take = 10,
     @Query('sortOrder') sortOrder: Prisma.SortOrder = 'asc',
   ) {
-    return await this.productService.findAllProductsBySearchQuery(
+    return await super.findAllProductsBySearchQuery(
       search.searchQuery,
       sortBy,
       sortOrder,
@@ -47,14 +56,14 @@ export class ProductController {
 
   @Get('product/findByName')
   async getProductByName(@Body() name: string) {
-    return await this.productService.findProductByName(name);
+    return await super.findProductByName(name);
   }
   @UseGuards(RolesGuard)
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard)
   @Delete('product/deleteByName')
   async deleteProductByName(@Body() name: string) {
-    return await this.productService.removeProductByName(name);
+    return await super.removeProductByName(name);
   }
 
   @Get('category/:id/products')
@@ -65,7 +74,7 @@ export class ProductController {
     @Query('skip') skip: any = 0,
     @Query('take') take: any = 10,
   ) {
-    return await this.productService.findAllProductsByCategoryId(
+    return await super.findAllProductsByCategoryId(
       id,
       sortBy,
       sortOrder,
@@ -82,7 +91,7 @@ export class ProductController {
     @Query('skip') skip: any = 0,
     @Query('take') take: any = 10,
   ) {
-    return await this.productService.findAllProductsBySubcategoryId(
+    return await super.findAllProductsBySubcategoryId(
       id,
       sortBy,
       sortOrder,
@@ -96,12 +105,8 @@ export class ProductController {
   @UseGuards(JwtAuthGuard)
   @Post('products')
   @UseInterceptors(FileInterceptor('file'))
-  async createCategory(
-    @UploadedFile() file,
-    @Req() req,
-    @Body() data: ProductDto,
-  ) {
-    return await this.productService.createProduct(
+  async addProduct(@UploadedFile() file, @Req() req, @Body() data: ProductDto) {
+    return await super.createProduct(
       {
         ...data,
         categoryId: parseInt(data.categoryId.toString()),
@@ -121,7 +126,7 @@ export class ProductController {
     @Query('skip') skip: any = 0,
     @Query('take') take: any = 10,
   ) {
-    return await this.productService.getSortedProducts(
+    return await super.getSortedProducts(
       sortBy,
       sortOrder,
       parseInt(skip),
@@ -131,7 +136,7 @@ export class ProductController {
 
   @Get('product/:id')
   async getProductById(@Param('id', ParseIntPipe) id: number) {
-    return await this.productService.findProductById(id);
+    return await super.findProductById(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -141,13 +146,13 @@ export class ProductController {
     @Body() data: UpdateProductDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.productService.updateProductInfo(data, id);
+    return await super.updateProductInfo(data, id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @Delete('product/:id')
   async deleteProductById(@Param('id', ParseIntPipe) id: number) {
-    return await this.productService.removeProductById(id);
+    return await super.removeProductById(id);
   }
 }

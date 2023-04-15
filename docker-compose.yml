@@ -21,9 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile_server
       target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+    command: yarn run start:server:dev
     env_file: '.env'
     networks:
       - appnet
@@ -31,7 +29,6 @@ services:
       - database
     ports:
       - '3001:3001'
-    command: yarn run start:server:dev
 
   test-server:
     container_name: test-server

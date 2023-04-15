@@ -1,29 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
-import { Category, Prisma, Product } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import { ProductQueries } from '../queries/product.queries';
 import { ProductDto } from '../dtos/product.dto';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
-import { ProductImageService } from './productImage.service';
-import { number } from 'joi';
+import { UploadProductImageService } from '../classes/uploadImage.class';
+import { ProductImageQueries } from '../queries/productImage.queries';
+import {PrismaService} from "./prisma.service";
 
 @Injectable()
-export class ProductService {
+export class ProductService extends UploadProductImageService {
   constructor(
-    private prisma: PrismaService,
+      private prisma: PrismaService,
     private productQueries: ProductQueries,
-    private productImageService: ProductImageService,
-  ) {}
+    productImageQueries: ProductImageQueries,
+  ) {
+    super(productImageQueries);
+  }
 
   async createProduct(
     data: ProductDto,
     dataBuffer: Buffer,
     filename: string,
   ): Promise<Product> {
-    const image = await this.productImageService.uploadProductImage(
-      dataBuffer,
-      filename,
-    );
+    const image = await super.uploadProductImage(dataBuffer, filename);
     return await this.productQueries.createProduct({
       ...data,
       productImageId: image.id,

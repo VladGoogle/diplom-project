@@ -1,5 +1,5 @@
 
-FROM node:19 As Development
+FROM node:19-alpine As Development
 
 ENV NODE_ENV=development
 
@@ -8,8 +8,6 @@ WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./prisma/
-COPY tsconfig.build.json ./
-COPY tsconfig.json ./
 
 RUN yarn install --production=false
 
@@ -18,3 +16,21 @@ COPY . .
 EXPOSE 3001
 
 RUN yarn build:server;
+
+
+FROM node:19-alpine As Production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /app
+
+COPY package.json ./
+COPY yarn.lock ./
+COPY prisma ./prisma/
+
+COPY --from=development /app/ .
+
+EXPOSE 3001
+
+CMD [ "yarn", "start:prod" ]

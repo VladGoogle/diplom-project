@@ -8,7 +8,8 @@ import {
   MinLength,
   MaxLength,
   IsStrongPassword,
-  minLength, IsOptional,
+  minLength,
+  IsOptional,
 } from 'class-validator';
 import { Role } from '../enums/role.enum';
 
