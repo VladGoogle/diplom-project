@@ -3,9 +3,9 @@ FROM node:19-alpine As Development
 
 ENV NODE_ENV=development
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package*.json ./
 COPY yarn.lock ./
 COPY prisma ./prisma/
 
@@ -15,7 +15,7 @@ COPY . .
 
 EXPOSE 3001
 
-RUN yarn build:server;
+RUN yarn build:server
 
 
 FROM node:19-alpine As Production
@@ -23,13 +23,13 @@ FROM node:19-alpine As Production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./prisma/
 
-COPY --from=development /app/dist ./dist
+COPY --from=development /usr/src/app/dist ./dist
 
 EXPOSE 3001
 

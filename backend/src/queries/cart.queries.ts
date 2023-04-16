@@ -3,6 +3,7 @@ import { PrismaService } from '../services/prisma.service';
 import { CartItemDto } from '../dtos/cartItem.dto';
 import { ProductService } from '../services/product.service';
 import { Prisma } from '@prisma/client';
+import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
 
 @Injectable()
 export class CartQueries {
@@ -120,6 +121,24 @@ export class CartQueries {
     }
   }
 
+  async getCartItemById(id: number) {
+    try {
+      return await this.prisma.cartItem.findUniqueOrThrow({
+        where: { id: id },
+        include: {
+          product: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Cart item doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
   async deleteCartById(id: number) {
     try {
       const cart = await this.prisma.cart.delete({
@@ -140,21 +159,78 @@ export class CartQueries {
 
   async removeCartItemFromCart(cartId: number, cartItemId: number) {
     try {
-      const cartItem = await this.prisma.cartItem.findFirstOrThrow({
-        where: { id: cartItemId },
-      });
-      const cart = await this.prisma.cart.findFirstOrThrow({
-        where: { id: cartId },
-      });
-      await this.prisma.cartItem.delete({
+      const cartItem = await this.prisma.cartItem.delete({
         where: { id: cartItemId },
       });
       return await this.prisma.cart.update({
         where: { id: cartId },
         data: {
-          totalPrice: (cart.totalPrice -= cartItem.subTotalPrice),
+          totalPrice: {
+            decrement: cartItem.subTotalPrice,
+          },
         },
       });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Item doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async updateCartTotalPrice(id: number) {
+    try {
+      const currentTotalPrice = await this.getCartById(id)
+        .then((data) => {
+          return data.cartItems;
+        })
+        .then((arr) => {
+          return arr.map((item) => {
+            return item.subTotalPrice;
+          });
+        })
+        .then((arr) => {
+          return arr.reduce((previous, current) => {
+            return previous + current;
+          });
+        });
+
+      return await this.prisma.cart.update({
+        where: { id: id },
+        data: {
+          totalPrice: currentTotalPrice,
+        },
+        include: {
+          cartItems: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Cart doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async updateCartItemQuantity(data: UpdateCartItemQuantityDto) {
+    try {
+      const productPrice = await this.getCartItemById(data.cartItemId).then(
+        (data) => {
+          return data.product.price;
+        },
+      );
+      await this.prisma.cartItem.update({
+        where: { id: data.cartItemId },
+        data: {
+          quantity: data.quantity,
+          subTotalPrice: productPrice * data.quantity,
+        },
+      });
+      return await this.updateCartTotalPrice(data.cartId);
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2025') {

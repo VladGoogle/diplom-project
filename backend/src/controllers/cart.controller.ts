@@ -19,18 +19,18 @@ import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
 export class CartController {
   constructor(private cartService: CartService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('carts')
-  async addProductToCart(@Body() data: CartItemDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.cartService.addProductToCart(
-      {
-        ...data,
-      },
-      token,
-    );
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Post('carts')
+  // async addProductToCart(@Body() data: CartItemDto, @Headers() headers: any) {
+  //   const authHeader = headers.authorization;
+  //   const token = authHeader.split(' ')[1];
+  //   return await this.cartService.addProductToCart(
+  //     {
+  //       ...data,
+  //     },
+  //     token,
+  //   );
+  // }
 
   @Get('cart/:id')
   async getCartById(@Param('id', ParseIntPipe) id: number) {
