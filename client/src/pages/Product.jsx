@@ -1,5 +1,4 @@
 import Counter from '../components/counter/Counter';
-import Card from '../components/card/Card';
 import ProductsSlider from '../components/swiper/Slider';
 import card_image from '../img/card_image.png';
 

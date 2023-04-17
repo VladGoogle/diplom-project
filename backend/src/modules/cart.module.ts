@@ -12,6 +12,7 @@ import { ProductQueries } from '../queries/product.queries';
 import { ProductImageService } from '../services/productImage.service';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import StripeService from '../services/stripe.service';
+import { CartGateway } from '../gateways/cart.gateway';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import StripeService from '../services/stripe.service';
     ProductImageService,
     ProductImageQueries,
     StripeService,
+    CartGateway,
   ],
   exports: [CartService],
   controllers: [CartController],

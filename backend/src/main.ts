@@ -6,6 +6,7 @@ import { PrismaService } from './services/prisma.service';
 import { config } from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
 dotenv.config();
+declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,10 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }));
   await app.listen(process.env.SERVER_PORT);
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
   console.log(`Server is listening on port ${process.env.SERVER_PORT}`);
 }
 bootstrap();

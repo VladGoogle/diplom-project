@@ -1,31 +1,62 @@
 import './style.css';
-import axios from 'axios';
 import React from 'react';
-import { useState } from 'react';
+import { instance } from '../../utils/axios/instance'
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../features/userSlice';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  email: yup.string().email().required('Email is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/,
+      'Must contain at least one uppercase, one lowercase, one digit and one special character'
+    ),
+});
 
 const Login = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user.user);   
+
+  const onSubmit = async (data) => {
     try {
-      const response = await axios.post('http://localhost/3001/login', {
-        email,
-        password,
-      });
-      const { token } = response.data;
-      // сохраняем токен в локальном хранилище
-      localStorage.setItem('authToken', body.access_token);
-      console.log(body.access_token);
+      await schema.validate(data);
+      const response = await instance.post(
+        '/login',
+        data,
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+        },
+      );
+      console.log(response.data);
+      localStorage.setItem('access_token', response.data.token);
+      dispatch(login({
+        email: data.email,
+        password: data.password,
+        loggedIn: true
+      }));
     } catch (error) {
       console.log(error);
     }
   };
 
+  if (user) {
+    return null
+  }
+
   return (
     <div className="popup-bg">
-      <div className="popup">
+      <div className="popup popup-signup">
         <div className="popup__top">
           <svg
             className="close-popup"
@@ -60,27 +91,29 @@ const Login = (props) => {
               fill="#050630"
             />
           </svg>
-          <form className="sign__up-form" onSubmit={handleSubmit}>
+          <form className="sign__up-form" onSubmit={handleSubmit(onSubmit)}>
+            <div className="input__field-inner">
             <input
-              value={email}
               className="input__field-sign_up"
               type="email"
               id="email"
               name="Email"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...register('email')}
             />
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
+            </div>
+            <div className="input__field-inner">
             <input
-              value={password}
               className="input__field-sign_up"
               type="password"
               id="password"
               name="Password"
               placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...register('password')}
             />
+            {errors.password && <p className="error-message">{errors.password.message}</p>}
+            </div>
             <button type="submit" className="sign__up-button">
               SIGN IN
             </button>

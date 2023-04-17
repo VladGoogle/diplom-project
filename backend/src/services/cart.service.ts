@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { UpdateCommentDto } from '../dtos/updateComment.dto';
 import { CartQueries } from '../queries/cart.queries';
 import { CartItemDto } from '../dtos/cartItem.dto';
+import {UpdateCartItemQuantityDto} from "../dtos/updateCartItemQuantity.dto";
 
 @Injectable()
 export class CartService {
@@ -35,6 +36,10 @@ export class CartService {
 
   async getCartById(id: number) {
     return await this.cartQueries.getCartById(id);
+  }
+
+  async updateCartItemQuantity(data: UpdateCartItemQuantityDto) {
+    return await this.cartQueries.updateCartItemQuantity(data);
   }
 
   async removeCartItemFromCart(cartId: number, cartItemId: number) {
