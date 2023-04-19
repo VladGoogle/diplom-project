@@ -25,11 +25,6 @@ export class UserQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new BadRequestException(`User with such email already exists`);
-        }
-      }
       throw e;
     }
   }

@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -12,6 +11,7 @@ import { LoginDto } from '../dtos/auth.dto';
 import { PayloadInterface } from '../interfaces/payload.interface';
 import { PrismaService } from './prisma.service';
 import StripeService from './stripe.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -54,8 +54,13 @@ export class AuthService {
         },
       });
       return createdUser;
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new BadRequestException(`User with such email already exists`);
+        }
+      }
+      throw e;
     }
   }
 
