@@ -64,6 +64,14 @@ export class UserController {
   async getUserByEmail(@Body() data: EmailDto) {
     return await this.userService.findUserByEmail(data.email);
   }
+
+  @Get('user/getByToken')
+  async getUserByToken(@Headers() headers: any) {
+    const authHeader = headers.authorization;
+    const token = authHeader.split(' ')[1];
+    return await this.userService.getUserByToken(token);
+  }
+
   @Delete('user/deleteByEmail')
   async deleteUserByEmail(@Body() data: EmailDto) {
     return await this.userService.removeUserByEmail(data.email);

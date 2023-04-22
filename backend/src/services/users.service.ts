@@ -38,6 +38,11 @@ export class UserService {
     return await this.userQueries.findUserByEmail(email);
   }
 
+  async getUserByToken(authHeader: string) {
+    const decodedJwt = this.jwtService.decode(authHeader) as PayloadInterface;
+    return await this.findUserByEmail(decodedJwt.email);
+  }
+
   async findAllUsers() {
     return await this.userQueries.findAllUsers();
   }
@@ -82,10 +87,7 @@ export class UserService {
   async updateAddress(data: UpdateAddressDto, authHeader: string) {
     const decodedJwt = this.jwtService.decode(authHeader) as PayloadInterface;
     const user = await this.findUserByEmail(decodedJwt.email);
-    const address = await this.userQueries.updateAddress(
-      data,
-      user.address[0].id,
-    );
+    const address = await this.userQueries.updateAddress(data, user.address.id);
     await this.stripe.customers.update(user.customerToken, {
       address: {
         ...data,
