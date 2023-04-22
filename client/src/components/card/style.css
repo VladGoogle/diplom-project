@@ -11,10 +11,6 @@
   cursor: pointer;
 }
 
-.products-card__status {
-  margin-left: 20px;
-}
-
 .products__card-bottom {
   text-align: center;
 }
@@ -96,6 +92,7 @@
   background-color: rgba(228, 40, 40, 0.7);
   border-radius: 10px;
   padding: 4px 5px;
+  margin-left: 20px;
 }
 
 .product__button {

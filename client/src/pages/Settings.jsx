@@ -1,9 +1,11 @@
+import SettingsTabs from "../components/settingsTab/SettingsTabs";
+
 const Settings = () => {
-    return ( 
+    return (
         <div>
-            <h1>Settings</h1>
-      </div>
-     );
+            <SettingsTabs/>
+        </div>
+    );
 }
- 
+
 export default Settings;

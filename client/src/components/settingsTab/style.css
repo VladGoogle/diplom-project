@@ -1,0 +1,65 @@
+.settings {
+    height: 100vh;
+    display: flex;
+}
+
+.settings__list {
+    border-right: 1px solid #D9D9D9;
+    width: 417px;
+    padding-right: 17px;
+    padding-top: 25px;
+}
+
+.settings__item {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.settings__title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.settings__icon {
+    padding: 18px 32px;
+}
+
+.settings__profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.profile__name {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    padding-bottom: 10px;
+}
+
+.profile__email {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #1C7FF3;
+    padding-top: 10px;
+}
+
+.settings__item.active, .settings__item:hover  {
+    background: rgba(253, 235, 70, 0.5);
+}
+
+.logout__title {
+    color: rgba(237, 45, 45, 0.7);
+}
+
+
+
+
