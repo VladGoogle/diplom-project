@@ -198,7 +198,7 @@ function Navbar(props) {
               <a className="header__button-language eng-language">ENG</a>
             </div>
             <nav className="header__bottom-links">
-              <div className="header__buttom-items-list">
+
                 <ul className="header__bottom-icons">
                   <li className="header__bottom-item">
                     <a href="#" className="header__bottom-icon">
@@ -218,15 +218,15 @@ function Navbar(props) {
                     </a>
                   </li>
                   <li
-                    className="header__bottom-icons header__account"
+                    className="header__bottom-item header__account"
                   >
                     {user ? (
                       <NavLink to="/settings" className="header__bottom-icon">
-                        {<a href="#" className="header__bottom-icon open-popup">
-                          <svg alt="account" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {
+                          <svg className="header__bottom-icon open-popup" alt="account" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M18 6C19.5913 6 21.1174 6.63214 22.2426 7.75736C23.3679 8.88258 24 10.4087 24 12C24 13.5913 23.3679 15.1174 22.2426 16.2426C21.1174 17.3679 19.5913 18 18 18C16.4087 18 14.8826 17.3679 13.7574 16.2426C12.6321 15.1174 12 13.5913 12 12C12 10.4087 12.6321 8.88258 13.7574 7.75736C14.8826 6.63214 16.4087 6 18 6ZM18 21C24.63 21 30 23.685 30 27V30H6V27C6 23.685 11.37 21 18 21Z" stroke="#1C7FF3" stroke-width="2" />
                           </svg>
-                        </a>}
+                        }
                       </NavLink>
                     ) : (
                       <>
@@ -249,8 +249,8 @@ function Navbar(props) {
                       </>
                     )}
                   </li>
-                  <li className="header__bottom-icons-item">
-                    <a href="#" className="header__bottom-icon">
+                  <li className="header__bottom-item">
+                    <NavLink to="/cart" className="header__bottom-icon">
                       <svg
                         alt="cart"
                         width="36"
@@ -264,10 +264,9 @@ function Navbar(props) {
                           fill="#FDFDFD"
                         />
                       </svg>
-                    </a>
+                    </NavLink>
                   </li>
                 </ul>
-              </div>
             </nav>
           </div>
         </div>

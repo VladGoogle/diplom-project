@@ -1,5 +1,4 @@
 import "./style.css"
-import { useState } from "react"
 import { ordersProducts } from './../../../helpers/ordersList'
 import Order from "../../order/Order.jsx"
 

@@ -34,7 +34,7 @@ const Account = () => {
                             <form action="" className="account__content">
                                 <div className="account__tab-inputs">
                                     <input id="firstName" name="firstName" placeholder="First name" type="text" className="account__tab-input" />
-                                    <input id="firstName" name="firstName" placeholder="Last name" type="Last name" className="account__tab-input" />
+                                    <input id="firstName" name="firstName" placeholder="Last name" type="text" className="account__tab-input" />
                                 </div>
                                 <button className="account__submit-button">
                                     SAVE

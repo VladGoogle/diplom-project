@@ -41,6 +41,30 @@ const ordersProducts = [
         delivery: 'Nova Poshta',
         total: '299.99$'
     },
+    {
+        id: 4,
+        status: 'In progress',
+        title: 'iPhone 14 Pro',
+        img: orderImage,
+        orderStatusImg: statusImageInprogress,
+        quantity: '1',
+        price: '499.99$',
+        pickup: 'Oleksandrivskiy Prospekt 22',
+        delivery: 'Nova Poshta',
+        total: '299.99$'
+    },
+    {
+        id: 5,
+        status: 'In progress',
+        title: 'iPhone 14 Pro',
+        img: orderImage,
+        orderStatusImg: statusImageInprogress,
+        quantity: '1',
+        price: '499.99$',
+        pickup: 'Oleksandrivskiy Prospekt 22',
+        delivery: 'Nova Poshta',
+        total: '299.99$'
+    },
 ];
 
 

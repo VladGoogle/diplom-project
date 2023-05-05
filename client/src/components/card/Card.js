@@ -1,12 +1,21 @@
 import './style.css';
+import React from 'react'
 
 import { NavLink } from 'react-router-dom';
 
-const Card = ({ title, img, category, status, old_price, new_price }) => {
+
+function Card({ name, img, category, price, onAddToCart }) {
+
+  const [isAdded, setIsAdded] = React.useState(false);
+
+  const onClickPlus = () => {
+    setIsAdded(!isAdded);
+  }
+
   return (
     <li className="products__card" data-tab="included-with">
       <div className="products__card-top">
-        <span className="products-card__status">{status}</span>
+        <span className="products-card__status">Discount</span>
         <svg
           className="products__card-like"
           width="36"
@@ -24,17 +33,25 @@ const Card = ({ title, img, category, status, old_price, new_price }) => {
       <div className="product__card-content">
         <div className="card__image-container">
           <NavLink to="/product" className="card__image-link">
-            <img src={img} alt={title} className="products__card-image" />
+            <img src={img} alt={name} className="products__card-image" />
           </NavLink>
         </div>
         <div className="products__card-bottom">
           <span className="products__category-title">{category}</span>
-          <span className="product__title">{title}</span>
+          <span className="product__title">{name}</span>
           <div className="product__prices">
-            <span className="product__price-old">{old_price}</span>
-            <span className="product__price">{new_price}</span>
+            <span className="product__price-old">599.99$</span>
+            <span className="product__price">{price}$</span>
           </div>
-          <button className="product__button">Buy</button>
+          {!isAdded ?
+            (
+              <button className="product__button" onClick={onAddToCart}>Buy</button>
+            )
+            :
+            (
+              <button className="product__button" onClick={onAddToCart} style={{ backgroundColor: '#57DC19', color: "#FDFDFD"}}>Thank you!</button>
+            )
+          }
         </div>
       </div>
     </li>

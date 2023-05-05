@@ -1,7 +1,7 @@
 import './style.css'
 import { useState } from 'react';
 
-const Order = ({ id, status, title, img, orderStatusImg, quantity, price, pickup, delivery, total }) => {
+const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, delivery, total }) => {
 
   const [showContent, setShowContent] = useState(false);
 
@@ -15,7 +15,7 @@ const Order = ({ id, status, title, img, orderStatusImg, quantity, price, pickup
           <img src={orderStatusImg} alt="order status" className="orders__tab-status--image" />
           <div className="orders__tab-status--info">
             <span className="order__tab-status--id">
-              {id}
+              454534
             </span>
             <h3 className="orders__tab-status--title">
               {status}

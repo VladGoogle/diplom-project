@@ -91,6 +91,9 @@
     "yup": "^1.1.1",
     "zxcvbn": "^4.4.2"
   },
+  "overrides": {
+    "typescript" : "^5.0.2"
+  },
   "watch": {
     "start:client": {
       "patterns": [
@@ -134,7 +137,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.0.4",
+    "typescript": "^5.0.2",
     "webpack": "^5.79.0",
     "webpack-node-externals": "^3.0.0"
   },

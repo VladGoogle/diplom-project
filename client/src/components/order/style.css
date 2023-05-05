@@ -28,7 +28,7 @@
 .orders__tab-left {
     display: flex;
     flex-direction: row;
-    width: 115px;
+    width: 150px;
 }
 
 .orders__tab-status--info {

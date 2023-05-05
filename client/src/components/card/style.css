@@ -61,7 +61,7 @@
 }
 
 .product__prices {
-  display: block;
+  align-items: center;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 500;
@@ -69,16 +69,17 @@
   line-height: 30px;
   padding-top: 14px;
   padding-bottom: 5px;
+  gap: 12px;
 }
 
 .product__price {
   color: rgba(228, 40, 40, 0.7);
-  padding-left: 12px;
 }
 
 .product__price-old {
   color: #d9d9d9;
   text-decoration: line-through;
+  margin-right: 12px;
 }
 
 .products-card__status {

@@ -361,6 +361,10 @@ input::placeholder {
 
 .care_instructions-text {
   max-width: 655px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
 }
 
 .recommended {
@@ -390,4 +394,144 @@ input::placeholder {
 
 .tab-content.active {
   display: block;
+}
+
+.cart__header {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 78px;
+  margin-top: 80px;
+  margin-bottom: 44px;
+}
+
+.cart {
+  height: 100vh;
+  overflow: auto;
+}
+
+.settings__screen {
+  height: 100vh;
+  overflow: auto;
+}
+
+.cart__titles {
+  padding-bottom: 12px;
+  border-bottom: 2px solid #D9D9D9;
+  width: 81%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cart__quantity-title {
+  text-align: center;
+}
+
+.cart__subtotal-title {
+  text-align: right;
+}
+
+.cart__title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  color: #D9D9D9;
+  width: 170px;
+}
+
+.cart__titles-title {
+  margin-left: 207px;
+  width: 270px;
+  display: block;
+}
+
+.cart__titles-right {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 265px;
+}
+
+.cart__summary {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  width: 81%;
+  margin-top: 80px;
+  margin-bottom: 36px;
+  align-items: flex-  end;
+}
+
+.cart__summary-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 29px;
+  margin-right: 8px;
+}
+
+.cart__summary-price {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 44px;
+}
+
+.cart__summary-top {
+  padding: 18px 17px;
+}
+
+.cart__summary-bottom {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;  
+  color: #1C7FF3;
+  margin-right: 17px;
+}
+
+.delivery__title {
+  margin-right: 5px;
+}
+
+.cart__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 81%;
+}
+
+.cart__button-buy {
+  background: #FDEB46;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 27px 47px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.cart__button-continue {
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 27px 47px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 2px solid #FDEB46;
 }
