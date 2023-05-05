@@ -1,16 +1,16 @@
-import { logout } from "../../../features/userSlice";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import "./style.css"
-import { useDispatch } from "react-redux";
+import { TokenContext } from "../../../TokenContext";
+
 
 const Logout = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const handleLogout = (e) => {
-        e.preventDefault();
-        dispatch(logout());
-        navigate('/');
+    const { logout } = useContext(TokenContext);
+
+    const handleLogout = () => {
+        logout(); 
+        navigate('/'); 
     }
     
     return (
@@ -22,7 +22,7 @@ const Logout = () => {
                 <p className="logout__screen-text">
                     You'll have to re-enter your information to come back.
                 </p>
-                <button className="logout__button" onClick={(e) => handleLogout(e)}>
+                <button className="logout__button" onClick={handleLogout}>
                     LOG OUT
                 </button>
             </div>

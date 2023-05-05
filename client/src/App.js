@@ -15,12 +15,14 @@ import Viewed from './components/settingsTabs/Viewed/Viewed';
 import Logout from './components/settingsTabs/Logout/Logout';
 import Wishlist from './components/settingsTabs/Wishlist/Wishlist';
 import Cart from './pages/Cart';
+import TokenProvider from "./TokenContext"
 
 
 function App() {
 
   return (
     <div className="App">
+      <TokenProvider>
       <Router>
         <ScrollToTop />
         <Header />
@@ -40,6 +42,7 @@ function App() {
         </Routes>
         <Footer />
       </Router>
+      </TokenProvider>
     </div>
   );
 }

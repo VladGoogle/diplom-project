@@ -1,12 +1,12 @@
 import './style.css';
 import React from 'react';
 import { instance } from '../../utils/axios/instance'
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../features/userSlice';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { TokenContext } from '../../TokenContext';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   email: yup
@@ -28,18 +28,22 @@ const schema = yup.object().shape({
 });
 
 const Login = (props) => {
+  const navigate = useNavigate();
+  const { login } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPopup, setShowPopup] = useState(true);
+
   const { register, setError, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
+  const handleLogin = () => {
+    login(); 
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-
-  const dispatch = useDispatch();
-  const user = useSelector(state => state.user.user);   
 
   const onSubmit = async (data) => {
     try {
@@ -55,11 +59,9 @@ const Login = (props) => {
       );
       console.log(response.data);
       localStorage.setItem('access_token', response.data.token);
-      dispatch(login({
-        email: data.email,
-        password: data.password,
-        loggedIn: true
-      }));
+      login(response.data.token); 
+      setShowPopup(false);
+      navigate('/settings'); 
     } catch (error) {
       if (error.response) {
         if (error.response.status === 401) {
@@ -78,11 +80,11 @@ const Login = (props) => {
     }
   };
 
-  if (user) {
-    return null
-  }
 
+  
   return (
+<>
+{showPopup && (
     <div className="popup-bg">
       <div className="popup popup-signup">
         <div className="popup__top">
@@ -155,7 +157,7 @@ const Login = (props) => {
               </div>
               {errors.password && <p className="error-message">{errors.password.message}</p>}
             </div>
-            <button type="submit" className="sign__up-button">
+            <button onClick={handleLogin} type="submit" className="sign__up-button">
               SIGN IN
             </button>
             <div className="sign__up-text">
@@ -249,6 +251,8 @@ const Login = (props) => {
         </div>
       </div>
     </div>
+    )}
+    </>
   );
 };
 

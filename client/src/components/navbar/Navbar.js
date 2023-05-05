@@ -1,11 +1,18 @@
 import { NavLink } from 'react-router-dom';
 import './style.css';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/userSlice';
+import React, { useContext, useEffect, useState } from 'react';
+import { TokenContext } from './../../TokenContext';
+
+
 
 function Navbar(props) {
 
-  const user = useSelector(selectUser);
+  const { token } = useContext(TokenContext);
+  const [showSettingsButton, setShowSettingsButton] = useState(token !== '');
+
+  useEffect(() => {
+    setShowSettingsButton(token !== '');
+  }, [token]);
 
   return (
     <header className="header">
@@ -220,7 +227,7 @@ function Navbar(props) {
                   <li
                     className="header__bottom-item header__account"
                   >
-                    {user ? (
+                    {showSettingsButton ? (
                       <NavLink to="/settings" className="header__bottom-icon">
                         {
                           <svg className="header__bottom-icon open-popup" alt="account" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
