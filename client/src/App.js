@@ -14,6 +14,7 @@ import Wallet from './components/settingsTabs/Wallet/Wallet';
 import Viewed from './components/settingsTabs/Viewed/Viewed';
 import Logout from './components/settingsTabs/Logout/Logout';
 import Wishlist from './components/settingsTabs/Wishlist/Wishlist';
+import Cart from './pages/Cart';
 
 
 function App() {
@@ -22,21 +23,22 @@ function App() {
     <div className="App">
       <Router>
         <ScrollToTop />
-        <Header/>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
-          <Route path="/settings" element={<Settings/>}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/settings" element={<Settings />}>
             <Route path="account" element={<Account />} />
             <Route path="orders" element={<Orders />} />
             <Route path="wallet" element={<Wallet />} />
             <Route path="viewed" element={<Viewed />} />
-            <Route path="wishlist" element={<Wishlist/>} />
+            <Route path="wishlist" element={<Wishlist />} />
             <Route path="logout" element={<Logout />} />
           </Route>
-          <Route path="/successRegistration" element={<SuccessRegistration/>}/>
+          <Route path="/successRegistration" element={<SuccessRegistration />} />
         </Routes>
-        <Footer/>
+        <Footer />
       </Router>
     </div>
   );

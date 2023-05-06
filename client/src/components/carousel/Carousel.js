@@ -10,6 +10,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import carousel from '../../img/Carousel_1.png';
+import carousel2 from '../../img/carousel_2.png';
+
 import './style.css';
 
 SwiperCore.use([Navigation, Pagination, Autoplay, Mousewheel, Keyboard]);
@@ -19,19 +21,11 @@ const slides = [
     id: 1,
     img: carousel,
     title: 'The best technologies\nfor the best consumers',
-    button: 'View All',
   },
   {
     id: 2,
-    img: carousel,
-    title: 'The best technologies\nfor the best consumers',
-    button: 'View All',
-  },
-  {
-    id: 3,
-    img: carousel,
-    title: 'The best technologies\nfor the best consumers',
-    button: 'View All',
+    img: carousel2,
+    title: 'Cosmic discounts!\nUp to 75% off on refrigerators',
   },
 ];
 
@@ -62,7 +56,6 @@ function Carousel() {
               />
               <div className="slide__text">
                 <h1 className="carousel-title">{slide.title}</h1>
-                <button className="carousel-button">{slide.button}</button>
               </div>
             </div>
           </SwiperSlide>

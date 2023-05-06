@@ -2,7 +2,7 @@ import SettingsTabs from "../components/settingsTab/SettingsTabs";
 
 const Settings = () => {
     return (
-        <div>
+        <div className="settings__screen">
             <SettingsTabs/>
         </div>
     );

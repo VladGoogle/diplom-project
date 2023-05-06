@@ -69,25 +69,25 @@
 }
 
 .header__bottom-catalog {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 40px;
   color: #fdfdfd;
   display: flex;
   background-color: #282766;
   border-radius: 5px;
   padding: 10px 15px;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
   border: none;
+  margin-right: 44px;
 }
 
 .header__bottom-catalog span {
-  margin-left: 12px;
-  margin-right: 40px;
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 40px;
+  padding-left: 12px;
+  padding-right: 40px;
 }
 
 .header__search-box {
@@ -99,7 +99,7 @@
 }
 
 .header__search-field {
-  height: 60px;
+  width: 51%;
 }
 
 .header__search-input {
@@ -107,12 +107,11 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 24px;
-  padding: 18px 0 18px 14px;
-  width: 651px;
+  padding: 18px 14px 18px 14px;
+  width: 100%;
 }
 
 .search-field__button {
-  margin-left: 44px;
   padding-left: 20px;
   padding-right: 0;
   border-radius: 5px 0px 0px 5px;
@@ -121,6 +120,7 @@
 .clear-field__button {
   padding-right: 15px;
   padding-left: 15px;
+  cursor: pointer;
 }
 
 .search-field__button,
@@ -148,10 +148,11 @@
   line-height: 40px;
   padding: 0 32px;
   font-family: 'Montserrat';
+  cursor: pointer;
 }
 
 .header__bottom-languages {
-  padding-left: 44px;
+  margin-left: 44px;
   display: flex;
   align-items: center;
 }
@@ -171,10 +172,13 @@
 }
 
 .header__bottom-icons {
-  padding-left: 40px;
   display: flex;
   align-items: center;
   flex-direction: row;
+}
+
+.header__bottom-links {
+  margin-left: 40px;
 }
 
 .header__bottom-icon {
@@ -183,5 +187,5 @@
 }
 
 .header__account {
-  padding: 0 30px;
+  margin: 0 30px;
 }
