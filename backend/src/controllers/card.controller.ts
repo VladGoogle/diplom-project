@@ -13,6 +13,7 @@ import {
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CardService } from '../services/card.service';
 import { CardDto } from '../dtos/card.dto';
+import { getTokenFromHeaders } from '../utilities/getAuthToken.utility';
 
 @Controller()
 export class CardController {
@@ -21,8 +22,7 @@ export class CardController {
   @UseGuards(JwtAuthGuard)
   @Post('account/card')
   async addCard(@Body() data: CardDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
+    const token = getTokenFromHeaders(headers);
     return await this.cardService.addCard(
       {
         ...data,
@@ -34,8 +34,7 @@ export class CardController {
   @UseGuards(JwtAuthGuard)
   @Patch('account/card')
   async updateCardInfo(@Body() data: CardDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
+    const token = getTokenFromHeaders(headers);
     return await this.cardService.updateCardInfo(
       {
         ...data,
@@ -47,16 +46,14 @@ export class CardController {
   @UseGuards(JwtAuthGuard)
   @Get('account/card')
   async getCardByUserId(@Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
+    const token = getTokenFromHeaders(headers);
     return await this.cardService.getCardByUserId(token);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('account/card/:id')
   async deleteCartById(@Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
+    const token = getTokenFromHeaders(headers);
     return await this.cardService.deleteCardByUserId(token);
   }
 }

@@ -67,7 +67,14 @@ export class CartQueries {
         include: {
           cartItems: {
             include: {
-              product: true,
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
             },
           },
         },
@@ -94,7 +101,14 @@ export class CartQueries {
         include: {
           cartItems: {
             include: {
-              product: true,
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
             },
           },
         },
@@ -108,7 +122,18 @@ export class CartQueries {
       return await this.prisma.cart.findUniqueOrThrow({
         where: { id: id },
         include: {
-          cartItems: true,
+          cartItems: {
+            include: {
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (e) {
@@ -126,7 +151,14 @@ export class CartQueries {
       return await this.prisma.cartItem.findUniqueOrThrow({
         where: { id: id },
         include: {
-          product: true,
+          product: {
+            select: {
+              subcategory: true,
+              name: true,
+              price: true,
+              productImage: true,
+            },
+          },
         },
       });
     } catch (e) {
@@ -169,6 +201,20 @@ export class CartQueries {
             decrement: cartItem.subTotalPrice,
           },
         },
+        include: {
+          cartItems: {
+            include: {
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
+            },
+          },
+        },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -203,7 +249,18 @@ export class CartQueries {
           totalPrice: currentTotalPrice,
         },
         include: {
-          cartItems: true,
+          cartItems: {
+            include: {
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (e) {

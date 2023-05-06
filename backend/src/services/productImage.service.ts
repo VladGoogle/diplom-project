@@ -9,10 +9,7 @@ export class ProductImageService extends ProductImageQueries {
     super(prisma);
   }
 
-  async uploadProductImage(
-    location: string,
-    key: string,
-  ) {
+  async uploadProductImage(location: string, key: string) {
     return await super.createImageRecord(location, key);
   }
 

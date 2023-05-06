@@ -33,8 +33,8 @@ export class UploadProductImageService extends UploadImageService {
     try {
       const uploadData = await super.uploadImage(dataBuffer, filename);
       return await this.productImageQueries.createImageRecord(
-        uploadData.Key,
         uploadData.Location,
+        uploadData.Key,
       );
     } catch (e) {
       throw e;

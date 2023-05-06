@@ -8,9 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ProductImageQueries {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   // async uploadProductImage(
   //   dataBuffer: Buffer,

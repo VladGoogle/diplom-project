@@ -66,8 +66,7 @@ export class UserService {
   }
 
   async addAddress(data: AddressDto, authHeader: string) {
-    const decodedJwt = this.jwtService.decode(authHeader) as PayloadInterface;
-    const user = await this.findUserByEmail(decodedJwt.email);
+    const user = await this.getUserByToken(authHeader);
     const address = await this.userQueries.addAddress({
       ...data,
       userId: user.id,
@@ -85,8 +84,7 @@ export class UserService {
   }
 
   async updateAddress(data: UpdateAddressDto, authHeader: string) {
-    const decodedJwt = this.jwtService.decode(authHeader) as PayloadInterface;
-    const user = await this.findUserByEmail(decodedJwt.email);
+    const user = await this.getUserByToken(authHeader);
     const address = await this.userQueries.updateAddress(data, user.address.id);
     await this.stripe.customers.update(user.customerToken, {
       address: {

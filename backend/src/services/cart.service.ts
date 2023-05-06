@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { UpdateCommentDto } from '../dtos/updateComment.dto';
 import { CartQueries } from '../queries/cart.queries';
 import { CartItemDto } from '../dtos/cartItem.dto';
-import {UpdateCartItemQuantityDto} from "../dtos/updateCartItemQuantity.dto";
+import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
 
 @Injectable()
 export class CartService {

@@ -5,12 +5,12 @@ import { ProductDto } from '../dtos/product.dto';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
 import { UploadProductImageService } from '../classes/uploadImage.class';
 import { ProductImageQueries } from '../queries/productImage.queries';
-import {PrismaService} from "./prisma.service";
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class ProductService extends UploadProductImageService {
   constructor(
-      private prisma: PrismaService,
+    private prisma: PrismaService,
     private productQueries: ProductQueries,
     productImageQueries: ProductImageQueries,
   ) {
