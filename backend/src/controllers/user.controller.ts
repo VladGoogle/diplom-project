@@ -2,7 +2,6 @@ import {
   Controller,
   Body,
   Post,
-  Res,
   UseGuards,
   Param,
   Get,
@@ -10,9 +9,6 @@ import {
   Patch,
   Headers,
 } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { UserDto } from '../dtos/user.dto';
-import { LoginDto } from '../dtos/auth.dto';
 import { UserService } from '../services/users.service';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { ChangeUserRoleDto } from '../dtos/changeUserRole.dto';
@@ -23,6 +19,7 @@ import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { getTokenFromHeaders } from '../utilities/getAuthToken.utility';
 
 @Controller()
 export class UserController {
@@ -31,25 +28,28 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Post('account/addresses')
   async addAddress(@Body() data: AddressDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.userService.addAddress(data, token);
+    return await this.userService.addAddress(
+      data,
+      getTokenFromHeaders(headers),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('account/userInfo')
   async updateUserInfo(@Body() data: UpdateUserDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.userService.updateUserInfo(data, token);
+    return await this.userService.updateUserInfo(
+      data,
+      getTokenFromHeaders(headers),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('account/password')
   async resetPassword(@Body() data: ResetPasswordDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.userService.resetUserPassword(data, token);
+    return await this.userService.resetUserPassword(
+      data,
+      getTokenFromHeaders(headers),
+    );
   }
 
   @UseGuards(RolesGuard)
@@ -67,9 +67,7 @@ export class UserController {
 
   @Get('user/getByToken')
   async getUserByToken(@Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.userService.getUserByToken(token);
+    return await this.userService.getUserByToken(getTokenFromHeaders(headers));
   }
 
   @Delete('user/deleteByEmail')
