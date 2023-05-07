@@ -396,6 +396,10 @@ input::placeholder {
   display: block;
 }
 
+.cart {
+  overflow-y: hidden;
+}
+
 .cart__header {
   font-style: normal;
   font-weight: 700;
@@ -418,7 +422,8 @@ input::placeholder {
 .cart__titles {
   padding-bottom: 12px;
   border-bottom: 2px solid #D9D9D9;
-  width: 81%;
+  width: 100%;
+  max-width: 1400px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -458,10 +463,11 @@ input::placeholder {
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
-  width: 81%;
+  width: 100%;
+  max-width: 1400px;
   margin-top: 80px;
   margin-bottom: 36px;
-  align-items: flex-  end;
+  align-items: flex-end;
 }
 
 .cart__summary-title {
@@ -500,7 +506,13 @@ input::placeholder {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 81%;
+  width: 100%;
+  max-width: 1400px;
+  margin-bottom: 200px;
+}
+
+.cart__buttons-price {
+  margin-left: 5px;
 }
 
 .cart__button-buy {
@@ -515,7 +527,7 @@ input::placeholder {
   font-weight: 700;
   font-size: 20px;
   line-height: 24px;
-  border: none;
+  border: none; 
   cursor: pointer;
   margin-right: 10px;
 }

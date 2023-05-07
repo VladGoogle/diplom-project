@@ -7,10 +7,17 @@ import { NavLink } from 'react-router-dom';
 function Card({ name, img, category, price, onAddToCart }) {
 
   const [isAdded, setIsAdded] = React.useState(false);
+  const [isAdding, setIsAdding] = React.useState(false);
 
-  const onClickPlus = () => {
-    setIsAdded(!isAdded);
-  }
+  const handleAddToCartClick = () => {
+    if (!isAdding) {
+      setIsAdding(true);
+      onAddToCart().then(() => {
+        setIsAdded(true);
+        setIsAdding(false);
+      });
+    }
+  };
 
   return (
     <li className="products__card" data-tab="included-with">
@@ -45,11 +52,11 @@ function Card({ name, img, category, price, onAddToCart }) {
           </div>
           {!isAdded ?
             (
-              <button className="product__button" onClick={onAddToCart}>Buy</button>
+              <button className="product__button" onClick={handleAddToCartClick}>Buy</button>
             )
             :
             (
-              <button className="product__button" onClick={onAddToCart} style={{ backgroundColor: '#57DC19', color: "#FDFDFD"}}>Thank you!</button>
+              <button className="product__button" style={{ backgroundColor: '#57DC19', color: "#FDFDFD"}}>Thank you!</button>
             )
           }
         </div>

@@ -1,38 +1,32 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-// Экспортируем контекст
 export const TokenContext = createContext({
-    token: '',
-    login: () => {},
-    logout: () => {}
+  token: '',
+});
+
+const TokenProvider = ({ children }) => {
+  const [token, setTokenState] = useState(() => {
+    // При первоначальной загрузке приложения, восстанавливаем токен из localStorage
+    const savedToken = localStorage.getItem('access_token');
+    return savedToken ?? '';
   });
 
-  const TokenProvider = ({ children }) => {
-    const [token, setToken] = useState('');
-  
-    useEffect(() => {
-      const savedToken = localStorage.getItem('access_token');
-      if (savedToken) {
-        setToken(savedToken);
-      }
-    }, []);
-    
-  
-    const login = (newToken) => {
-      setToken(newToken);
-      localStorage.setItem('access_token', newToken);
-    };
-  
-    const logout = () => {
-      setToken('');
-      localStorage.removeItem('access_token');
-    };
-  
-    return (
-      <TokenContext.Provider value={{ token, login, logout }}>
-        {children}
-      </TokenContext.Provider>
-    );
+  const setToken = (newToken) => {
+    setTokenState(newToken);
+    // Сохраняем токен в localStorage
+    localStorage.setItem('access_token', newToken);
   };
+
+  const logout = () => {
+    setTokenState('');
+    localStorage.removeItem('access_token');
+  };
+
+  return (
+    <TokenContext.Provider value={{ token, setToken, logout }}>
+      {children}
+    </TokenContext.Provider>
+  );
+};
 
 export default TokenProvider;

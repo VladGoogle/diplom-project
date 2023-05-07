@@ -2,11 +2,13 @@ import Card from '../card/Card.js';
 import './style.css';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { instance } from "./../../utils/axios/instance"
+import createAxiosInstance from '../../utils/axios/instance.js';  
 
 
 function Products() { 
 
+
+  const instance = createAxiosInstance();
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
 
@@ -24,7 +26,7 @@ function Products() {
 
   const handleAddToCart = async (item) => {
     try {
-      const response = await instance.post("/carts", item);
+      const response = await instance.post("/carts", { productId: item.id, quantity: 1 });
       setCartItems([...cartItems, response.data]);
     } catch (error) {
       console.log(error);

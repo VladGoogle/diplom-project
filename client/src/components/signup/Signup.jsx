@@ -1,6 +1,6 @@
 import './style.css';
 import React from 'react';
-import { instance } from '../../utils/axios/instance'
+import createAxiosInstance from '../../utils/axios/instance'
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,8 +32,9 @@ const schema = yup.object().shape({
 
 
 const Registration = (props) => {
+  const instance = createAxiosInstance();
   const navigate = useNavigate();
-  const { login } = useContext(TokenContext);
+  const { setToken } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
 
@@ -42,7 +43,7 @@ const Registration = (props) => {
   });
 
   const handleLogin = () => {
-    login(); 
+    setToken(); 
   }
 
   const togglePasswordVisibility = () => {
@@ -63,8 +64,7 @@ const Registration = (props) => {
         },
       );
       console.log(response.data);
-      localStorage.setItem('access_token', response.data.token);
-      login(response.data.token); 
+      setToken(response.data.access_token); 
       setShowPopup(false);
       navigate('/successRegistration'); 
     } catch (error) {

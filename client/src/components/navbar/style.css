@@ -68,6 +68,16 @@
   flex-direction: row;
 }
 
+.header__bottom-item {
+  padding: 5px;
+}
+
+.header__bottom-item:hover {
+  background-color: rgba(217, 217, 217, 0.35);
+  border-radius: 5px;
+  transition: all .2s ease-in-out;
+}
+
 .header__bottom-catalog {
   font-family: 'Montserrat';
   font-style: normal;
@@ -82,7 +92,12 @@
   align-items: center;
   cursor: pointer;
   border: none;
-  margin-right: 44px;
+  margin-right: 40px;
+}
+
+.header__bottom-catalog:hover {
+  transition: all .2s ease-in-out;
+  background-color: #7A78D4;
 }
 
 .header__bottom-catalog span {
@@ -152,7 +167,7 @@
 }
 
 .header__bottom-languages {
-  margin-left: 44px;
+  margin-left: 39px;
   display: flex;
   align-items: center;
 }
@@ -164,6 +179,12 @@
   font-size: 25px;
   line-height: 30px;
   color: #fdfdfd;
+  cursor: pointer;
+}
+
+.header__button-language:hover {
+  color: #1C7FF3;
+  transition: all .2s ease-in-out;
 }
 
 .header__bottom-language_vertical-line {
@@ -178,14 +199,15 @@
 }
 
 .header__bottom-links {
-  margin-left: 40px;
+  margin-left: 35px;
 }
 
 .header__bottom-icon {
   display: flex;
   justify-content: center;
+
 }
 
 .header__account {
-  margin: 0 30px;
+  margin: 0 25px;
 }
