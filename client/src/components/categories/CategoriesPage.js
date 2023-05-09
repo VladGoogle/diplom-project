@@ -9,26 +9,30 @@ function  CategoriesPage() {
 
   const instance = createAxiosInstance();
   const [categories, setCategories] = React.useState([]);
+  const [error, setError] = React.useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ids = Array.from({ length: 8 }, (_, i) => i + 1); // создаем массив с id от 1 до 10
-        const promises = ids.map((id) => instance.get(`/category/${id}`)); // создаем массив промисов для выполнения запросов к API
-        const responses = await Promise.all(promises); // ожидаем выполнения всех промисов
-        const categories = responses.map((response) => response.data);
+        const response = await instance.get("/categories"); // запрос к API, который вернет все категории
+        const categories = response.data;
         setCategories(categories);
       } catch (error) {
+        setError(error);
         console.log(error);
       }
     };
     fetchData();
   }, []);
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <section className="categories">
         <ul className="categories__top-items">
-        {categories
+        {categories 
             .map((obj) => {
               return (
                 <Categories
