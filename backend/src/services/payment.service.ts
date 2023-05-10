@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Cart, CartItem, Comment, Order, Payment } from '@prisma/client';
+import { Payment } from '@prisma/client';
 import { UserService } from './users.service';
-import { AuthService } from './auth.service';
 import { PaymentQueries } from '../queries/payment.queries';
-import { ChargeDto } from '../dtos/charge.dto';
 import StripeService from './stripe.service';
 import { OrderService } from './order.service';
 import { CartService } from './cart.service';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class PaymentService {
@@ -15,14 +14,14 @@ export class PaymentService {
     private prisma: PrismaService,
     private paymentQueries: PaymentQueries,
     private userService: UserService,
-    private authService: AuthService,
+    private tokenService: TokenService,
     private stripeService: StripeService,
     private orderService: OrderService,
     private cartService: CartService,
   ) {}
 
   async createPayment(orderId: number, authHeader: string): Promise<Payment> {
-    const decodedPayload = await this.authService.decodeAuthToken(authHeader);
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     const order = await this.orderService.getOrderById(orderId);
     const charge = await this.stripeService.createCharge({

@@ -4,6 +4,7 @@ import { CartItemDto } from '../dtos/cartItem.dto';
 import { ProductService } from '../services/product.service';
 import { Prisma } from '@prisma/client';
 import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
+import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
 
 @Injectable()
 export class CartQueries {
@@ -14,106 +15,106 @@ export class CartQueries {
 
   async addProductToCart(data: CartItemDto) {
     const cart = await this.prisma.cart.findFirst({
-      where: {
-        userId: data.userId,
-        AND: {
-          NOT: {
-            cartItems: {
-              none: {},
-            },
-          },
-        },
-      },
-      include: {
-        cartItems: {
-          include: {
-            product: true,
-          },
-        },
-      },
+      where: { userId: data.userId },
     });
 
     if (!cart) {
-      const product = await this.productService.findProductById(data.productId);
-      const cartObj = await this.prisma.cart.create({
-        data: {
-          userId: data.userId,
-          cartItems: {
-            create: {
-              productId: data.productId,
-              quantity: data.quantity,
-              subTotalPrice: product.price * data.quantity,
-            },
-          },
-        },
-        include: {
-          cartItems: {
-            include: {
-              product: true,
-            },
-          },
-        },
-      });
-      const cartItem = await this.prisma.cartItem.findFirst({
-        where: { cartId: cartObj.id },
-      });
-      const updatedCartObj = await this.prisma.cart.update({
-        where: { id: cartObj.id },
-        data: {
-          totalPrice: {
-            increment: cartItem.subTotalPrice,
-          },
-        },
-        include: {
-          cartItems: {
-            include: {
-              product: {
-                select: {
-                  subcategory: true,
-                  name: true,
-                  price: true,
-                  productImage: true,
-                },
+      return await this.prisma.cart
+        .create({
+          data: {
+            userId: data.userId,
+            cartItems: {
+              create: {
+                productId: data.productId,
+                quantity: data.quantity,
+                subTotalPrice:
+                  (
+                    await this.productService.findProductById(data.productId)
+                  ).price * data.quantity,
               },
             },
           },
-        },
-      });
-      return updatedCartObj;
+          include: {
+            cartItems: {
+              include: {
+                product: true,
+              },
+            },
+          },
+        })
+        .then(async (cart) => {
+          try {
+            return await this.prisma.cart.update({
+              where: { id: cart.id },
+              data: {
+                totalPrice: {
+                  increment: (
+                    await this.prisma.cartItem.findFirst({
+                      where: { cartId: cart.id },
+                    })
+                  ).subTotalPrice,
+                },
+              },
+              include: {
+                cartItems: {
+                  include: {
+                    product: {
+                      select: {
+                        subcategory: true,
+                        name: true,
+                        price: true,
+                        productImage: true,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          } catch (e) {
+            throw e;
+          }
+        });
     } else {
-      const product = await this.productService.findProductById(data.productId);
-      const cartItem = await this.prisma.cartItem.create({
-        data: {
-          cartId: cart.id,
-          productId: data.productId,
-          quantity: data.quantity,
-          subTotalPrice: product.price * data.quantity,
-        },
-      });
-
-      const updatedCart = await this.prisma.cart.update({
-        where: { id: cart.id },
-        data: {
-          totalPrice: {
-            increment: cartItem.subTotalPrice,
+      return await this.prisma.cartItem
+        .create({
+          data: {
+            cartId: cart.id,
+            productId: data.productId,
+            quantity: data.quantity,
+            subTotalPrice:
+              (
+                await this.productService.findProductById(data.productId)
+              ).price * data.quantity,
           },
-        },
-        include: {
-          cartItems: {
-            include: {
-              product: {
-                select: {
-                  subcategory: true,
-                  name: true,
-                  price: true,
-                  productImage: true,
+        })
+        .then(async (item) => {
+          try {
+            return await this.prisma.cart.update({
+              where: { id: cart.id },
+              data: {
+                totalPrice: {
+                  increment: item.subTotalPrice,
                 },
               },
-            },
-          },
-        },
-      });
-      return updatedCart;
+              include: {
+                cartItems: {
+                  include: {
+                    product: {
+                      select: {
+                        subcategory: true,
+                        name: true,
+                        price: true,
+                        productImage: true,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          } catch (e) {
+            throw e;
+          }
+        });
     }
   }
 
@@ -121,6 +122,35 @@ export class CartQueries {
     try {
       return await this.prisma.cart.findUniqueOrThrow({
         where: { id: id },
+        include: {
+          cartItems: {
+            include: {
+              product: {
+                select: {
+                  subcategory: true,
+                  name: true,
+                  price: true,
+                  productImage: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Cart doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async getCartByUserId(id: number) {
+    try {
+      return await this.prisma.cart.findUniqueOrThrow({
+        where: { userId: id },
         include: {
           cartItems: {
             include: {
@@ -189,16 +219,17 @@ export class CartQueries {
     }
   }
 
-  async removeCartItemFromCart(cartId: number, cartItemId: number) {
+  async removeCartItemFromCart(data: RemoveItemFromCartDto) {
     try {
-      const cartItem = await this.prisma.cartItem.delete({
-        where: { id: cartItemId },
-      });
       return await this.prisma.cart.update({
-        where: { id: cartId },
+        where: { id: data.cartId },
         data: {
           totalPrice: {
-            decrement: cartItem.subTotalPrice,
+            decrement: (
+              await this.prisma.cartItem.delete({
+                where: { id: data.cartItemId },
+              })
+            ).subTotalPrice,
           },
         },
         include: {
@@ -300,7 +331,7 @@ export class CartQueries {
 
   async deleteAllItemsFromCart(id: number) {
     try {
-      const deletedItems = this.prisma.cartItem.deleteMany({
+      await this.prisma.cartItem.deleteMany({
         where: { cartId: id },
       });
       return { message: `All items from cart with id:${id} has been deleted` };

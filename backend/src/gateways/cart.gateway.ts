@@ -65,10 +65,7 @@ export class CartGateway
     @ConnectedSocket() socket: Socket,
   ) {
     try {
-      const cart = await this.cartService.removeCartItemFromCart(
-        data.cartId,
-        data.cartItemId,
-      );
+      const cart = await this.cartService.removeCartItemFromCart(data);
       socket.emit('getUpdatedCart', cart);
     } catch (error) {
       socket.emit('getUpdatedCart', { error: error.message });

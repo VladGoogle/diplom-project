@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
 import { UserService } from '../services/users.service';
 import { UserQueries } from '../queries/user.queries';
-import { AuthService } from '../services/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { CartService } from '../services/cart.service';
 import { CartQueries } from '../queries/cart.queries';
@@ -13,12 +12,13 @@ import { ProductImageService } from '../services/productImage.service';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import StripeService from '../services/stripe.service';
 import { CartGateway } from '../gateways/cart.gateway';
+import { TokenService } from '../services/token.service';
 
 @Module({
   providers: [
     UserService,
     UserQueries,
-    AuthService,
+    TokenService,
     PrismaService,
     JwtService,
     CartService,

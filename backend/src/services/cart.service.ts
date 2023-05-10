@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Cart, CartItem, Comment } from '@prisma/client';
-import { CommentQueries } from '../queries/comment.queries';
-import { CommentDto } from '../dtos/comment.dto';
+import { Cart } from '@prisma/client';
 import { UserService } from './users.service';
-import { AuthService } from './auth.service';
-import { UpdateCommentDto } from '../dtos/updateComment.dto';
 import { CartQueries } from '../queries/cart.queries';
 import { CartItemDto } from '../dtos/cartItem.dto';
 import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
+import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class CartService {
@@ -16,11 +14,11 @@ export class CartService {
     private prisma: PrismaService,
     private cartQueries: CartQueries,
     private userService: UserService,
-    private authService: AuthService,
+    private tokenService: TokenService,
   ) {}
 
   async addProductToCart(data: CartItemDto, authHeader: string): Promise<Cart> {
-    const decodedPayload = await this.authService.decodeAuthToken(authHeader);
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.cartQueries.addProductToCart({
       ...data,
@@ -29,7 +27,7 @@ export class CartService {
   }
 
   async deleteCartById(authHeader: string) {
-    const decodedPayload = await this.authService.decodeAuthToken(authHeader);
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.cartQueries.deleteCartById(user.id);
   }
@@ -42,8 +40,8 @@ export class CartService {
     return await this.cartQueries.updateCartItemQuantity(data);
   }
 
-  async removeCartItemFromCart(cartId: number, cartItemId: number) {
-    return await this.cartQueries.removeCartItemFromCart(cartId, cartItemId);
+  async removeCartItemFromCart(data: RemoveItemFromCartDto) {
+    return await this.cartQueries.removeCartItemFromCart(data);
   }
 
   async deleteAllItemsFromCart(cartId: number): Promise<{ message: string }> {

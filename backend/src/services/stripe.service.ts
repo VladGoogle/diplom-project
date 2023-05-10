@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { ChargeDto } from '../dtos/charge.dto';
+import { AddressDto } from '../dtos/address.dto';
+import { UpdateAddressDto } from '../dtos/updateAddress.dto';
 
 @Injectable()
 export default class StripeService {
@@ -22,6 +24,17 @@ export default class StripeService {
       metadata: {
         first_name: first_name,
         last_name: last_name,
+      },
+    });
+  }
+
+  public async updateCustomerAddress(
+    token: string,
+    data: AddressDto | UpdateAddressDto,
+  ) {
+    return await this.stripe.customers.update(token, {
+      address: {
+        ...data,
       },
     });
   }

@@ -13,6 +13,8 @@ import {
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { CartService } from '../services/cart.service';
 import { CartItemDto } from '../dtos/cartItem.dto';
+
+import { getTokenFromHeaders } from '../utilities/getAuthToken.utility';
 import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
 
 @Controller()
@@ -22,13 +24,9 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @Post('carts')
   async addProductToCart(@Body() data: CartItemDto, @Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
     return await this.cartService.addProductToCart(
-      {
-        ...data,
-      },
-      token,
+      data,
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -40,8 +38,12 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @Delete('cart')
   async deleteCartById(@Headers() headers: any) {
-    const authHeader = headers.authorization;
-    const token = authHeader.split(' ')[1];
-    return await this.cartService.deleteCartById(token);
+    return await this.cartService.deleteCartById(getTokenFromHeaders(headers));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('cart/removeItem')
+  async removeItemFromCart(@Body() data: RemoveItemFromCartDto) {
+    return await this.cartService.removeCartItemFromCart(data);
   }
 }

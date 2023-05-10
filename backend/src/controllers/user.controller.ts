@@ -8,6 +8,7 @@ import {
   Delete,
   Patch,
   Headers,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from '../services/users.service';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
@@ -81,12 +82,12 @@ export class UserController {
   }
 
   @Get('user/:id')
-  async getUserById(@Param('id') id: string) {
-    return await this.userService.findUserById(parseInt(id));
+  async getUserById(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findUserById(id);
   }
 
   @Delete('user/:id')
-  async deleteUserById(@Param('id') id: string) {
-    return await this.userService.removeUserById(parseInt(id));
+  async deleteUserById(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.removeUserById(id);
   }
 }

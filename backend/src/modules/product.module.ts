@@ -8,9 +8,9 @@ import { ProductImageQueries } from '../queries/productImage.queries';
 import { CartService } from '../services/cart.service';
 import { CartQueries } from '../queries/cart.queries';
 import { UserService } from '../services/users.service';
-import { AuthService } from '../services/auth.service';
 import { UserQueries } from '../queries/user.queries';
 import StripeService from '../services/stripe.service';
+import { TokenService } from '../services/token.service';
 
 @Module({
   providers: [
@@ -22,7 +22,7 @@ import StripeService from '../services/stripe.service';
     CartService,
     CartQueries,
     UserService,
-    AuthService,
+    TokenService,
     UserQueries,
     StripeService,
   ],

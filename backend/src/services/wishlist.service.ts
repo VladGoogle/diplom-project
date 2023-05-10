@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { Cart, Wishlist, WishlistItem } from '@prisma/client';
 import { UserService } from './users.service';
-import { AuthService } from './auth.service';
-import { CartQueries } from '../queries/cart.queries';
-import { CartItemDto } from '../dtos/cartItem.dto';
 import { WishlistQueries } from '../queries/wishlist.queries';
 import { WishlistItemDto } from '../dtos/wishlistItem.dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class WishlistService {
@@ -14,11 +11,11 @@ export class WishlistService {
     private prisma: PrismaService,
     private wishlistQueries: WishlistQueries,
     private userService: UserService,
-    private authService: AuthService,
+    private tokenService: TokenService,
   ) {}
 
   async addProductToWishlist(data: WishlistItemDto, authHeader: string) {
-    const decodedPayload = await this.authService.decodeAuthToken(authHeader);
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.wishlistQueries.addProductToWishlist({
       ...data,

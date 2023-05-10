@@ -10,6 +10,7 @@ import { PrismaService } from '../services/prisma.service';
 import { UserQueries } from '../queries/user.queries';
 import { UsersModule } from './users.module';
 import StripeService from '../services/stripe.service';
+import { TokenService } from '../services/token.service';
 dotenv.config();
 
 @Module({
@@ -36,6 +37,7 @@ dotenv.config();
     UsersModule,
     PrismaService,
     StripeService,
+    TokenService,
   ],
   exports: [JwtModule, AuthService],
   controllers: [AuthController],

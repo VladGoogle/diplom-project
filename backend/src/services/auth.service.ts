@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from './users.service';
 import { UserDto } from '../dtos/user.dto';
 import { LoginDto } from '../dtos/auth.dto';
-import { PayloadInterface } from '../interfaces/payload.interface';
 import { PrismaService } from './prisma.service';
 import StripeService from './stripe.service';
 import { Prisma } from '@prisma/client';
@@ -62,10 +61,5 @@ export class AuthService {
       }
       throw e;
     }
-  }
-
-  public async decodeAuthToken(authHeader: string) {
-    const decodedJwt = this.jwtService.decode(authHeader) as PayloadInterface;
-    return decodedJwt.email;
   }
 }

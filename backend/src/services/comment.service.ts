@@ -4,8 +4,8 @@ import { Comment } from '@prisma/client';
 import { CommentQueries } from '../queries/comment.queries';
 import { CommentDto } from '../dtos/comment.dto';
 import { UserService } from './users.service';
-import { AuthService } from './auth.service';
 import { UpdateCommentDto } from '../dtos/updateComment.dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class CommentService {
@@ -13,11 +13,11 @@ export class CommentService {
     private prisma: PrismaService,
     private commentQueries: CommentQueries,
     private userService: UserService,
-    private authService: AuthService,
+    private tokenService: TokenService,
   ) {}
 
   async addComment(data: CommentDto, authHeader: string): Promise<Comment> {
-    const decodedPayload = await this.authService.decodeAuthToken(authHeader);
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.commentQueries.addComment({
       ...data,
