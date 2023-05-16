@@ -24,9 +24,8 @@ export class DiscountQueries {
         where: { id: id },
         data: {
           discountId: discount.id,
-          price: {
-            decrement: product.price * (discount.discount_percent / 100),
-          },
+          discountPrice:
+            product.price - product.price * (discount.discount_percent / 100),
         },
         include: {
           discount: true,
@@ -65,7 +64,7 @@ export class DiscountQueries {
           where: { id: productId },
           data: {
             discountId: null,
-            price: product.price / (1 - discount / 100),
+            discountPrice: product.price / (1 - discount / 100),
           },
         });
       }

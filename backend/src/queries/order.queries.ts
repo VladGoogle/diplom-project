@@ -17,10 +17,17 @@ export class OrderQueries {
 
   async createOrder(data: OrderDto, cartId: number) {
     try {
+      const order = await this.getOrderByCartId(cartId).then((order) => {
+        if (order) {
+          throw new BadRequestException('Order with such cart already exists');
+        }
+      });
+
       const cart = await this.cartService.getCartById(cartId);
       return await this.prisma.order.create({
         data: {
           ...data,
+          cartId: cartId,
           amount: cart.cartItems.reduce(
             (acc, currentValue) => acc + currentValue.subTotalPrice,
             0,
@@ -64,6 +71,21 @@ export class OrderQueries {
       }
       throw e;
     }
+  }
+
+  async getOrderByCartId(id: number) {
+    return this.prisma.order.findUnique({
+      where: { cartId: id },
+      include: {
+        user: true,
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+        payment: true,
+      },
+    });
   }
 
   async getAllOrdersByUserId(id: number) {
