@@ -16,6 +16,7 @@ import { CartItemDto } from '../dtos/cartItem.dto';
 
 import { getTokenFromHeaders } from '../utilities/getAuthToken.utility';
 import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
+import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
 
 @Controller()
 export class CartController {
@@ -39,6 +40,12 @@ export class CartController {
   @Delete('cart')
   async deleteCartById(@Headers() headers: any) {
     return await this.cartService.deleteCartById(getTokenFromHeaders(headers));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('cart/updateItem')
+  async updateCartItemQuantity(@Body() data: UpdateCartItemQuantityDto) {
+    return await this.cartService.updateCartItemQuantity(data);
   }
 
   @UseGuards(JwtAuthGuard)
