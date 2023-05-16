@@ -26,7 +26,7 @@ export class PaymentService {
     const order = await this.orderService.getOrderById(orderId);
     const charge = await this.stripeService.createCharge({
       currency: user.card.currency.toString(),
-      amount: order.amount * 100,
+      amount: Math.floor(order.amount * 100),
       source: user.card.cardSource,
       customer: user.customerToken,
     });

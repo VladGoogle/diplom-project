@@ -26,11 +26,10 @@ export class CartQueries {
             cartItems: {
               create: {
                 productId: data.productId,
-                quantity: data.quantity,
-                subTotalPrice:
-                  (
-                    await this.productService.findProductById(data.productId)
-                  ).price * data.quantity,
+                quantity: 1,
+                subTotalPrice: (
+                  await this.productService.findProductById(data.productId)
+                ).price,
               },
             },
           },
@@ -80,11 +79,10 @@ export class CartQueries {
           data: {
             cartId: cart.id,
             productId: data.productId,
-            quantity: data.quantity,
-            subTotalPrice:
-              (
-                await this.productService.findProductById(data.productId)
-              ).price * data.quantity,
+            quantity: 1,
+            subTotalPrice: (
+              await this.productService.findProductById(data.productId)
+            ).price,
           },
         })
         .then(async (item) => {
