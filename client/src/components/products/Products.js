@@ -50,7 +50,7 @@ function Products() {
                   name={obj.name.length > 15 ? obj.name.slice(0, 13) + '...' : obj.name}
                   category={obj.subcategory.name}
                   price={obj.price}
-                  img={obj.productImage.key}
+                  img={obj.productImage.url}
                   onAddToCart={ () => handleAddToCart(obj)}
                 />
               );

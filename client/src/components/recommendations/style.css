@@ -1,0 +1,28 @@
+.recommended {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+  }
+  
+  .tab-buttons {
+    display: flex;
+  }
+  
+  .tab-button {
+    padding-bottom: 10px;
+    cursor: pointer;
+    margin-right: 30px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 39px;
+    margin-bottom: 80px;
+  }
+  
+  .tab-button.active {
+    font-weight: 500;
+    border-bottom: 2px solid #1c7ff3;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }

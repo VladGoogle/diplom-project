@@ -28,13 +28,23 @@ const schema = yup.object().shape({
 });
 
 const Login = (props) => {
+  const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
   const { setToken } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
   const instance = createAxiosInstance();
 
-  const { register, setError, handleSubmit, formState: { errors } } = useForm({
+  const handleFormChange = async (data) => {
+    try {
+      await schema.validate(data);
+      setFormValid(true);
+    } catch (error) {
+      setFormValid(false);
+    }
+  };
+
+  const { register, setError, handleSubmit, formState: { errors }, getValues } = useForm({
     resolver: yupResolver(schema),
   });
   const handleLogin = () => {
@@ -75,6 +85,11 @@ const Login = (props) => {
             message: 'Email is not found in the system',
           });
         }
+              // Set the form as invalid if there is an error
+      setFormValid(false);
+    } else {
+      // Set the form as invalid if there is an error
+      setFormValid(false);
       }
       console.log(error);
     }
@@ -121,10 +136,10 @@ const Login = (props) => {
                   fill="#050630"
                 />
               </svg>
-              <form className="sign__up-form" onSubmit={handleSubmit(onSubmit)}>
+              <form className="sign__up-form" onSubmit={handleSubmit(onSubmit)} onChange={() => handleFormChange(getValues())}>
                 <div className="input__field-inner">
                   <input
-                    className="input__field-sign_up"
+                    className={`input__field-sign_up ${formValid ? "valid" : errors.password ? "invalid" : ""}`}
                     type="email"
                     id="email"
                     name="Email"
@@ -136,7 +151,7 @@ const Login = (props) => {
                 <div className="input__field-inner">
                   <div className="input__field-inner--password">
                     <input
-                      className="input__field-sign_up input__field-sign_up--password"
+                      className={`input__field-sign_up input__field-sign_up--password ${formValid ? "valid" : errors.password ? "invalid" : ""}`}
                       type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"

@@ -62,6 +62,8 @@
 .cart__image {
     margin-right: 50px;
     margin-left: 54px;
+    max-width: 79px;
+    max-height: 102px;
 }
 
 .cart__item-info {

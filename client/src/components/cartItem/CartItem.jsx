@@ -1,8 +1,7 @@
 import "./style.css"
-import cartImage from "./../../img/cart_image.png"
 import Counter from "../counter/Counter";
 
-function CartItem({ price, name, subTotalPrice, itemId, onRemoveItem }) {
+function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, onRemoveItem }) {
 
     const handleRemove = () => {
         onRemoveItem(itemId);
@@ -21,15 +20,15 @@ function CartItem({ price, name, subTotalPrice, itemId, onRemoveItem }) {
                             <div className="cart__item-info">
                                 <div className="cart__item-info--top">
                                     <span className="cart__item-category">
-                                        Smartphone
+                                        {subcategory}
                                     </span>
                                     <span className="cart__item-title">
-                                        {name} iPhone 14 Pro Max
+                                        {name}
                                     </span>
                                 </div>
                                 <div className="cart__item-info--bottom">
                                     <span className="cart__item-id">
-                                        Article №: 10002233
+                                        Product id:{itemId}
                                     </span>
                                 </div>
                             </div>
@@ -37,7 +36,7 @@ function CartItem({ price, name, subTotalPrice, itemId, onRemoveItem }) {
                         <div className="cart__item-right">
                             <div className="cart__item-prices">
                                 <span className="cart__item-price">
-                                    {price}122$
+                                    {price}$
                                 </span>
                                 <div className="cart__item-quantity">
                                     <Counter />

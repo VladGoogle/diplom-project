@@ -1,7 +1,7 @@
 import './style.css';
 import Categories from './Categories';
 import React from "react"
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import createAxiosInstance from '../../utils/axios/instance'; 
 
 
@@ -38,8 +38,8 @@ function  CategoriesPage() {
                 <Categories
                   key={obj.id}
                   name={obj.name}
-                  categoryIcon={obj.categoryIcon.url}
-                />
+                  categoryIcon={obj.categoryIcon?.url}
+                />  
               );
             })}
         </ul>

@@ -2,12 +2,14 @@ import CartItem from "../components/cartItem/CartItem";
 import React from "react";
 import createAxiosInstance from "../utils/axios/instance";
 import { useEffect } from "react";
+import { NavLink } from 'react-router-dom';
 
 const Cart = () => {
 
     const instance = createAxiosInstance();
     const [items, setItems] = React.useState([]);
     const [itemsTotal, setItemsTotal] = React.useState([]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,20 +23,22 @@ const Cart = () => {
         };
         fetchData();
     }, []);
+    
 
     const handleRemoveItem = async (itemId) => {
         try {
-         await instance.patch('/cart/removeItem', {
-            cartId: 1,
-            cartItemId: itemId,
-          });
-          // Обновите список элементов в корзине после успешного удаления
-          const updatedItems = items.filter((item) => item.id !== itemId);
-          setItems(updatedItems);
+            await instance.patch('/cart/removeItem', {
+                cartId: 1,
+                cartItemId: itemId,
+            });
+    
+            // Обновите список элементов в корзине после успешного удаления
+            const updatedItems = items.filter((item) => item.id !== itemId);
+            setItems(updatedItems);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
 
 
@@ -69,6 +73,10 @@ const Cart = () => {
                                     subTotalPrice={obj.subTotalPrice}
                                     onRemoveItem={handleRemoveItem}
                                     itemId={obj.id}
+                                    price={obj.product.price}
+                                    name={obj.product.name}
+                                    subcategory={obj.product.subcategory.name}
+                                    cartImage={obj.product.productImage.url}
                                 />
                             );
                         })}
@@ -92,12 +100,16 @@ const Cart = () => {
                     </div>
                 </div>
                 <div className="cart__buttons">
+                    <NavLink to="/checkout" className="logo">
                     <button className="cart__button-buy">
                         BUY FOR <span className="cart__buttons-price">{itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$</span>
                     </button>
+                    </NavLink>
+                    <NavLink to="/" className="logo">
                     <button className="cart__button-continue">
                         CONTINUE SHOPPING
                     </button>
+                    </NavLink>
                 </div>
             </div>
         </section>

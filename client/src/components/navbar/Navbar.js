@@ -8,10 +8,10 @@ import { TokenContext } from './../../TokenContext';
 function Navbar(props) {
 
   const { token } = useContext(TokenContext);
-  const [showSettingsButton, setShowSettingsButton] = useState(token !== '');
+  const [showSettingsButton, setShowSettingsButton] = useState(!!token);
 
   useEffect(() => {
-    setShowSettingsButton(token !== '');
+    setShowSettingsButton(!!token);
   }, [token]);
 
   return (

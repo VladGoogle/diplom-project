@@ -252,3 +252,11 @@
 .input__field-sign_up--password {
   border-right: none;
 }
+
+.invalid {
+  border-color: #E42828;
+}
+
+.valid {
+  border-color: #57DC19;
+}

@@ -16,6 +16,7 @@ import Logout from './components/settingsTabs/Logout/Logout';
 import Wishlist from './components/settingsTabs/Wishlist/Wishlist';
 import Cart from './pages/Cart';
 import TokenProvider from "./TokenContext"
+import Checkout from './components/checkout/Checkout';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/settings" element={<Settings />}>
             <Route path="account" element={<Account />} />
             <Route path="orders" element={<Orders />} />
