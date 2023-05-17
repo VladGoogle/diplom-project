@@ -147,6 +147,7 @@ model Product {
   id             Int            @id @default(autoincrement())
   name           String?        @unique
   price          Float?
+  discountPrice  Float?
   productImage   ProductImage?  @relation(fields: [productImageId], references: [id], onDelete: Cascade)
   productImageId Int?           @unique
   description    String?
@@ -156,7 +157,7 @@ model Product {
   categoryId     Int?
   qtyInStock     Int?
   discount       Discount?      @relation(fields: [discountId], references: [id], onDelete: Cascade)
-  discountId     Int?
+  discountId     Int?           @unique
   comments       Comment[]
   cartItems      CartItem[]
   orderItems     OrderItem[]
@@ -192,6 +193,7 @@ model Cart {
   totalPrice Float?     @default(0.00)
   createdAt  DateTime?  @default(now())
   updatedAt  DateTime?  @updatedAt
+  order      Order?
 }
 
 model CartItem {
@@ -210,6 +212,8 @@ model Order {
   id          Int           @id @default(autoincrement())
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
+  cart        Cart?         @relation(fields: [cartId], references: [id], onDelete: SetNull)
+  cartId      Int?          @unique
   orderItems  OrderItem[]
   amount      Float
   payment     Payment?
