@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
 }
 
 datasource db {
@@ -156,7 +157,7 @@ model Product {
   category       Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId     Int?
   qtyInStock     Int?
-  discount       Discount?      @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  discount       Discount?      @relation(fields: [discountId], references: [id], onDelete: SetNull)
   discountId     Int?           @unique
   comments       Comment[]
   cartItems      CartItem[]

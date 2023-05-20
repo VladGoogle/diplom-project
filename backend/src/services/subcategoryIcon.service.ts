@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { CategoryIcon, SubcategoryIcon } from '@prisma/client';
+import { SubcategoryIcon } from '@prisma/client';
 import { SubcategoryIconQueries } from '../queries/subcategoryIcon.queries';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class SubcategoryIconService {
   async uploadSubcategoryIcon(
     data: Buffer,
     filename: string,
-  ): Promise<SubcategoryIcon> {
+  ){
     return await this.subcategoryIconQueries.uploadSubcategoryIcon(
       data,
       filename,

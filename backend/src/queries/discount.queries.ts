@@ -59,21 +59,25 @@ export class DiscountQueries {
           message: `Product with id:${product.id} don't have a discount`,
         };
       } else {
-        const discount = product.discount.discount_percent;
-        return await this.prisma.product.update({
-          where: { id: productId },
-          data: {
-            discountId: null,
-            discountPrice: product.price / (1 - discount / 100),
-          },
-        });
+        await this.prisma.discount
+          .delete({
+            where: {
+              id: product.discountId,
+            },
+          })
+          .then(async () => {
+            await this.prisma.product.update({
+              where: {
+                id: productId,
+              },
+              data: {
+                discountPrice: null,
+              },
+            });
+          });
+        return await this.productService.findProductById(productId);
       }
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Wishlist doesn't exist`);
-        }
-      }
       throw e;
     }
   }

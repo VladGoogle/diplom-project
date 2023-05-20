@@ -14,44 +14,109 @@ export class CartQueries {
   ) {}
 
   async addProductToCart(data: CartItemDto) {
-    const cart = await this.prisma.cart.findFirst({
-      where: { userId: data.userId },
-    });
+    let newCart;
+    let item;
+    try {
+      const cart = await this.prisma.cart.findFirst({
+        where: { userId: data.userId },
+        include: {
+          cartItems: true,
+        },
+      });
+      const product = await this.productService.findProductById(data.productId);
 
-    if (!cart) {
-      return await this.prisma.cart
-        .create({
-          data: {
-            userId: data.userId,
-            cartItems: {
-              create: {
-                productId: data.productId,
-                quantity: 1,
-                subTotalPrice: (
-                  await this.productService.findProductById(data.productId)
-                ).price,
+      if (!cart) {
+        if (product.discountPrice !== null) {
+          newCart = await this.prisma.cart.create({
+            data: {
+              userId: data.userId,
+              cartItems: {
+                create: {
+                  productId: data.productId,
+                  quantity: 1,
+                  subTotalPrice: product.discountPrice,
+                },
               },
+            },
+            include: {
+              cartItems: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          });
+        } else {
+          newCart = await this.prisma.cart.create({
+            data: {
+              userId: data.userId,
+              cartItems: {
+                create: {
+                  productId: data.productId,
+                  quantity: 1,
+                  subTotalPrice: product.price,
+                },
+              },
+            },
+            include: {
+              cartItems: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          });
+        }
+        return await this.prisma.cart.update({
+          where: { id: newCart.id },
+          data: {
+            totalPrice: {
+              increment: (
+                await this.prisma.cartItem.findFirst({
+                  where: { cartId: newCart.id },
+                })
+              ).subTotalPrice,
             },
           },
           include: {
             cartItems: {
               include: {
-                product: true,
+                product: {
+                  select: {
+                    subcategory: true,
+                    name: true,
+                    price: true,
+                    discountPrice: true,
+                    productImage: true,
+                  },
+                },
               },
             },
           },
-        })
-        .then(async (cart) => {
-          try {
+        });
+      } else {
+        let item = cart.cartItems.find(
+          (obj) => obj.productId === data.productId,
+        );
+        if (product.discountPrice !== null) {
+          if (item) {
             return await this.prisma.cart.update({
               where: { id: cart.id },
               data: {
+                cartItems: {
+                  update: {
+                    where: {
+                      id: item.id,
+                    },
+                    data: {
+                      quantity: {
+                        increment: 1,
+                      },
+                    },
+                  },
+                },
                 totalPrice: {
-                  increment: (
-                    await this.prisma.cartItem.findFirst({
-                      where: { cartId: cart.id },
-                    })
-                  ).subTotalPrice,
+                  increment: product.discountPrice,
                 },
               },
               include: {
@@ -62,6 +127,7 @@ export class CartQueries {
                         subcategory: true,
                         name: true,
                         price: true,
+                        discountPrice: true,
                         productImage: true,
                       },
                     },
@@ -69,50 +135,88 @@ export class CartQueries {
                 },
               },
             });
-          } catch (e) {
-            throw e;
           }
-        });
-    } else {
-      return await this.prisma.cartItem
-        .create({
+          item = await this.prisma.cartItem.create({
+            data: {
+              cartId: cart.id,
+              productId: data.productId,
+              quantity: 1,
+              subTotalPrice: product.discountPrice,
+            },
+          });
+        } else {
+          if (item) {
+            return await this.prisma.cart.update({
+              where: { id: cart.id },
+              data: {
+                cartItems: {
+                  update: {
+                    where: {
+                      id: item.id,
+                    },
+                    data: {
+                      quantity: {
+                        increment: 1,
+                      },
+                    },
+                  },
+                },
+                totalPrice: {
+                  increment: product.price,
+                },
+              },
+              include: {
+                cartItems: {
+                  include: {
+                    product: {
+                      select: {
+                        subcategory: true,
+                        name: true,
+                        price: true,
+                        discountPrice: true,
+                        productImage: true,
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+          item = await this.prisma.cartItem.create({
+            data: {
+              cartId: cart.id,
+              productId: data.productId,
+              quantity: 1,
+              subTotalPrice: product.price,
+            },
+          });
+        }
+        return await this.prisma.cart.update({
+          where: { id: cart.id },
           data: {
-            cartId: cart.id,
-            productId: data.productId,
-            quantity: 1,
-            subTotalPrice: (
-              await this.productService.findProductById(data.productId)
-            ).price,
+            totalPrice: {
+              increment: item.subTotalPrice,
+            },
           },
-        })
-        .then(async (item) => {
-          try {
-            return await this.prisma.cart.update({
-              where: { id: cart.id },
-              data: {
-                totalPrice: {
-                  increment: item.subTotalPrice,
-                },
-              },
+          include: {
+            cartItems: {
               include: {
-                cartItems: {
-                  include: {
-                    product: {
-                      select: {
-                        subcategory: true,
-                        name: true,
-                        price: true,
-                        productImage: true,
-                      },
-                    },
+                product: {
+                  select: {
+                    subcategory: true,
+                    name: true,
+                    price: true,
+                    discountPrice: true,
+                    productImage: true,
                   },
                 },
               },
-            });
-          } catch (e) {
-            throw e;
-          }
+            },
+          },
         });
+      }
+    } catch (e) {
+      throw e;
     }
   }
 

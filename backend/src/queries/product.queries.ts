@@ -7,7 +7,6 @@ import { PrismaService } from '../services/prisma.service';
 import { ProductDto } from '../dtos/product.dto';
 import { Prisma } from '@prisma/client';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
-import { number } from 'joi';
 
 @Injectable()
 export class ProductQueries {
@@ -310,4 +309,6 @@ export class ProductQueries {
       throw e;
     }
   }
+
+
 }

@@ -29,6 +29,7 @@ export class AuthService {
     const access_token = this.jwtService.sign({
       email: user.email,
       roles: user.roles,
+      isBanned: user.isBanned
     });
     return { access_token };
   }
