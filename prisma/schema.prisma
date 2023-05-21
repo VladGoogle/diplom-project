@@ -116,7 +116,8 @@ model ProductImage {
   id        Int       @id @default(autoincrement())
   url       String?
   key       String?
-  product   Product?
+  product   Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId Int?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
@@ -145,26 +146,27 @@ model Discount {
 }
 
 model Product {
-  id             Int            @id @default(autoincrement())
-  name           String?        @unique
-  price          Float?
-  discountPrice  Float?
-  productImage   ProductImage?  @relation(fields: [productImageId], references: [id], onDelete: Cascade)
-  productImageId Int?           @unique
-  description    String?
-  subcategory    Subcategory?   @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
-  subcategoryId  Int?
-  category       Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId     Int?
-  qtyInStock     Int?
-  discount       Discount?      @relation(fields: [discountId], references: [id], onDelete: SetNull)
-  discountId     Int?           @unique
-  comments       Comment[]
-  cartItems      CartItem[]
-  orderItems     OrderItem[]
-  wishlistItems  WishlistItem[]
-  createdAt      DateTime?      @default(now())
-  updatedAt      DateTime?      @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String?        @unique
+  price         Float?
+  discountPrice Float?
+  // productImage   ProductImage?  @relation(fields: [productImageId], references: [id], onDelete: Cascade)
+  // productImageId Int?           @unique
+  description   String?
+  subcategory   Subcategory?   @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  subcategoryId Int?
+  category      Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    Int?
+  qtyInStock    Int?
+  discount      Discount?      @relation(fields: [discountId], references: [id], onDelete: SetNull)
+  discountId    Int?           @unique
+  comments      Comment[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  wishlistItems WishlistItem[]
+  productImages ProductImage[]
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @updatedAt
 }
 
 model Wishlist {
@@ -210,17 +212,19 @@ model CartItem {
 }
 
 model Order {
-  id          Int           @id @default(autoincrement())
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
-  cart        Cart?         @relation(fields: [cartId], references: [id], onDelete: SetNull)
-  cartId      Int?          @unique
-  orderItems  OrderItem[]
-  amount      Float
-  payment     Payment?
-  orderStatus OrderStatus[] @default([RECEIVED])
-  createdAt   DateTime?     @default(now())
-  updatedAt   DateTime?     @updatedAt
+  id                    Int                  @id @default(autoincrement())
+  user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                Int
+  cart                  Cart?                @relation(fields: [cartId], references: [id], onDelete: SetNull)
+  cartId                Int?                 @unique
+  selfCheckoutAddress   SelfCheckoutSection? @relation(fields: [selfCheckoutAddressId], references: [id], onDelete: Cascade)
+  selfCheckoutAddressId Int?
+  orderItems            OrderItem[]
+  amount                Float
+  payment               Payment?
+  orderStatus           OrderStatus[]        @default([RECEIVED])
+  createdAt             DateTime?            @default(now())
+  updatedAt             DateTime?            @updatedAt
 }
 
 model OrderItem {
@@ -248,6 +252,25 @@ model Payment {
   refundToken  String?
   createdAt    DateTime?      @default(now())
   updatedAt    DateTime?      @updatedAt
+}
+
+model SelfCheckout {
+  id                   Int                   @id @default(autoincrement())
+  city                 String
+  selfCheckoutSections SelfCheckoutSection[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime?             @updatedAt
+}
+
+model SelfCheckoutSection {
+  id             Int          @id @default(autoincrement())
+  selfCheckout   SelfCheckout @relation(fields: [selfCheckoutId], references: [id], onDelete: SetNull)
+  selfCheckoutId Int
+  sectionNumber  Int
+  sectionAddress Int
+  orders         Order[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime?    @updatedAt
 }
 
 enum Role {

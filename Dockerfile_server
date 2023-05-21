@@ -15,7 +15,7 @@ COPY . .
 
 EXPOSE 3001
 
-RUN yarn build:server
+RUN yarn build:server;
 
 
 FROM node:19-alpine As Production

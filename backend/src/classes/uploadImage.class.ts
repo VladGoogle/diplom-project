@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../services/prisma.service';
 import { ProductImageQueries } from '../queries/productImage.queries';
+import { Files, ImageInterface } from '../interfaces/image.interface';
 
 export class UploadImageService extends ConfigService {
   constructor() {
@@ -22,6 +23,25 @@ export class UploadImageService extends ConfigService {
         return data;
       });
   }
+
+  async uploadMultipleImages<T extends Files>(images: T) {
+    const s3 = new S3();
+    console.log(images);
+    return Promise.all(
+      images.files.map(async (image) => {
+        return await s3
+          .upload({
+            Bucket: super.get('AWS_PUBLIC_BUCKET_NAME'),
+            Body: image.buffer,
+            Key: `${uuid()}-${image.originalname}`,
+          })
+          .promise()
+          .then((data) => {
+            return data;
+          });
+      }),
+    );
+  }
 }
 
 export class UploadProductImageService extends UploadImageService {
@@ -29,12 +49,17 @@ export class UploadProductImageService extends UploadImageService {
     super();
   }
 
-  async uploadProductImage(dataBuffer: Buffer, filename: string) {
+  async uploadProductImages<T extends Files>(images: T, productId: number) {
     try {
-      const uploadData = await super.uploadImage(dataBuffer, filename);
-      return await this.productImageQueries.createImageRecord(
-        uploadData.Location,
-        uploadData.Key,
+      const imageArray = await super.uploadMultipleImages(images);
+      return Promise.all(
+        imageArray.map(async (obj) => {
+          return await this.productImageQueries.createImageRecord(
+            obj.Location,
+            obj.Key,
+            productId,
+          );
+        }),
       );
     } catch (e) {
       throw e;

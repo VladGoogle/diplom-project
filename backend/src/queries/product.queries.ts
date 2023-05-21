@@ -19,7 +19,7 @@ export class ProductQueries {
           ...data,
         },
         include: {
-          productImage: true,
+          productImages: true,
           category: true,
           subcategory: true,
           discount: true,
@@ -42,7 +42,7 @@ export class ProductQueries {
       return await this.prisma.product.findUniqueOrThrow({
         where: { id: id },
         include: {
-          productImage: true,
+          productImages: true,
           category: true,
           subcategory: true,
           discount: true,
@@ -106,7 +106,7 @@ export class ProductQueries {
           [sortBy]: sortOrder,
         },
         include: {
-          productImage: true,
+          productImages: true,
           category: true,
           subcategory: true,
         },
@@ -121,7 +121,7 @@ export class ProductQueries {
       return await this.prisma.product.findUniqueOrThrow({
         where: { name: name },
         include: {
-          productImage: true,
+          productImages: true,
           category: true,
           subcategory: true,
           comments: true,
@@ -150,7 +150,7 @@ export class ProductQueries {
         take: take,
         where: { categoryId: id },
         include: {
-          productImage: true,
+          productImages: true,
           category: {
             include: {
               categoryIcon: true,
@@ -188,7 +188,7 @@ export class ProductQueries {
         take: take,
         where: { subcategoryId: id },
         include: {
-          productImage: true,
+          productImages: true,
           category: {
             include: {
               categoryIcon: true,
@@ -227,7 +227,7 @@ export class ProductQueries {
           [sortBy]: sortOrder,
         },
         include: {
-          productImage: true,
+          productImages: true,
           category: {
             include: {
               categoryIcon: true,
@@ -283,7 +283,7 @@ export class ProductQueries {
           ...data,
         },
         include: {
-          productImage: true,
+          productImages: true,
           category: {
             include: {
               categoryIcon: true,
@@ -309,6 +309,4 @@ export class ProductQueries {
       throw e;
     }
   }
-
-
 }
