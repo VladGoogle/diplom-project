@@ -522,3 +522,7 @@ input::placeholder {
   background-color: transparent;
   border: 2px solid #FDEB46;
 }
+
+.cart__empty-title {
+  text-align: center;
+}

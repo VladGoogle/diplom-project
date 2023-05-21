@@ -17,6 +17,7 @@ import Wishlist from './components/settingsTabs/Wishlist/Wishlist';
 import Cart from './pages/Cart';
 import TokenProvider from "./TokenContext"
 import Checkout from './components/checkout/Checkout';
+import NotFound from './components/notfound/NotFound';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
             <Route path="logout" element={<Logout />} />
           </Route>
           <Route path="/successRegistration" element={<SuccessRegistration />} />
+          <Route element={<NotFound />}/>
         </Routes>
         <Footer />
       </Router>

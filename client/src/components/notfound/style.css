@@ -1,23 +1,14 @@
-.logout {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    flex-direction: column;
-    margin-top: 80px;
-}
-
-.logout__screen-title {
+.not_found_cart-title {
     font-family: 'Sedan SC';
     font-style: normal;
-    font-weight: 400;
-    font-size: 112px;
-    line-height: 155px;
+    font-weight: 450;
+    font-size: 240px;
+    line-height: 308px;
     color: #050630;
     margin-bottom: 28px;
   }
   
-  .logout__screen-text {
+  .not_found_cart-text {
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 400;
@@ -28,8 +19,8 @@
     margin-bottom: 40px;
   }
   
-  .logout__button {
-    background-color: rgba(237, 45, 45, 0.7);
+  .successfull__button {
+    background-color: #fdeb46;
     border-radius: 5px;
     padding: 28px 58px;
     border: none;
@@ -40,4 +31,19 @@
     cursor: pointer;
   }
   
-
+  .not_found_cart-inner {
+    display:flex;
+  }
+  
+  .not_found_cart-left {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 166px;
+  }
+  
+  .not_found_cart-right {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 73px;
+  }

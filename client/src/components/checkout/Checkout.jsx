@@ -1,13 +1,37 @@
 import './style.css'
 import mastercard_1 from "../../img/mastercard_1.svg"
 import { useState, useEffect } from 'react';
+import createAxiosInstance from '../../utils/axios/instance';
 
 const Checkout = () => {
 
+    const instance = createAxiosInstance();
     const [selectedOption, setSelectedOption] = useState('');
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
+    };
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+            event.preventDefault();
+            event.returnValue = ''; // Необходимо для поддержки старых браузеров
+            handleRemoveOrder(); // Вызов функции для удаления заказа при закрытии страницы
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    const handleRemoveOrder = async () => {
+        try {
+            await instance.delete('/account/orders');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 

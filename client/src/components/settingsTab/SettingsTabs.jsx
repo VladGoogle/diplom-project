@@ -1,9 +1,27 @@
 import "./style.css"
-
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import createAxiosInstance from '../../utils/axios/instance.js';  
+import React from "react";
 
 const SettingsTabs = () => {
+
+    const instance = createAxiosInstance();
+    const [user, setUser] = React.useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await instance.get("/user/getByToken");
+            setUser(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        fetchData();
+      }, []);
+
     return (
         <div className="container">
             <section className="settings">
@@ -18,10 +36,10 @@ const SettingsTabs = () => {
                                 </div>
                                 <div className="settings__profile-info">
                                     <h2 className="profile__name">
-                                        John Doe
+                                        {user.firstName + " " + user.lastName}
                                     </h2>
                                     <h3 className="profile__email">
-                                        LaPigeon@gmail.com
+                                        {user.email}
                                     </h3>
                                 </div>
                             </NavLink>

@@ -1,10 +1,30 @@
 import "./style.css"
-import { ordersProducts } from './../../../helpers/ordersList'
 import Order from "../../order/Order.jsx"
+import React from 'react';
+import { useState, useEffect } from 'react';
+import createAxiosInstance from "../../../utils/axios/instance";
+
 
 const Orders = () => {
 
+  const instance = createAxiosInstance();
+  const [ordersTotal, setOrdersTotal] = React.useState([]);
+  const [ordersItem, setOrdersItem] = React.useState([]);
+  const [ordersUser, setOrdersUser] = React.useState([]);
   
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await instance.get("/account/orders");
+        setOrdersTotal(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <section className="orders__settings">
@@ -62,19 +82,16 @@ const Orders = () => {
           </form>
         </div>
         <ul className="orders__list">
-        {ordersProducts.map((order, id) => {
+        {ordersTotal.map((ordersTotal, id) => {
               return (
                 <Order
                   key={id}
-                  title={order.title}
-                  status={order.status}
-                  img={order.img}
-                  orderStatusImg={order.orderStatusImg}
-                  quantity={order.quantity}
-                  price={order.price}
-                  pickup={order.pickup}
-                  delivery={order.delivery}
-                  total={order.total}
+                  total={ordersTotal.amount}
+                  firstName={ordersTotal.user.firstName}
+                  lastName={ordersTotal.user.lastName}
+                  email={ordersTotal.user.email}
+                  subTotalPrice={ordersTotal.orderItems.subTotalPrice}
+                  quantity={ordersTotal.orderItems.quantity}
                 />
               );
             })}

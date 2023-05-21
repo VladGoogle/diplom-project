@@ -1,6 +1,6 @@
 import Carousel from '../components/carousel/Carousel.js';
-import CategoriesPage from '../components/categories/CategoriesPage.js';
-import Products from '../components/products/Products.js';
+import CategoriesPage from '../components/categories/CategoriesPage';
+import Products from '../components/products/Products';
 
 const Home = () => {
   return (

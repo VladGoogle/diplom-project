@@ -1,24 +1,29 @@
 import './style.css'
 import { useState } from 'react';
+import status from "../../img/status__image.png"
 
-const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, delivery, total }) => {
+
+const Order = ({ id, firstName, lastName, total, email, quantity, subTotalPrice, }) => {
 
   const [showContent, setShowContent] = useState(false);
 
   const toggleContent = () => {
     setShowContent(!showContent);
   };
+
+
+
   return (
     <li className="orders__tab" onClick={toggleContent}>
       <div className="orders__top">
         <div className="orders__tab-left">
-          <img src={orderStatusImg} alt="order status" className="orders__tab-status--image" />
+          <img src={status} alt="order status" className="orders__tab-status--image" />
           <div className="orders__tab-status--info">
             <span className="order__tab-status--id">
-              454534
+              {id}
             </span>
             <h3 className="orders__tab-status--title">
-              {status}
+              In progress
             </h3>
           </div>
         </div>
@@ -28,7 +33,7 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
               Order price
             </span>
             <h3 className="orders__tab-price">
-              {price}
+              {total}$
             </h3>
           </div>
         )}
@@ -52,11 +57,11 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
                 Information about delivery
               </h4>
               <p className="delivery__company">
-                {delivery}
+                Nova Poshta
               </p>
-              <button className="delivery__pickup">
-                {pickup}
-              </button>
+              <p className="delivery__pickup">
+                Pickup from №21, Oleksandrivskiy Prospekt 22
+              </p>
               <div className="delivery__schedule">
                 <h4 className="delivery__schedule-title">
                   Schedule:
@@ -72,17 +77,17 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
             <div className="delivery__info-personal">
               <div className="delivery__info-receiver">
                 <p className="delivery__info-reveiver--name">
-                  John Doe
+                  {firstName + " " + lastName}
                 </p>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12 9V13M12 16V16.01M3 12C3 13.1819 3.23279 14.3522 3.68508 15.4442C4.13738 16.5361 4.80031 17.5282 5.63604 18.364C6.47177 19.1997 7.46392 19.8626 8.55585 20.3149C9.64778 20.7672 10.8181 21 12 21C13.1819 21 14.3522 20.7672 15.4442 20.3149C16.5361 19.8626 17.5282 19.1997 18.364 18.364C19.1997 17.5282 19.8626 16.5361 20.3149 15.4442C20.7672 14.3522 21 13.1819 21 12C21 10.8181 20.7672 9.64778 20.3149 8.55585C19.8626 7.46392 19.1997 6.47177 18.364 5.63604C17.5282 4.80031 16.5361 4.13738 15.4442 3.68508C14.3522 3.23279 13.1819 3 12 3C10.8181 3 9.64778 3.23279 8.55585 3.68508C7.46392 4.13738 6.47177 4.80031 5.63604 5.63604C4.80031 6.47177 4.13738 7.46392 3.68508 8.55585C3.23279 9.64778 3 10.8181 3 12Z" stroke="#1C7FF3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </div>
               <p className="delivery__info-receiver-tel">
-                +380325003405
+                +380502993369
               </p>
               <p className="delivery__info-receiver-email">
-                LaPigeon@gmail.com
+                {email}
               </p>
             </div>
             <div className="delivery__info-links">
@@ -103,19 +108,19 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
           <div className="orders__content-right">
             <div className="orders__products">
               <h4 className="orders__products-title">
-                Products
+                
               </h4>
               <div className="orders__product">
-                <img src={img} alt="Product image" />
+                <img src="" alt="Product image" />
                 <button className="orders__product-link">
-                  {title}
+                  
                 </button>
                 <div className="orders__product-price">
                   <h4 className="orders__product-price--title">
                     Price
                   </h4>
                   <span className="orders__product-price--text">
-                    {price}
+                    
                   </span>
                 </div>
                 <div className="orders__product-quantity">
@@ -131,7 +136,7 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
                     Total
                   </h4>
                   <span className="orders__product-total--text">
-                    299.99$
+                    {subTotalPrice}$
                   </span>
                 </div>
               </div>
@@ -168,7 +173,7 @@ const Order = ({ status, title, img, orderStatusImg, quantity, price, pickup, de
                 Total
               </h4>
               <span className="orders__total-text">
-                {total}
+                {total}$
               </span>
             </div>
             <button className="orders__button">

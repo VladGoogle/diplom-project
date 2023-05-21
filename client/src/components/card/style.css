@@ -82,7 +82,8 @@
   margin-right: 12px;
 }
 
-.products-card__status {
+.products-card__status,
+.products-card__status--regular {
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
@@ -90,10 +91,17 @@
   line-height: 17px;
   text-transform: uppercase;
   color: #fdfdfd;
-  background-color: rgba(228, 40, 40, 0.7);
   border-radius: 10px;
   padding: 4px 5px;
   margin-left: 20px;
+}
+
+.products-card__status {
+  background-color: rgba(228, 40, 40, 0.7);
+}
+
+.products-card__status--regular {
+  background-color: #D9D9D9;
 }
 
 .product__button {
