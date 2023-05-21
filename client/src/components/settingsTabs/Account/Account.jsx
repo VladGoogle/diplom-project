@@ -1,13 +1,41 @@
 import "./style.css"
 import { useState } from "react";
+import createAxiosInstance from "../../../utils/axios/instance";
+import React from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+    firstName: yup.string(),
+    lastName: yup.string(),
+    phone: yup.string(),
+    email: yup.string()
+  });
 
 const Account = () => {
 
+    
+    const instance = createAxiosInstance();
     const [isOpen, setIsOpen] = useState([false, false]);
   
     const togglePanel = (index) => {
         setIsOpen(prevState => prevState.map((open, i) => i === index ? !open : open));
     };
+
+    const { register, handleSubmit, errors } = useForm({
+        resolver: yupResolver(schema),
+      });
+
+      const onSubmit = async (data) => {
+        try {
+          const response = await instance.post("/account/userInfo", data);
+          console.log(response.data); 
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    
 
     return (
         <div>
@@ -31,12 +59,12 @@ const Account = () => {
                         </div>
                         {isOpen [0] && (
                         <div className="account__tab-content">
-                            <form action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
                                 <div className="account__tab-inputs">
-                                    <input id="firstName" name="firstName" placeholder="First name" type="text" className="account__tab-input" />
-                                    <input id="firstName" name="firstName" placeholder="Last name" type="text" className="account__tab-input" />
+                                        <input id="firstName" name="firstName" placeholder="First name" type="text" className="account__tab-input" {...register('firstName')}/>
+                                        <input id="lastName" name="lastName" placeholder="Last name" type="text" className="account__tab-input" {...register('lastName')}/>
                                 </div>
-                                <button className="account__submit-button">
+                                <button type="submit" className="account__submit-button">
                                     SAVE
                                 </button>
                             </form>
@@ -58,12 +86,12 @@ const Account = () => {
                         </div>
                         {isOpen[1] && (
                         <div className="account__tab-content">
-                            <form action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
                                 <div className="account__tab-inputs">
-                                    <input placeholder="Phone number" type="tel" className="account__tab-input" />
-                                    <input placeholder="Email" type="email" className="account__tab-input" />
+                                        <input placeholder="Phone number" type="text" className="account__tab-input" {...register('phone')}/>
+                                        <input placeholder="Email" type="email" className="account__tab-input" {...register('email')}/>
                                 </div>
-                                <button className="account__submit-button">
+                                <button type="submit" className="account__submit-button">
                                     SAVE
                                 </button>
                             </form>

@@ -132,4 +132,53 @@
     width: 100%;
 }
 
+.signed_out_cart-title {
+    font-family: 'Sedan SC';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 112px;
+    line-height: 155px;
+    color: #050630;
+    margin-bottom: 28px;
+  }
+  
+  .signed_out_cart-text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 39px;
+    text-align: center;
+    color: #050630;
+    margin-bottom: 40px;
+  }
+  
+  .successfull__button {
+    background-color: #fdeb46;
+    border-radius: 5px;
+    padding: 28px 58px;
+    border: none;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+  }
+  
+  .signed_out_cart-inner {
+    display:flex;
+  }
+  
+  .signed_out_cart-left {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 166px;
+  }
+  
+  .signed_out_cart-right {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 73px;
+  }
 

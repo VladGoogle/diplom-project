@@ -33,6 +33,15 @@ function Products() {
     }
   }
 
+  const handleAddToWishlist = async (item) => {
+    try {
+      const response = await instance.post("/wishlist", { productId: item.id});
+      setCartItems([...cartItems, response.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   
 
@@ -50,8 +59,10 @@ function Products() {
                   name={obj.name.length > 15 ? obj.name.slice(0, 13) + '...' : obj.name}
                   category={obj.subcategory.name}
                   price={obj.price}
+                  discountPrice={obj.discountPrice}
                   img={obj.productImage.url}
                   onAddToCart={ () => handleAddToCart(obj)}
+                  onAddToWishlist={ () => handleAddToWishlist(obj)}
                 />
               );
             })}
