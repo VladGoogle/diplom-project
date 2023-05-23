@@ -24,7 +24,11 @@ export class WishlistQueries {
       include: {
         wishlistItems: {
           include: {
-            product: true,
+            product: {
+              include: {
+                productImages: true,
+              },
+            },
           },
         },
       },
