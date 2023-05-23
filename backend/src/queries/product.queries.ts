@@ -137,6 +137,18 @@ export class ProductQueries {
     }
   }
 
+  async getMostExpensiveProduct() {
+    try {
+      return await this.prisma.product.findFirstOrThrow({
+        orderBy: {
+          price: 'desc',
+        },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async findAllProductsByCategoryId(
     id: number,
     sortBy: 'name' | 'price',

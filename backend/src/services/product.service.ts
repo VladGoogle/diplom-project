@@ -111,4 +111,8 @@ export class ProductService extends UploadProductImageService {
   async updateProductInfo(data: UpdateProductDto, id: number) {
     return await this.productQueries.updateProductInfo(data, id);
   }
+
+  async countWishlistScore(id: number) {
+    return await this.productQueries.countWishlistScore(id);
+  }
 }

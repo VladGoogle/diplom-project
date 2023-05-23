@@ -32,7 +32,7 @@ export class PaymentService {
     });
 
     //Delete the cart
-    await this.cartService.deleteCartById(authHeader);
+    await this.cartService.deleteCartByUserId(authHeader);
 
     //Update products quantity
     const orderItems = order.orderItems;

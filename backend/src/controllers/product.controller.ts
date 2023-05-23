@@ -146,6 +146,11 @@ export class ProductController extends ProductService {
     return await super.findProductById(id);
   }
 
+  @Get('product/:id/countWishlist')
+  async countWishlistScore(@Param('id', ParseIntPipe) id: number) {
+    return await super.countWishlistScore(id);
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @Patch('product/:id')

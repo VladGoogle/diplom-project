@@ -256,7 +256,7 @@ model Payment {
 
 model SelfCheckout {
   id                   Int                   @id @default(autoincrement())
-  city                 String
+  city                 String                @unique
   selfCheckoutSections SelfCheckoutSection[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime?             @updatedAt
@@ -267,7 +267,7 @@ model SelfCheckoutSection {
   selfCheckout   SelfCheckout @relation(fields: [selfCheckoutId], references: [id], onDelete: SetNull)
   selfCheckoutId Int
   sectionNumber  Int
-  sectionAddress Int
+  sectionAddress String
   orders         Order[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime?    @updatedAt

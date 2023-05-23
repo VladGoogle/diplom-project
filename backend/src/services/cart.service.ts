@@ -26,7 +26,7 @@ export class CartService {
     });
   }
 
-  async deleteCartById(authHeader: string) {
+  async deleteCartByUserId(authHeader: string) {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
     const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.cartQueries.deleteCartById(user.id);
@@ -34,6 +34,14 @@ export class CartService {
 
   async getCartById(id: number) {
     return await this.cartQueries.getCartById(id);
+  }
+
+  async getCartByUserId(authHeader: string) {
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    console.log(decodedPayload)
+    const user = await this.userService.findUserByEmail(decodedPayload);
+    console.log(user)
+    return await this.cartQueries.getCartByUserId(user.id);
   }
 
   async updateCartItemQuantity(data: UpdateCartItemQuantityDto) {

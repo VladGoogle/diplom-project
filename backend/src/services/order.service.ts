@@ -4,6 +4,7 @@ import { Order } from '@prisma/client';
 import { OrderQueries } from '../queries/order.queries';
 import { UserService } from './users.service';
 import { TokenService } from './token.service';
+import {SetSectionAddressDto} from "../dtos/setSectionAddress.dto";
 
 @Injectable()
 export class OrderService {
@@ -43,5 +44,9 @@ export class OrderService {
 
   async updateOrderStatus(orderId: number, status: 'RECEIVED' | 'RETURNED') {
     return await this.orderQueries.updateOrderStatus(orderId, status);
+  }
+
+  async setSectionAddressToOrder(data: SetSectionAddressDto) {
+    return await this.orderQueries.setSectionAddressToOrder(data);
   }
 }

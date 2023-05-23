@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
 import { CartItemDto } from '../dtos/cartItem.dto';
 import { ProductService } from '../services/product.service';
@@ -16,13 +20,6 @@ export class WishlistQueries {
     const wishlist = await this.prisma.wishlist.findFirst({
       where: {
         userId: data.userId,
-        AND: {
-          NOT: {
-            wishlistItems: {
-              none: {},
-            },
-          },
-        },
       },
       include: {
         wishlistItems: {
@@ -34,7 +31,6 @@ export class WishlistQueries {
     });
 
     if (!wishlist) {
-      const product = await this.productService.findProductById(data.productId);
       const wishlistObj = await this.prisma.wishlist.create({
         data: {
           userId: data.userId,
@@ -47,15 +43,26 @@ export class WishlistQueries {
         include: {
           wishlistItems: {
             include: {
-              product: true,
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
             },
           },
         },
       });
       return wishlistObj;
     } else {
-      const product = await this.productService.findProductById(data.productId);
-      const wishlistItem = await this.prisma.wishlistItem.create({
+      if (
+        wishlist.wishlistItems.find((obj) => obj.productId === data.productId)
+      ) {
+        throw new BadRequestException(
+          'This product has already been added in the wishlist',
+        );
+      }
+
+      await this.prisma.wishlistItem.create({
         data: {
           wishlistId: wishlist.id,
           productId: data.productId,
@@ -73,7 +80,15 @@ export class WishlistQueries {
       return await this.prisma.wishlist.findUniqueOrThrow({
         where: { id: id },
         include: {
-          wishlistItems: true,
+          wishlistItems: {
+            include: {
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (e) {
@@ -86,11 +101,37 @@ export class WishlistQueries {
     }
   }
 
-  async deleteWishlistById(id: number) {
+  async getWishlistByUserId(id: number) {
+    try {
+      return await this.prisma.wishlist.findUniqueOrThrow({
+        where: { userId: id },
+        include: {
+          wishlistItems: {
+            include: {
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Wishlist doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async deleteWishlistByUserId(id: number) {
     try {
       const wishlist = await this.prisma.wishlist.delete({
         where: {
-          id: id,
+          userId: id,
         },
         include: {
           wishlistItems: true,
@@ -118,7 +159,15 @@ export class WishlistQueries {
       return await this.prisma.wishlist.findUniqueOrThrow({
         where: { id: wishlistId },
         include: {
-          wishlistItems: true,
+          wishlistItems: {
+            include: {
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (e) {

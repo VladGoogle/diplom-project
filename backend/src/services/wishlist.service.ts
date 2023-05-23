@@ -23,13 +23,22 @@ export class WishlistService {
     });
   }
 
-  async deleteWishlistById(id: number) {
-    return await this.wishlistQueries.deleteWishlistById(id);
+  async deleteWishlistByUserId(authHeader: string) {
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    const user = await this.userService.findUserByEmail(decodedPayload);
+    return await this.wishlistQueries.deleteWishlistByUserId(user.id);
+  }
+
+  async getWishlistByUserId(authHeader: string) {
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    const user = await this.userService.findUserByEmail(decodedPayload);
+    return await this.wishlistQueries.getWishlistByUserId(user.id);
   }
 
   async getWishlistById(id: number) {
     return await this.wishlistQueries.getWishlistById(id);
   }
+
 
   async removeWishlistItemFromWishlist(
     wishlistId: number,

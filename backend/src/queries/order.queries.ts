@@ -7,6 +7,7 @@ import { PrismaService } from '../services/prisma.service';
 import { OrderDto } from '../dtos/order.dto';
 import { Prisma } from '@prisma/client';
 import { CartService } from '../services/cart.service';
+import { SetSectionAddressDto } from '../dtos/setSectionAddress.dto';
 
 @Injectable()
 export class OrderQueries {
@@ -17,7 +18,7 @@ export class OrderQueries {
 
   async createOrder(data: OrderDto, cartId: number) {
     try {
-      const order = await this.getOrderByCartId(cartId).then((order) => {
+      await this.getOrderByCartId(cartId).then((order) => {
         if (order) {
           throw new BadRequestException('Order with such cart already exists');
         }
@@ -41,7 +42,21 @@ export class OrderQueries {
           },
         },
         include: {
-          orderItems: true,
+          user: {
+            select: {
+              address: true,
+            },
+          },
+          orderItems: {
+            include: {
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          },
+          payment: true,
         },
       });
     } catch (e) {
@@ -54,10 +69,18 @@ export class OrderQueries {
       return await this.prisma.order.findUniqueOrThrow({
         where: { id: id },
         include: {
-          user: true,
+          user: {
+            select: {
+              address: true,
+            },
+          },
           orderItems: {
             include: {
-              product: true,
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
             },
           },
           payment: true,
@@ -77,10 +100,18 @@ export class OrderQueries {
     return this.prisma.order.findUnique({
       where: { cartId: id },
       include: {
-        user: true,
+        user: {
+          select: {
+            address: true,
+          },
+        },
         orderItems: {
           include: {
-            product: true,
+            product: {
+              include: {
+                productImages: true,
+              },
+            },
           },
         },
         payment: true,
@@ -93,10 +124,18 @@ export class OrderQueries {
       return await this.prisma.order.findMany({
         where: { userId: id },
         include: {
-          user: true,
+          user: {
+            select: {
+              address: true,
+            },
+          },
           orderItems: {
             include: {
-              product: true,
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
             },
           },
           payment: true,
@@ -135,6 +174,24 @@ export class OrderQueries {
         include: {
           orderItems: true,
           payment: true,
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Order doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async setSectionAddressToOrder(data: SetSectionAddressDto) {
+    try {
+      return await this.prisma.order.update({
+        where: { id: data.orderId },
+        data: {
+          selfCheckoutAddressId: data.sectionId,
         },
       });
     } catch (e) {
