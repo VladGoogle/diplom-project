@@ -60,7 +60,7 @@ function Products() {
                   category={obj.subcategory.name}
                   price={obj.price}
                   discountPrice={obj.discountPrice}
-                  img={obj.productImage.url}
+                  img={obj.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
                 />
