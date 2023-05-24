@@ -87,7 +87,7 @@ export class CartQueries {
                     name: true,
                     price: true,
                     discountPrice: true,
-                    productImage: true,
+                    productImages: true,
                   },
                 },
               },
@@ -128,7 +128,7 @@ export class CartQueries {
                         name: true,
                         price: true,
                         discountPrice: true,
-                        productImage: true,
+                        productImages: true,
                       },
                     },
                   },
@@ -174,7 +174,7 @@ export class CartQueries {
                         name: true,
                         price: true,
                         discountPrice: true,
-                        productImage: true,
+                        productImages: true,
                       },
                     },
                   },
@@ -207,7 +207,7 @@ export class CartQueries {
                     name: true,
                     price: true,
                     discountPrice: true,
-                    productImage: true,
+                    productImages: true,
                   },
                 },
               },
@@ -232,7 +232,7 @@ export class CartQueries {
                   subcategory: true,
                   name: true,
                   price: true,
-                  productImage: true,
+                  productImages: true,
                 },
               },
             },
@@ -261,7 +261,7 @@ export class CartQueries {
                   subcategory: true,
                   name: true,
                   price: true,
-                  productImage: true,
+                  productImages: true,
                 },
               },
             },
@@ -288,7 +288,7 @@ export class CartQueries {
               subcategory: true,
               name: true,
               price: true,
-              productImage: true,
+              productImages: true,
             },
           },
         },
@@ -303,7 +303,7 @@ export class CartQueries {
     }
   }
 
-  async deleteCartById(id: number) {
+  async deleteCartByUserId(id: number) {
     try {
       const cart = await this.prisma.cart.delete({
         where: {
@@ -342,7 +342,7 @@ export class CartQueries {
                   subcategory: true,
                   name: true,
                   price: true,
-                  productImage: true,
+                  productImages: true,
                 },
               },
             },
@@ -389,7 +389,7 @@ export class CartQueries {
                   subcategory: true,
                   name: true,
                   price: true,
-                  productImage: true,
+                  productImages: true,
                 },
               },
             },

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { UserService } from './users.service';
 import { WishlistQueries } from '../queries/wishlist.queries';
 import { WishlistItemDto } from '../dtos/wishlistItem.dto';
 import { TokenService } from './token.service';
@@ -10,21 +9,25 @@ export class WishlistService {
   constructor(
     private prisma: PrismaService,
     private wishlistQueries: WishlistQueries,
-    private userService: UserService,
     private tokenService: TokenService,
   ) {}
 
   async addProductToWishlist(data: WishlistItemDto, authHeader: string) {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
     return await this.wishlistQueries.addProductToWishlist({
       ...data,
-      userId: user.id,
+      userId: decodedPayload.id,
     });
   }
 
-  async deleteWishlistById(id: number) {
-    return await this.wishlistQueries.deleteWishlistById(id);
+  async deleteWishlistByUserId(authHeader: string) {
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    return await this.wishlistQueries.deleteWishlistByUserId(decodedPayload.id);
+  }
+
+  async getWishlistByUserId(authHeader: string) {
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    return await this.wishlistQueries.getWishlistByUserId(decodedPayload.id);
   }
 
   async getWishlistById(id: number) {

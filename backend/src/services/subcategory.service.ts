@@ -11,7 +11,6 @@ export class SubcategoryService {
   constructor(
     private prisma: PrismaService,
     private subcategoryQueries: SubcategoryQueries,
-
     private subcategoryIconService: SubcategoryIconService,
   ) {}
 

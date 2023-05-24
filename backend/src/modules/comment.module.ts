@@ -11,8 +11,6 @@ import { TokenService } from '../services/token.service';
 
 @Module({
   providers: [
-    UserService,
-    UserQueries,
     TokenService,
     CommentQueries,
     CommentService,

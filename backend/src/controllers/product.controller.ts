@@ -10,13 +10,17 @@ import {
   Query,
   Req,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from '../services/product.service';
 import { ProductDto } from '../dtos/product.dto';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 import { SearchInterface } from '../interfaces/search.interface';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { Role } from '../enums/role.enum';
@@ -104,8 +108,12 @@ export class ProductController extends ProductService {
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard)
   @Post('products')
-  @UseInterceptors(FileInterceptor('file'))
-  async addProduct(@UploadedFile() file, @Req() req, @Body() data: ProductDto) {
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }]))
+  async addProduct(
+    @UploadedFiles() files,
+    @Req() req,
+    @Body() data: ProductDto,
+  ) {
     return await super.createProduct(
       {
         ...data,
@@ -114,8 +122,7 @@ export class ProductController extends ProductService {
         price: parseFloat(data.price.toString()),
         qtyInStock: parseInt(data.qtyInStock.toString()),
       },
-      file.buffer,
-      file.originalname,
+      files,
     );
   }
 
@@ -137,6 +144,11 @@ export class ProductController extends ProductService {
   @Get('product/:id')
   async getProductById(@Param('id', ParseIntPipe) id: number) {
     return await super.findProductById(id);
+  }
+
+  @Get('product/:id/countWishlist')
+  async countWishlistScore(@Param('id', ParseIntPipe) id: number) {
+    return await super.countWishlistScore(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

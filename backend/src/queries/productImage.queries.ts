@@ -31,10 +31,11 @@ export class ProductImageQueries {
   //   }
   // }
 
-  async createImageRecord(location: string, key: string) {
+  async createImageRecord(location: string, key: string, id: number) {
     try {
       return await this.prisma.productImage.create({
         data: {
+          productId: id,
           url: location,
           key: key,
         },

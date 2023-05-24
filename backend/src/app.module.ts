@@ -21,6 +21,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { PasswordModule } from './modules/password.module';
 import * as path from 'path';
+import { AddressModule } from './modules/address.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import * as path from 'path';
     PaymentModule,
     OrderModule,
     PasswordModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

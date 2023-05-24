@@ -21,27 +21,6 @@ import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
 @Controller()
 export class CartController {
   constructor(private cartService: CartService) {}
-
-  @UseGuards(JwtAuthGuard)
-  @Post('carts')
-  async addProductToCart(@Body() data: CartItemDto, @Headers() headers: any) {
-    return await this.cartService.addProductToCart(
-      data,
-      getTokenFromHeaders(headers),
-    );
-  }
-
-  @Get('cart/:id')
-  async getCartById(@Param('id', ParseIntPipe) id: number) {
-    return await this.cartService.getCartById(id);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Delete('cart')
-  async deleteCartById(@Headers() headers: any) {
-    return await this.cartService.deleteCartById(getTokenFromHeaders(headers));
-  }
-
   @UseGuards(JwtAuthGuard)
   @Patch('cart/updateItem')
   async updateCartItemQuantity(@Body() data: UpdateCartItemQuantityDto) {
@@ -52,5 +31,33 @@ export class CartController {
   @Patch('cart/removeItem')
   async removeItemFromCart(@Body() data: RemoveItemFromCartDto) {
     return await this.cartService.removeCartItemFromCart(data);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('cart/getByToken')
+  async getCartByUserId(@Headers() headers: any) {
+    return await this.cartService.getCartByUserId(getTokenFromHeaders(headers));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('carts')
+  async addProductToCart(@Body() data: CartItemDto, @Headers() headers: any) {
+    return await this.cartService.addProductToCart(
+      data,
+      getTokenFromHeaders(headers),
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('cart')
+  async deleteCartById(@Headers() headers: any) {
+    return await this.cartService.deleteCartByUserId(
+      getTokenFromHeaders(headers),
+    );
+  }
+
+  @Get('cart/:id')
+  async getCartById(@Param('id', ParseIntPipe) id: number) {
+    return await this.cartService.getCartById(id);
   }
 }

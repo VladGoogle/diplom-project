@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -23,13 +24,21 @@ export class AuthService {
 
   async signIn(data: LoginDto) {
     const user = await this.userService.findUserByEmail(data.email);
+
     if (!user || !(await bcrypt.compare(data.password, user.password))) {
       throw new UnauthorizedException('Invalid user credentials');
     }
+
+    if (user.isBanned === true) {
+      throw new ForbiddenException(
+        'You are banned from this portal. Please, refer to administrator',
+      );
+    }
     const access_token = this.jwtService.sign({
+      id: user.id,
       email: user.email,
       roles: user.roles,
-      isBanned: user.isBanned
+      isBanned: user.isBanned,
     });
     return { access_token };
   }

@@ -22,7 +22,7 @@ export class PaymentService {
 
   async createPayment(orderId: number, authHeader: string): Promise<Payment> {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
+    const user = await this.userService.findUserByEmail(decodedPayload.email);
     const order = await this.orderService.getOrderById(orderId);
     const charge = await this.stripeService.createCharge({
       currency: user.card.currency.toString(),
@@ -32,7 +32,7 @@ export class PaymentService {
     });
 
     //Delete the cart
-    await this.cartService.deleteCartById(authHeader);
+    await this.cartService.deleteCartByUserId(authHeader);
 
     //Update products quantity
     const orderItems = order.orderItems;
