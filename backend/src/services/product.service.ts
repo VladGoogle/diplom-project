@@ -6,7 +6,7 @@ import { UpdateProductDto } from '../dtos/updateProduct.dto';
 import { UploadProductImageService } from '../classes/uploadImage.class';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { PrismaService } from './prisma.service';
-import {Files, ImageInterface} from '../interfaces/image.interface';
+import { Files } from '../interfaces/image.interface';
 
 @Injectable()
 export class ProductService extends UploadProductImageService {
@@ -22,7 +22,6 @@ export class ProductService extends UploadProductImageService {
     data: ProductDto,
     images: T,
   ): Promise<Product> {
-    // const image = await super.uploadProductImage(dataBuffer, filename);
     const product = await this.productQueries.createProduct({
       ...data,
     });

@@ -303,7 +303,7 @@ export class CartQueries {
     }
   }
 
-  async deleteCartById(id: number) {
+  async deleteCartByUserId(id: number) {
     try {
       const cart = await this.prisma.cart.delete({
         where: {

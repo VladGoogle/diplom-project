@@ -150,8 +150,7 @@ model Product {
   name          String?        @unique
   price         Float?
   discountPrice Float?
-  // productImage   ProductImage?  @relation(fields: [productImageId], references: [id], onDelete: Cascade)
-  // productImageId Int?           @unique
+  wishlistCount Int?           @default(0)
   description   String?
   subcategory   Subcategory?   @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   subcategoryId Int?

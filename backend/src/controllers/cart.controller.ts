@@ -52,7 +52,7 @@ export class CartController {
   @Delete('cart')
   async deleteCartById(@Headers() headers: any) {
     return await this.cartService.deleteCartByUserId(
-        getTokenFromHeaders(headers),
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -60,5 +60,4 @@ export class CartController {
   async getCartById(@Param('id', ParseIntPipe) id: number) {
     return await this.cartService.getCartById(id);
   }
-
 }

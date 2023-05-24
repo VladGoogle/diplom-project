@@ -10,10 +10,7 @@ export class SubcategoryIconService {
     private subcategoryIconQueries: SubcategoryIconQueries,
   ) {}
 
-  async uploadSubcategoryIcon(
-    data: Buffer,
-    filename: string,
-  ){
+  async uploadSubcategoryIcon(data: Buffer, filename: string) {
     return await this.subcategoryIconQueries.uploadSubcategoryIcon(
       data,
       filename,

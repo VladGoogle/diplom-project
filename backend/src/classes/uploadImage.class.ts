@@ -26,7 +26,6 @@ export class UploadImageService extends ConfigService {
 
   async uploadMultipleImages<T extends Files>(images: T) {
     const s3 = new S3();
-    console.log(images);
     return Promise.all(
       images.files.map(async (image) => {
         return await s3

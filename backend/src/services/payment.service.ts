@@ -22,7 +22,7 @@ export class PaymentService {
 
   async createPayment(orderId: number, authHeader: string): Promise<Payment> {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
+    const user = await this.userService.findUserByEmail(decodedPayload.email);
     const order = await this.orderService.getOrderById(orderId);
     const charge = await this.stripeService.createCharge({
       currency: user.card.currency.toString(),

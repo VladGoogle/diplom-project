@@ -31,7 +31,9 @@ export class UserService {
 
   async getUserByToken(authHeader: string) {
     return await this.findUserByEmail(
-      await this.tokenService.decodeAuthToken(authHeader),
+      (
+        await this.tokenService.decodeAuthToken(authHeader)
+      ).email,
     );
   }
 
@@ -48,17 +50,13 @@ export class UserService {
   }
 
   async updateUserInfo(data: UpdateUserDto, authHeader: string) {
-    return await this.userQueries.updateUserInfo(
-      data,
-      await this.tokenService.decodeAuthToken(authHeader),
-    );
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    return await this.userQueries.updateUserInfo(data, decodedPayload.email);
   }
 
   async resetUserPassword(data: ResetPasswordDto, authHeader: string) {
-    return await this.userQueries.resetUserPassword(
-      data,
-      await this.tokenService.decodeAuthToken(authHeader),
-    );
+    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    return await this.userQueries.resetUserPassword(data, decodedPayload.email);
   }
 
   async addAddress(data: AddressDto, authHeader: string) {

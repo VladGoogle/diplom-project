@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
-import { CartItemDto } from '../dtos/cartItem.dto';
 import { ProductService } from '../services/product.service';
 import { Prisma } from '@prisma/client';
 import { WishlistItemDto } from '../dtos/wishlistItem.dto';
@@ -56,6 +55,15 @@ export class WishlistQueries {
           },
         },
       });
+
+      await this.prisma.product.update({
+        where: { id: data.productId },
+        data: {
+          wishlistCount: {
+            increment: 1,
+          },
+        },
+      });
       return wishlistObj;
     } else {
       if (
@@ -75,6 +83,16 @@ export class WishlistQueries {
           wishlist: true,
         },
       });
+
+      await this.prisma.product.update({
+        where: { id: data.productId },
+        data: {
+          wishlistCount: {
+            increment: 1,
+          },
+        },
+      });
+
       return await this.getWishlistById(wishlist.id);
     }
   }
@@ -157,8 +175,16 @@ export class WishlistQueries {
     wishlistItemId: number,
   ) {
     try {
-      await this.prisma.wishlistItem.delete({
+      const item = await this.prisma.wishlistItem.delete({
         where: { id: wishlistItemId },
+      });
+      await this.prisma.product.update({
+        where: { id: item.productId },
+        data: {
+          wishlistCount: {
+            decrement: 1,
+          },
+        },
       });
       return await this.prisma.wishlist.findUniqueOrThrow({
         where: { id: wishlistId },

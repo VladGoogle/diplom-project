@@ -27,15 +27,6 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('account/addresses')
-  async addAddress(@Body() data: AddressDto, @Headers() headers: any) {
-    return await this.userService.addAddress(
-      data,
-      getTokenFromHeaders(headers),
-    );
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Patch('account/userInfo')
   async updateUserInfo(@Body() data: UpdateUserDto, @Headers() headers: any) {
     return await this.userService.updateUserInfo(

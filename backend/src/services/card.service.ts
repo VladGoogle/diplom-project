@@ -20,7 +20,7 @@ export class CardService {
 
   async addCard(data: CardDto, authHeader: string): Promise<Card> {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
+    const user = await this.userService.findUserByEmail(decodedPayload.email);
     await this.cardQueries.addCard({
       ...data,
       userId: user.id,
@@ -45,19 +45,17 @@ export class CardService {
 
   async deleteCardByUserId(authHeader: string) {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
-    return await this.cardQueries.deleteCardByUserId(user.id);
+    return await this.cardQueries.deleteCardByUserId(decodedPayload.id);
   }
 
   async getCardByUserId(authHeader: string) {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
-    return await this.cardQueries.getCardByUserId(user.id);
+    return await this.cardQueries.getCardByUserId(decodedPayload.id);
   }
 
   async updateCardInfo(data: UpdateCardDto, authHeader: string) {
     const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
-    const user = await this.userService.findUserByEmail(decodedPayload);
+    const user = await this.userService.findUserByEmail(decodedPayload.email);
     await this.cardQueries.updateCardInfo(user.id, data);
     const cardSource = await this.stripeService.createCardToken(
       user.customerToken,

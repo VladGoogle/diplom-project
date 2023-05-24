@@ -1,8 +1,7 @@
-import {IsInt, IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CheckoutSectionDto {
-    @IsInt()
-    @IsNotEmpty()
-    selfCheckoutId: number;
-
+  @IsInt()
+  @IsNotEmpty()
+  selfCheckoutId: number;
 }
