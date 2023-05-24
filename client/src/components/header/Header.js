@@ -6,6 +6,8 @@ import React from 'react';
 const Header = () => {
   const [loginOpened, setLoginOpened] = React.useState(false);
   const [registrationOpened, setRegistrationOpened] = React.useState(false);
+  const [catalogOpened, setCatalogOpened] = React.useState(false);
+  
     return (
       <>
         {loginOpened && (

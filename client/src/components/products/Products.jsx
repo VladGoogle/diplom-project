@@ -35,7 +35,7 @@ function Products() {
 
   const handleAddToWishlist = async (item) => {
     try {
-      const response = await instance.post("/wishlist", { productId: item.id});
+      const response = await instance.post("/wishlists", { productId: item.id});
       setCartItems([...cartItems, response.data]);
     } catch (error) {
       console.log(error);

@@ -4,6 +4,7 @@ import createAxiosInstance from "../../../utils/axios/instance";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
     firstName: yup.string(),
@@ -22,13 +23,13 @@ const Account = () => {
         setIsOpen(prevState => prevState.map((open, i) => i === index ? !open : open));
     };
 
-    const { register, handleSubmit, errors } = useForm({
+    const { register, handleSubmit } = useForm({
         resolver: yupResolver(schema),
       });
 
       const onSubmit = async (data) => {
         try {
-          const response = await instance.post("/account/userInfo", data);
+          const response = await instance.patch("/account/userInfo", data);
           console.log(response.data); 
         } catch (error) {
           console.error(error);
