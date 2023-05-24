@@ -14,7 +14,7 @@
     "format": "prettier --write \\\"backend/src/**/*.ts\\\" \\\"test/**/*.ts\\\" \\\"client/**/**/*.js\\\"",
     "start": "nest start",
     "start:test": "yarn run migration:dev && nest start --watch",
-    "start:server:dev": "yarn migration:dev && nest start --watch",
+    "start:server:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/backend/src/main.js",
     "migration:dev": "yarn prisma migrate dev",
