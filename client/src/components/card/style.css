@@ -125,4 +125,6 @@
 .products__card-image {
   display: flex;
   align-self: center;
+  max-width: 201px;
+  max-height: 262px;
 }

@@ -11,6 +11,8 @@ function Products() {
   const instance = createAxiosInstance();
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
+  const [wishlistItems, setWishlistItems] = React.useState(null);
+  const [deletedWishlistItems, setdeletedWishlistItems] = React.useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,10 +35,31 @@ function Products() {
     }
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+    try {
+      const response = await instance.get("/wishlist/getByToken");
+      setWishlistItems(response.data);
+      console.log(wishlistItems)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  fetchData();
+  }, []);
+
   const handleAddToWishlist = async (item) => {
     try {
       const response = await instance.post("/wishlists", { productId: item.id});
-      setCartItems([...cartItems, response.data]);
+      setdeletedWishlistItems([...deletedWishlistItems, response.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleRemoveFromWishlist = async (wishlistItem) => {
+    try {
+      await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId: wishlistItem.id});
     } catch (error) {
       console.log(error);
     }
@@ -63,6 +86,7 @@ function Products() {
                   img={obj.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
+                  onRemoveFromWishlist={() => handleRemoveFromWishlist(wishlistItems)}
                 />
               );
             })}
