@@ -1,3 +1,4 @@
+import CatalogPopup from '../catalogPopup/CatalogPopup';
 import Navbar from '../navbar/Navbar';
 import Login from '../signup/Login';
 import Registration from '../signup/Signup';
@@ -8,6 +9,10 @@ const Header = () => {
   const [registrationOpened, setRegistrationOpened] = React.useState(false);
   const [catalogOpened, setCatalogOpened] = React.useState(false);
   
+  const toggleCatalog = () => {
+    setCatalogOpened(!catalogOpened);
+  };
+
     return (
       <>
         {loginOpened && (
@@ -20,11 +25,18 @@ const Header = () => {
           />
         )}
         <Navbar
+          catalogOpened={catalogOpened}
+          onClickCatalog={toggleCatalog}
           onClickSignup={() => {
             setRegistrationOpened(!registrationOpened);
             setLoginOpened(false);
           }}
         />
+      {catalogOpened && (
+        <CatalogPopup 
+          onCloseCatalog={toggleCatalog}
+        />
+      )}
         {registrationOpened && (
           <Registration
             onCloseRegistration={() => setRegistrationOpened(false)}

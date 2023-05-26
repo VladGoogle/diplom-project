@@ -1,7 +1,7 @@
 import Card from '../card/Card.js';
 import './style.css';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import createAxiosInstance from '../../utils/axios/instance.js';  
 
 
@@ -11,8 +11,7 @@ function Products() {
   const instance = createAxiosInstance();
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
-  const [wishlistItems, setWishlistItems] = React.useState(null);
-  const [deletedWishlistItems, setdeletedWishlistItems] = React.useState([]);
+  const [addedWishlistItems, setAddedWishlistItems] = React.useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,31 +34,19 @@ function Products() {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-    try {
-      const response = await instance.get("/wishlist/getByToken");
-      setWishlistItems(response.data);
-      console.log(wishlistItems)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchData();
-  }, []);
 
   const handleAddToWishlist = async (item) => {
     try {
       const response = await instance.post("/wishlists", { productId: item.id});
-      setdeletedWishlistItems([...deletedWishlistItems, response.data]);
+      setAddedWishlistItems([...addedWishlistItems, response.data]);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const handleRemoveFromWishlist = async (wishlistItem) => {
+  const handleRemoveFromWishlist = async () => {
     try {
-      await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId: wishlistItem.id});
+      await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId});
     } catch (error) {
       console.log(error);
     }
@@ -86,7 +73,7 @@ function Products() {
                   img={obj.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
-                  onRemoveFromWishlist={() => handleRemoveFromWishlist(wishlistItems)}
+                  onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0].id)}
                 />
               );
             })}
