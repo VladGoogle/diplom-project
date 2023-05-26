@@ -15,8 +15,7 @@ function  CategoriesPage() {
     const fetchData = async () => {
       try {
         const response = await instance.get("/categories"); // запрос к API, который вернет все категории
-        const categories = response.data;
-        setCategories(categories);
+        setCategories(response.data);
       } catch (error) {
         setError(error);
         console.log(error);

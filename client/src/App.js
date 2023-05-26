@@ -42,7 +42,7 @@ function App() {
             <Route path="logout" element={<Logout />} />
           </Route>
           <Route path="/successRegistration" element={<SuccessRegistration />} />
-          <Route element={<NotFound />}/>
+          <Route path="*" element={<NotFound />}/>
         </Routes>
         <Footer />
       </Router>

@@ -110,7 +110,7 @@ function Navbar(props) {
       <div className="header__bottom">
         <div className="container">
           <div className="header__bottom-items">
-            <button className="header__bottom-catalog">
+            <button onClick={props.onClickCatalog} className="header__bottom-catalog">
               <svg
                 alt="catalog"
                 className="header__button-icon"

@@ -1,3 +1,7 @@
+.not__found {
+  overflow: hidden;
+}
+
 .not_found_cart-title {
     font-family: 'Sedan SC';
     font-style: normal;
@@ -33,6 +37,8 @@
   
   .not_found_cart-inner {
     display:flex;
+    justify-content: space-around;
+    overflow: hidden;
   }
   
   .not_found_cart-left {
@@ -46,4 +52,8 @@
     display: flex;
     align-items: flex-end;
     padding-top: 73px;
+  }
+
+  .not__found-image {
+    margin-top: 10px;
   }
