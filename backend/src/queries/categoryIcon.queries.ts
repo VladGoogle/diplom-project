@@ -13,31 +13,18 @@ export class CategoryIconQueries {
     private readonly configService: ConfigService,
   ) {}
 
-  async uploadCategoryIcon(
-    dataBuffer: Buffer,
-    filename: string,
-  ): Promise<CategoryIcon> {
+  async createImageRecord(location: string, key: string, id: number) {
     try {
-      const s3 = new S3();
-      const uploadResult = await s3
-        .upload({
-          Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
-          Body: dataBuffer,
-          Key: `${uuid()}-${filename}`,
-        })
-        .promise()
-        .then((data) => {
-          return data;
-        });
       return await this.prisma.categoryIcon.create({
         data: {
-          url: uploadResult.Location,
-          key: uploadResult.Key,
+          categoryId: id,
+          url: location,
+          key: key,
         },
         include: { category: true },
       });
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 

@@ -175,38 +175,24 @@ export class WishlistQueries {
     wishlistItemId: number,
   ) {
     try {
-      const item = await this.prisma.wishlistItem.delete({
-        where: { id: wishlistItemId },
-      });
-      await this.prisma.product.update({
-        where: { id: item.productId },
-        data: {
-          wishlistCount: {
-            decrement: 1,
-          },
-        },
-      });
-      return await this.prisma.wishlist.findUniqueOrThrow({
-        where: { id: wishlistId },
-        include: {
-          wishlistItems: {
-            include: {
-              product: {
-                include: {
-                  productImages: true,
-                },
+      await this.prisma.wishlistItem
+        .delete({
+          where: { id: wishlistItemId },
+        })
+        .then(async (item) => {
+          await this.prisma.product.update({
+            where: { id: item.productId },
+            data: {
+              wishlistCount: {
+                decrement: 1,
               },
             },
-          },
-        },
-      });
+          });
+        });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Item doesn't exist`);
-        }
-      }
       throw e;
     }
+
+    return await this.getWishlistById(wishlistId);
   }
 }

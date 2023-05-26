@@ -45,16 +45,20 @@ export class ProductController extends ProductService {
   async getAllProductsBySearchQuery(
     @Query() search: SearchInterface,
     @Query('sortBy') sortBy: 'name' | 'price' = 'name',
-    @Query('skip') skip = 0,
-    @Query('take') take = 10,
     @Query('sortOrder') sortOrder: Prisma.SortOrder = 'asc',
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Query('minPrice') minPrice = '0',
+    @Query('maxPrice') maxPrice = '9999',
   ) {
     return await super.findAllProductsBySearchQuery(
       search.searchQuery,
       sortBy,
       sortOrder,
-      skip,
-      take,
+      +skip,
+      +take,
+      +minPrice,
+      +maxPrice,
     );
   }
 
@@ -75,15 +79,19 @@ export class ProductController extends ProductService {
     @Param('id', ParseIntPipe) id: number,
     @Query('sortBy') sortBy: 'name' | 'price' = 'name',
     @Query('sortOrder') sortOrder: Prisma.SortOrder = 'asc',
-    @Query('skip') skip: any = 0,
-    @Query('take') take: any = 10,
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Query('minPrice') minPrice = '0',
+    @Query('maxPrice') maxPrice = '9999',
   ) {
     return await super.findAllProductsByCategoryId(
       id,
       sortBy,
       sortOrder,
-      parseInt(skip),
-      parseInt(take),
+      +skip,
+      +take,
+      +minPrice,
+      +maxPrice,
     );
   }
 
@@ -92,15 +100,19 @@ export class ProductController extends ProductService {
     @Param('id', ParseIntPipe) id: number,
     @Query('sortBy') sortBy: 'name' | 'price' = 'name',
     @Query('sortOrder') sortOrder: Prisma.SortOrder = 'asc',
-    @Query('skip') skip: any = 0,
-    @Query('take') take: any = 10,
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Query('minPrice') minPrice = '0',
+    @Query('maxPrice') maxPrice = '9999',
   ) {
     return await super.findAllProductsBySubcategoryId(
       id,
       sortBy,
       sortOrder,
-      parseInt(skip),
-      parseInt(take),
+      +skip,
+      +take,
+      +minPrice,
+      +maxPrice,
     );
   }
 
@@ -130,25 +142,24 @@ export class ProductController extends ProductService {
   async getAllProducts(
     @Query('sortBy') sortBy: 'name' | 'price' = 'name',
     @Query('sortOrder') sortOrder: Prisma.SortOrder = 'asc',
-    @Query('skip') skip: any = 0,
-    @Query('take') take: any = 10,
+    @Query('skip') skip = '0',
+    @Query('take') take = '10',
+    @Query('minPrice') minPrice = '0',
+    @Query('maxPrice') maxPrice = '9999',
   ) {
     return await super.getSortedProducts(
       sortBy,
       sortOrder,
-      parseInt(skip),
-      parseInt(take),
+      +skip,
+      +take,
+      +minPrice,
+      +maxPrice,
     );
   }
 
   @Get('product/:id')
   async getProductById(@Param('id', ParseIntPipe) id: number) {
     return await super.findProductById(id);
-  }
-
-  @Get('product/:id/countWishlist')
-  async countWishlistScore(@Param('id', ParseIntPipe) id: number) {
-    return await super.countWishlistScore(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -161,8 +172,9 @@ export class ProductController extends ProductService {
     return await super.updateProductInfo(data, id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RolesGuard)
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Delete('product/:id')
   async deleteProductById(@Param('id', ParseIntPipe) id: number) {
     return await super.removeProductById(id);

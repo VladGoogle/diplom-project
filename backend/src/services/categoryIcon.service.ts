@@ -10,13 +10,6 @@ export class CategoryIconService {
     private categoryIconQueries: CategoryIconQueries,
   ) {}
 
-  async uploadCategoryIcon(
-    data: Buffer,
-    filename: string,
-  ): Promise<CategoryIcon> {
-    return await this.categoryIconQueries.uploadCategoryIcon(data, filename);
-  }
-
   async getCategoryIconById(id: number): Promise<CategoryIcon> {
     return await this.categoryIconQueries.getCategoryIconById(id);
   }

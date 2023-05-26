@@ -58,31 +58,14 @@ export class ProductQueries {
     }
   }
 
-  async countWishlistScore(id: number) {
-    try {
-      const product = await this.findProductById(id);
-      const wishlistCount = await this.prisma.wishlistItem.count({
-        where: { productId: id },
-      });
-      return {
-        message: `Product with id:${product.id} has been added to wishlist ${wishlistCount} times`,
-      };
-    } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
-      }
-      throw e;
-    }
-  }
-
   async findAllProductsBySearchQuery(
     query: string,
     sortBy: 'name' | 'price',
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     try {
       return await this.prisma.product.findMany({
@@ -101,6 +84,10 @@ export class ProductQueries {
               },
             },
           ],
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
         },
         orderBy: {
           [sortBy]: sortOrder,
@@ -155,17 +142,25 @@ export class ProductQueries {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     try {
       return await this.prisma.product.findMany({
         skip: skip,
         take: take,
-        where: { categoryId: id },
+        where: {
+          categoryId: id,
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
+        },
         include: {
           productImages: true,
           category: {
             include: {
-              categoryIcon: true,
+              categoryIcons: true,
             },
           },
           subcategory: {
@@ -193,17 +188,25 @@ export class ProductQueries {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     try {
       return await this.prisma.product.findMany({
         skip: skip,
         take: take,
-        where: { subcategoryId: id },
+        where: {
+          subcategoryId: id,
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
+        },
         include: {
           productImages: true,
           category: {
             include: {
-              categoryIcon: true,
+              categoryIcons: true,
             },
           },
           subcategory: {
@@ -230,11 +233,19 @@ export class ProductQueries {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     try {
       return await this.prisma.product.findMany({
         skip: skip,
         take: take,
+        where: {
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
+          },
+        },
         orderBy: {
           [sortBy]: sortOrder,
         },
@@ -242,12 +253,17 @@ export class ProductQueries {
           productImages: true,
           category: {
             include: {
-              categoryIcon: true,
+              categoryIcons: true,
             },
           },
           subcategory: {
             include: {
               subcategoryIcon: true,
+            },
+          },
+          wishlistItems: {
+            include: {
+              wishlist: true,
             },
           },
         },
@@ -298,7 +314,7 @@ export class ProductQueries {
           productImages: true,
           category: {
             include: {
-              categoryIcon: true,
+              categoryIcons: true,
             },
           },
           subcategory: {

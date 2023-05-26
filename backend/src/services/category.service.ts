@@ -5,28 +5,27 @@ import { CategoryDto } from '../dtos/category.dto';
 import { CategoryIconService } from './categoryIcon.service';
 import { Category } from '@prisma/client';
 import { UpdateCategoryDto } from '../dtos/updateCategory.dto';
+import { UploadCategoryImageService } from '../classes/uploadImage.class';
+import { CategoryIconQueries } from '../queries/categoryIcon.queries';
+import { Files } from '../interfaces/image.interface';
 
 @Injectable()
-export class CategoryService {
+export class CategoryService extends UploadCategoryImageService {
   constructor(
     private prisma: PrismaService,
     private categoryQueries: CategoryQueries,
-    private categoryIconService: CategoryIconService,
-  ) {}
+    categoryIconQueries: CategoryIconQueries,
+  ) {
+    super(categoryIconQueries);
+  }
 
-  async createCategory(
-    data: CategoryDto,
-    buffer: Buffer,
-    filename: string,
-  ): Promise<Category> {
-    const icon = await this.categoryIconService.uploadCategoryIcon(
-      buffer,
-      filename,
-    );
-    return await this.categoryQueries.createCategory({
+  async createCategory<T extends Files>(data: CategoryDto, images: T) {
+    const category = await this.categoryQueries.createCategory({
       ...data,
-      categoryIconId: icon.id,
     });
+
+    await super.uploadCategoryIcons(images, category.id);
+    return await this.findCategoryById(category.id);
   }
 
   async findCategoryById(id: number) {

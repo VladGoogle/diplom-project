@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../services/prisma.service';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { Files, ImageInterface } from '../interfaces/image.interface';
+import { CategoryIconQueries } from '../queries/categoryIcon.queries';
 
 export class UploadImageService extends ConfigService {
   constructor() {
@@ -57,6 +58,29 @@ export class UploadProductImageService extends UploadImageService {
             obj.Location,
             obj.Key,
             productId,
+          );
+        }),
+      );
+    } catch (e) {
+      throw e;
+    }
+  }
+}
+
+export class UploadCategoryImageService extends UploadImageService {
+  constructor(private readonly categoryIconQueries: CategoryIconQueries) {
+    super();
+  }
+
+  async uploadCategoryIcons<T extends Files>(images: T, categoryId: number) {
+    try {
+      const imageArray = await super.uploadMultipleImages(images);
+      return Promise.all(
+        imageArray.map(async (obj) => {
+          return await this.categoryIconQueries.createImageRecord(
+            obj.Location,
+            obj.Key,
+            categoryId,
           );
         }),
       );

@@ -43,6 +43,8 @@ export class ProductService extends UploadProductImageService {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     return await this.productQueries.findAllProductsByCategoryId(
       id,
@@ -50,6 +52,8 @@ export class ProductService extends UploadProductImageService {
       sortOrder,
       skip,
       take,
+      minPrice,
+      maxPrice,
     );
   }
 
@@ -59,6 +63,8 @@ export class ProductService extends UploadProductImageService {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     return await this.productQueries.findAllProductsBySubcategoryId(
       id,
@@ -66,6 +72,8 @@ export class ProductService extends UploadProductImageService {
       sortOrder,
       skip,
       take,
+      minPrice,
+      maxPrice,
     );
   }
 
@@ -75,6 +83,8 @@ export class ProductService extends UploadProductImageService {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     return await this.productQueries.findAllProductsBySearchQuery(
       query,
@@ -82,6 +92,8 @@ export class ProductService extends UploadProductImageService {
       sortOrder,
       skip,
       take,
+      minPrice,
+      maxPrice,
     );
   }
 
@@ -90,12 +102,16 @@ export class ProductService extends UploadProductImageService {
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
+    minPrice: number,
+    maxPrice: number,
   ) {
     return await this.productQueries.getSortedProducts(
       sortBy,
       sortOrder,
       skip,
       take,
+      minPrice,
+      maxPrice,
     );
   }
 
@@ -109,9 +125,5 @@ export class ProductService extends UploadProductImageService {
 
   async updateProductInfo(data: UpdateProductDto, id: number) {
     return await this.productQueries.updateProductInfo(data, id);
-  }
-
-  async countWishlistScore(id: number) {
-    return await this.productQueries.countWishlistScore(id);
   }
 }

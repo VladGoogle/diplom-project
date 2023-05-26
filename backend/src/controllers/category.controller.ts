@@ -10,11 +10,18 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseIntPipe,
+  UseGuards, UploadedFiles,
 } from '@nestjs/common';
 import { CategoryService } from '../services/category.service';
 import { CategoryDto } from '../dtos/category.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+} from '@nestjs/platform-express';
 import { UpdateCategoryDto } from '../dtos/updateCategory.dto';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../enums/role.enum';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
 @Controller()
 export class CategoryController {
@@ -24,23 +31,25 @@ export class CategoryController {
   async getCategoryByName(@Body() name: string) {
     return await this.categoryService.findCategoryByName(name);
   }
+
+  @UseGuards(RolesGuard)
+  @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Delete('category/deleteByName')
   async deleteCategoryByName(@Body() name: string) {
     return await this.categoryService.removeCategoryByName(name);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Post('categories')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 5 }]))
   async createCategory(
-    @UploadedFile() file,
-    @Req() req,
+    @UploadedFiles() files,
     @Body() data: CategoryDto,
   ) {
-    return await this.categoryService.createCategory(
-      data,
-      req.file.buffer,
-      req.file.originalname,
-    );
+    return await this.categoryService.createCategory(data, files);
   }
 
   @Get('categories')
@@ -53,16 +62,19 @@ export class CategoryController {
     return await this.categoryService.findCategoryById(id);
   }
 
+  @UseGuards(RolesGuard)
+  @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Patch('category/:id')
   async updateCategoryInfo(
     @Body() data: UpdateCategoryDto,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.categoryService.updateCategoryInfo(data, parseInt(id));
+    return await this.categoryService.updateCategoryInfo(data, id);
   }
 
   @Delete('user/:id')
-  async deleteUserById(@Param('id') id: string) {
-    return await this.categoryService.removeCategoryById(parseInt(id));
+  async deleteCategoryById(@Param('id', ParseIntPipe) id: number) {
+    return await this.categoryService.removeCategoryById(id);
   }
 }

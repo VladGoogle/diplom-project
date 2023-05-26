@@ -21,7 +21,7 @@ export class SubcategoryQueries {
           subcategoryIcon: true,
           category: {
             include: {
-              categoryIcon: true,
+              categoryIcons: true,
             },
           },
         },

@@ -72,23 +72,23 @@ model Card {
 }
 
 model Category {
-  id             Int           @id @default(autoincrement())
-  name           String?       @unique
-  categoryIcon   CategoryIcon? @relation(fields: [categoryIconId], references: [id], onDelete: Cascade)
-  categoryIconId Int?          @unique
-  subcategories  Subcategory[]
-  products       Product[]
-  createdAt      DateTime?     @default(now())
-  updatedAt      DateTime?     @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String?        @unique
+  categoryIcons CategoryIcon[]
+  subcategories Subcategory[]
+  products      Product[]
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @updatedAt
 }
 
 model CategoryIcon {
-  id        Int       @id @default(autoincrement())
-  url       String?
-  key       String?
-  category  Category?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id         Int       @id @default(autoincrement())
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId Int?
+  url        String?
+  key        String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model Subcategory {
