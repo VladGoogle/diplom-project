@@ -155,7 +155,7 @@ const Product = () => {
                   </span>
                   <span className="goods__price-old--text">{productInfo.price}$</span>
                 </div>
-}
+                  }
                 <div className="goods__delivery-cost">
                   <span className="goods__delivery-cost--text">
                     The cost of delivery goods to{' '}
