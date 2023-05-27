@@ -66,6 +66,7 @@ function Products() {
               return (
                 <Card
                   key={id}
+                  id={obj.id}
                   name={obj.name.length > 15 ? obj.name.slice(0, 13) + '...' : obj.name}
                   category={obj.subcategory.name}
                   price={obj.price}

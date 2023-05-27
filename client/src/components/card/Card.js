@@ -4,7 +4,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 
 
-function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist }) {
+function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist, id }) {
 
   const [isAddedToCart, setIsAddedToCart] = React.useState(false);
   const [isAddingToCart, setIsAddingToCart] = React.useState(false);
@@ -80,7 +80,7 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
       </div>
       <div className="product__card-content">
         <div className="card__image-container">
-          <NavLink to="/product" className="card__image-link">
+          <NavLink to={`/product/${id}`} className="card__image-link">
             <img src={img} alt={name} className="products__card-image" />
           </NavLink>
         </div>
