@@ -25,9 +25,10 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
+RUN cd ..
 COPY package.json ./
 COPY yarn.lock ./
-COPY prisma ./prisma/
+#COPY ../prisma    ./prisma/
 
 COPY --from=development /usr/src/app/dist ./dist
 

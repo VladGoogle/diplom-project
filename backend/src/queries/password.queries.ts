@@ -7,6 +7,8 @@ import { PrismaService } from '../services/prisma.service';
 import { OrderDto } from '../dtos/order.dto';
 import { Prisma } from '@prisma/client';
 import { CartService } from '../services/cart.service';
+import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class PasswordQueries {
@@ -38,6 +40,30 @@ export class PasswordQueries {
           user: true,
         },
       });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2025') {
+          throw new NotFoundException(`Token doesn't exist`);
+        }
+      }
+      throw e;
+    }
+  }
+
+  async setNewPassword(data: ForgotPasswordDto, userId: number) {
+    try {
+      if (data.newPassword !== data.confirmPassword) {
+        throw new BadRequestException(`Passwords should be matched`);
+      }
+
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          password: await bcrypt.hash(data.newPassword, 10),
+        },
+      });
+
+      return { message: 'Password has been successfully restored!' };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2025') {

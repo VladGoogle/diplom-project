@@ -29,7 +29,6 @@ export const cities = [
   'Kramatorsk',
   'Melitopol',
   'Kerch',
-  'Nikopol',
   'Sloviansk',
   'Uzhhorod',
   'Berdiansk',
