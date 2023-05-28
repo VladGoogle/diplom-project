@@ -4,6 +4,7 @@ import { UserService } from './users.service';
 import { PasswordQueries } from '../queries/password.queries';
 import { MailerService } from '@nestjs-modules/mailer';
 import * as bcrypt from 'bcrypt';
+import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
 
 @Injectable()
 export class PasswordService {
@@ -35,15 +36,10 @@ export class PasswordService {
     }
   }
 
-  async resetPassword(token: string, newPassword: string) {
+  async resetPassword(data: ForgotPasswordDto, token) {
     const passwordResetToken =
       await this.passwordQueries.findPasswordResetToken(token);
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await this.prisma.user.update({
-      where: { id: passwordResetToken.user.id },
-      data: { password: hashedPassword },
-    });
-
+    await this.passwordQueries.setNewPassword(data, passwordResetToken.user.id);
     await this.passwordQueries.deletePasswordTokenById(passwordResetToken.id);
   }
 }

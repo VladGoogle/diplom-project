@@ -60,7 +60,7 @@ export class ProductQueries {
 
   async findAllProductsBySearchQuery(
     query: string,
-    sortBy: 'name' | 'price',
+    sortBy: 'name' | 'price' | 'wishlistCounter',
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
@@ -72,18 +72,10 @@ export class ProductQueries {
         skip: skip,
         take: take,
         where: {
-          OR: [
-            {
-              name: {
-                contains: query,
-              },
-            },
-            {
-              description: {
-                contains: query,
-              },
-            },
-          ],
+          name: {
+            contains: query,
+          },
+
           price: {
             gte: minPrice,
             lte: maxPrice,
@@ -138,7 +130,7 @@ export class ProductQueries {
 
   async findAllProductsByCategoryId(
     id: number,
-    sortBy: 'name' | 'price',
+    sortBy: 'name' | 'price' | 'wishlistCounter',
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,
@@ -229,7 +221,7 @@ export class ProductQueries {
   }
 
   async getSortedProducts(
-    sortBy: 'name' | 'price',
+    sortBy: 'name' | 'price' | 'wishlistCounter',
     sortOrder: Prisma.SortOrder,
     skip: number,
     take: number,

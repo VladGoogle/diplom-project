@@ -1,5 +1,6 @@
 import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
 import { PasswordService } from '../services/password.service';
+import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
 
 @Controller('password')
 export class PasswordController {
@@ -19,9 +20,9 @@ export class PasswordController {
   @Patch('reset/:token')
   async resetPassword(
     @Param('token') token: string,
-    @Body('password') password: string,
+    @Body('password') data: ForgotPasswordDto,
   ) {
-    await this.passwordService.resetPassword(token, password);
+    await this.passwordService.resetPassword(data, token);
     return { message: 'Password reset successful' };
   }
 }
