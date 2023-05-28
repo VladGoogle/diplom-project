@@ -41,6 +41,11 @@ const Cart = () => {
           return item;
         });
         setItems(updatedItems);
+        const newTotalPrice = updatedItems.reduce((total, item) => {
+            return total + item.product.price * item.quantity;
+          }, 0);
+          // Обновите подитоговую сумму всех товаров в компоненте
+          setItemsTotal((prevTotal) => ({ ...prevTotal, totalPrice: newTotalPrice }));
       };
 
 

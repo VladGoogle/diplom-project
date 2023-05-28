@@ -208,7 +208,7 @@ function Navbar(props) {
 
                 <ul className="header__bottom-icons">
                   <li className="header__bottom-item">
-                    <a href="#" className="header__bottom-icon">
+                    <NavLink to="/settings/wishlist" className="header__bottom-icon">
                       <svg
                         alt="Likes"
                         width="36"
@@ -222,7 +222,7 @@ function Navbar(props) {
                           fill="#FDFDFD"
                         />
                       </svg>
-                    </a>
+                    </NavLink>
                   </li>
                   <li
                     className="header__bottom-item header__account"

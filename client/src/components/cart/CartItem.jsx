@@ -3,8 +3,9 @@ import Counter from "../counter/Counter";
 import React from 'react';
 import createAxiosInstance from "../../utils/axios/instance";
 
-function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, quantity, onRemoveItem, onQuantityChange}) {
+function CartItem({ cartImage, subcategory, price, name, itemId, quantity, onRemoveItem, onQuantityChange}) {
 
+    const [subTotalPrice, setSubTotalPrice] = React.useState(price * quantity);
     const instance = createAxiosInstance();
     const handleRemove = () => {
         onRemoveItem(itemId);
@@ -21,6 +22,10 @@ function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, 
         // Отправьте запрос на обновление количества
         try {
           await instance.patch('/cart/updateItem', updateItemData);
+              // Вычислите новую подитоговую сумму
+            const newSubTotalPrice = price * newQuantity;
+            // Обновите подитоговую сумму в компоненте
+            setSubTotalPrice(newSubTotalPrice);
         } catch (error) {
           console.log(error);
         }
