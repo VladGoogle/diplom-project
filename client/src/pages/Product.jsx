@@ -9,6 +9,7 @@ const Product = () => {
 
   const instance = createAxiosInstance();
   const [productInfo, setProductInfo] = useState([]);
+  const [productImages, setProductImages] = useState([]);
   const { id } = useParams();
   const discountPercentage = ((productInfo.price - productInfo.discountPrice) / productInfo.price) * 100;
 
@@ -18,7 +19,8 @@ const Product = () => {
           try {
               const response = await instance.get(`/product/${id}`);
               setProductInfo(response.data);
-          } catch (error) {
+              setProductImages(response.data.productImages);        
+            } catch (error) {
               console.log(error);
           }
       };
@@ -127,13 +129,15 @@ const Product = () => {
             </ul>
           </div>
           <div className="goods__inner">
-            <div className="goods__left">
-              <div className="goods__main">
-                
-                <p className="goods__description">
+          <div className="goods__left">
+          {productImages && productImages.length > 0 && (
+            <div>
+              <ProductsSlider images={productImages} />
+            </div>
+              )}
+              <p className="goods__description">
                   {productInfo.description}
                 </p>
-              </div>
             </div>
             <div className="goods__right">
               <div className="goods__name">
@@ -155,7 +159,7 @@ const Product = () => {
                   </span>
                   <span className="goods__price-old--text">{productInfo.price}$</span>
                 </div>
-                  }
+                }
                 <div className="goods__delivery-cost">
                   <span className="goods__delivery-cost--text">
                     The cost of delivery goods to{' '}

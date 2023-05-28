@@ -44,3 +44,29 @@
   right: 0;
   transform: translateY(-50%);
 }
+
+.slider-big-image {
+  max-width: 680px;
+  max-height: 408px;
+  min-height: 308px;
+
+}
+
+.thumbnail {
+  max-width: 94px;
+  max-height: 80px;
+  padding: 5px;
+}
+
+.slider-big-image {
+  display: none;
+}
+
+.thumbnail.active {
+  border: 1px solid #1C7FF3;
+  border-radius: 5px;
+}
+
+.slider-big-image.active {
+  display: block;
+}

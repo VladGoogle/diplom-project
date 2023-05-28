@@ -22,7 +22,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await instance.get("/cart/4");
+                const response = await instance.get("/cart/1");
                 setItems(response.data.cartItems);
                 setItemsTotal(response.data);
             } catch (error) {
@@ -95,7 +95,7 @@ const Cart = () => {
                                                 price={obj.product.price}
                                                 name={obj.product.name}
                                                 subcategory={obj.product.subcategory.name}
-                                                cartImage={obj.product.productImage.url}
+                                                cartImage={obj.product.productImages[0]?.url}
                                             />
                                         );
                                     })}

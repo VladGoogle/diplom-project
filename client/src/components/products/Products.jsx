@@ -44,7 +44,7 @@ function Products() {
     }
   }
 
-  const handleRemoveFromWishlist = async () => {
+  const handleRemoveFromWishlist = async (wishlistItemId) => {
     try {
       await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId});
     } catch (error) {
@@ -74,7 +74,7 @@ function Products() {
                   img={obj.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
-                  onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0].id)}
+                  onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0]?.id)}
                 />
               );
             })}
