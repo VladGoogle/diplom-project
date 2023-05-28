@@ -44,7 +44,7 @@ function Products() {
     }
   }
 
-  const handleRemoveFromWishlist = async () => {
+  const handleRemoveFromWishlist = async (wishlistItemId) => {
     try {
       await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId});
     } catch (error) {
@@ -66,6 +66,7 @@ function Products() {
               return (
                 <Card
                   key={id}
+                  id={obj.id}
                   name={obj.name.length > 15 ? obj.name.slice(0, 13) + '...' : obj.name}
                   category={obj.subcategory.name}
                   price={obj.price}
@@ -73,7 +74,7 @@ function Products() {
                   img={obj.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
-                  onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0].id)}
+                  onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0]?.id)}
                 />
               );
             })}

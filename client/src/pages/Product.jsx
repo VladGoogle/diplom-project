@@ -1,7 +1,32 @@
 import ProductsSlider from '../components/swiper/Slider';
 import Recommended from '../components/recommendations/Recommended';
+import { useState, useEffect } from 'react';
+import createAxiosInstance from '../utils/axios/instance';
+import { useParams } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 const Product = () => {
+
+  const instance = createAxiosInstance();
+  const [productInfo, setProductInfo] = useState([]);
+  const [productImages, setProductImages] = useState([]);
+  const { id } = useParams();
+  const discountPercentage = ((productInfo.price - productInfo.discountPrice) / productInfo.price) * 100;
+
+
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await instance.get(`/product/${id}`);
+              setProductInfo(response.data);
+              setProductImages(response.data.productImages);        
+            } catch (error) {
+              console.log(error);
+          }
+      };
+      fetchData();
+  }, [id]);
+
   return (
     <>
       <section className="goods">
@@ -9,7 +34,7 @@ const Product = () => {
           <div className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item breadcrumbs__item-home">
-                <a href="#" className="breadcrumbs__link">
+                <NavLink to="/" className="breadcrumbs__link">
                   <svg
                     alt="home"
                     className="home__icon"
@@ -35,6 +60,7 @@ const Product = () => {
                       </clipPath>
                     </defs>
                   </svg>
+
                   <svg
                     alt="arrow"
                     className="breadcrumbs__icon"
@@ -49,12 +75,13 @@ const Product = () => {
                       fill="#D9D9D9"
                     />
                   </svg>
-                </a>
+                  </NavLink>
               </li>
+              {productInfo.category && (
               <li className="breadcrumbs__item">
                 <a href="#" className="breadcrumbs__link">
                   <span className="breadcrumbs__text">
-                    Smartphones and gadgets
+                    {productInfo.category.name}
                   </span>
                   <svg
                     alt="arrow"
@@ -72,9 +99,11 @@ const Product = () => {
                   </svg>
                 </a>
               </li>
+              )}
+              {productInfo.subcategory && (
               <li className="breadcrumbs__item">
                 <a href="#" className="breadcrumbs__link">
-                  <span className="breadcrumbs__text">Smartphones</span>
+                  <span className="breadcrumbs__text">{productInfo.subcategory.name}</span>
                   <svg
                     alt="arrow"
                     className="breadcrumbs__icon"
@@ -91,54 +120,46 @@ const Product = () => {
                   </svg>
                 </a>
               </li>
+              )}
               <li className="breadcrumbs__item">
                 <a href="#" className="breadcrumbs__link">
-                  <span className="breadcrumbs__text">iOS Smartphone</span>
+                  <span className="breadcrumbs__text">{productInfo.name}</span>
                 </a>
               </li>
             </ul>
           </div>
           <div className="goods__inner">
-            <div className="goods__left">
-              <div className="goods__main">
-                <ProductsSlider />
-                <p className="goods__description">
-                  Lorem ipsum dolor sit amet consectetur. Morbi vehicula
-                  porttitor porta lobortis id dolor. Tellus varius vel at
-                  vulputate elementum ut sit. Penatibus lectus lacus enim
-                  convallis vitae ipsum neque. Eu ornare tincidunt neque nec
-                  cursus leo viverra. Egestas purus amet erat id sed
-                  consectetur. Potenti quam eget metus purus vel. Egestas
-                  elementum lectus risus ac ac vivamus. Sit nulla dolor velit
-                  tortor eu justo praesent. A sed tincidunt vitae enim ut
-                  integer. Urna pulvinar aliquam sit mi maecenas. Arcu mauris
-                  habitasse lectus volutpat turpis lacus sed. Arcu aliquam
-                  fringilla orci ac eget nam elementum ultricies nunc. Vitae
-                  mauris dictum turpis congue fringilla vitae cursus diam
-                  ullamcorper. Ornare erat nisl donec eget augue scelerisque
-                  etiam.
+          <div className="goods__left">
+          {productImages && productImages.length > 0 && (
+            <div>
+              <ProductsSlider images={productImages} />
+            </div>
+              )}
+              <p className="goods__description">
+                  {productInfo.description}
                 </p>
-              </div>
             </div>
             <div className="goods__right">
               <div className="goods__name">
                 <div className="goods__name-top">
                   <div className="goods__company">APPLE</div>
                   <div className="goods__id">
-                    Article №: <b>10002343</b>
+                    Article №: <b>{productInfo.id}</b>
                   </div>
                 </div>
                 <div className="goods__name-bottom">
-                  <div className="goods__title">iPhone 14 Pro</div>
+                  <div className="goods__title">{productInfo.name}</div>
                 </div>
               </div>
               <div className="goods__price-top">
+                {productInfo.discountPrice &&
                 <div className="goods__price-old">
                   <span className="goods__price-old--title goods__price-title">
                     Old price
                   </span>
-                  <span className="goods__price-old--text">499.99$</span>
+                  <span className="goods__price-old--text">{productInfo.price}$</span>
                 </div>
+                }
                 <div className="goods__delivery-cost">
                   <span className="goods__delivery-cost--text">
                     The cost of delivery goods to{' '}
@@ -148,10 +169,18 @@ const Product = () => {
               </div>
               <div className="goods__price-bottom">
                 <div className="goods__new-price">
+                {productInfo.discountPrice ? 
+                  (
                   <span className="goods__price-new--title goods__price-title">
                     New price
                   </span>
-                  <span className="goods__price-new--text">299.99$</span>
+                  ) : (
+                    <span className="goods__price-new--title goods__price-title">
+                    Price
+                  </span>
+                  )
+                    }
+                  <span className="goods__price-new--text">{(productInfo.discountPrice ? productInfo.discountPrice.toFixed(2) : productInfo.price)}$</span>
                 </div>
                 <svg
                   alt="line"
@@ -164,14 +193,17 @@ const Product = () => {
                 >
                   <path d="M1 0V46" stroke="#D9D9D9" />
                 </svg>
+                {productInfo.discountPrice ?
+                (
+                <>
                 <div className="goods__new-discount">
                   <span className="goods__discount-title goods__price-title">
                     Discount
                   </span>
                   <span className="goods__discount-text goods__price-text">
-                    59%[200$]
+                    {discountPercentage.toFixed(0)}%[{productInfo.price - productInfo.discountPrice.toFixed(2)}$]
                   </span>
-                </div>
+                </div>    
                 <svg
                   alt="line"
                   className="vertical-line"
@@ -183,21 +215,29 @@ const Product = () => {
                 >
                   <path d="M1 0V46" stroke="#D9D9D9" />
                 </svg>
-                <div className="goods__new-termination">
-                  <span className="goods__termination-title goods__price-title">
-                    Before the end of the discount:
+                <div className="goods__likes-box">
+                <svg className='goods__likes-icon' width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M41.7188 7.5C36.8789 7.5 32.6414 9.58125 30 13.0992C27.3586 9.58125 23.1211 7.5 18.2812 7.5C14.4287 7.50434 10.7351 9.0367 8.0109 11.7609C5.2867 14.4851 3.75434 18.1787 3.75 22.0313C3.75 38.4375 28.0758 51.7172 29.1117 52.2656C29.3848 52.4125 29.69 52.4894 30 52.4894C30.31 52.4894 30.6152 52.4125 30.8883 52.2656C31.9242 51.7172 56.25 38.4375 56.25 22.0313C56.2457 18.1787 54.7133 14.4851 51.9891 11.7609C49.2649 9.0367 45.5713 7.50434 41.7188 7.5ZM30 48.4688C25.7203 45.975 7.5 34.6148 7.5 22.0313C7.50372 19.173 8.64079 16.4329 10.6619 14.4119C12.6829 12.3908 15.423 11.2537 18.2812 11.25C22.8398 11.25 26.6672 13.6781 28.2656 17.5781C28.4069 17.922 28.6472 18.2162 28.956 18.4232C29.2648 18.6302 29.6282 18.7407 30 18.7407C30.3718 18.7407 30.7352 18.6302 31.044 18.4232C31.3528 18.2162 31.5931 17.922 31.7344 17.5781C33.3328 13.6711 37.1602 11.25 41.7188 11.25C44.577 11.2537 47.3171 12.3908 49.3381 14.4119C51.3592 16.4329 52.4963 19.173 52.5 22.0313C52.5 34.5961 34.275 45.9727 30 48.4688Z" fill="#FDEB46"/>
+                </svg>
+                    <div className="goods__likes-right">
+                      <span className="goods__likes-title goods__price-title">Added to wishlist</span>
+                      <span className="goods__likes-text goods__price-text">{productInfo.wishlistCount}{" "}times!</span>
+                    </div>
+                  </div>
+                </>
+                ) : (
+                  <span className="goods__termination-text--nodiscount goods__price-text">
+                    This product does not have any discounts for now 
                   </span>
-                  <span className="goods__termination-text goods__price-text">
-                    1 day, 12 hours and 55 minutes
-                  </span>
-                </div>
+                )
+                    }
               </div>
-              <span className="goods__in-stock">In stock: 10</span>
+              <span className="goods__in-stock">In stock: {productInfo.qtyInStock}</span>
               <div className="goods__buttons">
                 <button className="goods__buttons-add">ADD TO CART</button>
                 <button className="goods__buttons-buy">BUY IN ONE CLICK</button>
               </div>
-              <div className="goods__details">
+              {/* <div className="goods__details">
                 <div className="goods__details-container">
                   <div className="goods__details-top" id="details1">
                     <h3 className="goods__details-title">PRODUCT DETAILS</h3>
@@ -248,7 +288,7 @@ const Product = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="care__instructions">
                 <div className="care__instrucions-top">
                   <svg
@@ -281,12 +321,7 @@ const Product = () => {
                 </div>
                 <div className="care__instructions-bottom">
                   <div className="care_instructions-text">
-                    Lorem ipsum dolor sit amet consectetur. Dui penatibus
-                    fermentum donec augue adipiscing nec et felis commodo. Vel
-                    nulla nascetur ac neque consequat cursus orci in nunc.
-                    Faucibus euismod porttitor luctus elementum viverra dui
-                    faucibus aliquam faucibus. Vel fringilla aliquam ut vel
-                    libero varius viverra mattis.
+                  Please thoroughly read the user manual before using the product. It contains essential instructions, safety precautions, and troubleshooting tips that will help you navigate the product effectively.
                   </div>
                 </div>
               </div>

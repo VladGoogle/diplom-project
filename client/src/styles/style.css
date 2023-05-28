@@ -48,7 +48,8 @@ input::placeholder {
 }
 
 .container {
-  max-width: 1740px;
+  max-width: 1760px;
+  padding: 0 10px;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -71,17 +72,13 @@ input::placeholder {
 }
 
 .goods__left {
+  width: 100%;
   padding-right: 82px;
 }
 
 .goods__right {
+  width: 100%;
   padding-left: 82px;
-}
-
-.goods__left,
-.goods__right {
-  flex-basis: 50%;
-  max-width: 50%;
 }
 
 .breadcrumbs__list {
@@ -118,6 +115,7 @@ input::placeholder {
   font-size: 24px;
   line-height: 29px;
   color: #050630;
+  width: 100%;
 }
 
 .goods__name-top {
@@ -167,12 +165,14 @@ input::placeholder {
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
+  width: 100%;
 }
 
 .goods__price-old {
   display: flex;
   flex-direction: column;
   margin-left: 18px;
+  padding-right: 15px;
 }
 
 .goods__price-title {
@@ -215,6 +215,7 @@ input::placeholder {
   border-radius: 5px;
   margin-bottom: 14px;
   margin-top: 62px;
+  width: 100%;
 }
 
 .goods__price-text {
@@ -224,6 +225,15 @@ input::placeholder {
   font-size: 20px;
   line-height: 24px;
   color: #1c7ff3;
+}
+
+.goods__termination-text--nodiscount {
+  max-width: 500px;
+  width: 100%;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 29px;
+  margin-left: 32px;
 }
 
 .goods__price-new--text {
@@ -247,13 +257,27 @@ input::placeholder {
   padding: 0 32px;
 }
 
-.goods__new-termination {
+.goods__likes-box {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   padding-left: 32px;
 }
 
-.goods__termination-title,
+.goods__likes-right {
+  display: flex;
+  flex-direction: column;
+  margin-left: 14px;
+}
+
+.goods__likes-text {
+  color: #FDEB46;
+}
+
+.goods__likes-icon {
+  cursor: pointer;
+}
+
+.goods__likes-title,
 .goods__discount-title {
   margin-bottom: 7px;
 }
@@ -264,6 +288,7 @@ input::placeholder {
   justify-content: space-between;
   margin-bottom: 50px;
   margin-top: 37px;
+  gap: 47px;
 }
 
 .goods__buttons-add {
@@ -276,6 +301,7 @@ input::placeholder {
   border-radius: 5px;
   padding: 28px 42px;
   cursor: pointer;
+  width: 100%;
 }
 
 .goods__buttons-buy {
@@ -288,6 +314,7 @@ input::placeholder {
   border-radius: 5px;
   padding: 24px 13px;
   cursor: pointer;
+  width: 100%;
 }
 
 .goods__counter-add {
