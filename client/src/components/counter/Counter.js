@@ -1,15 +1,17 @@
 import './style.css';
 import React from 'react';
 
-const Counter = () => {
-  const [count, setCount] = React.useState(1);
-
+const Counter = ({ count, onPlus, onMinus }) => {
   const plus = () => {
-    setCount(count + 1);
+    const newCount = count + 1;
+    onPlus(newCount);
   };
 
   const minus = () => {
-    if (count > 1) setCount(count - 1);
+    if (count > 1) {
+      const newCount = count - 1;
+      onMinus(newCount);
+    }
   };
 
   return (

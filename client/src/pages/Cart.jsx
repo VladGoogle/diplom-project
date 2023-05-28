@@ -32,6 +32,17 @@ const Cart = () => {
         fetchData();
     }, []);
 
+    const handleQuantityChange = (itemId, newQuantity) => {
+        // Find the item in the items list and update its quantity
+        const updatedItems = items.map((item) => {
+          if (item.id === itemId) {
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        });
+        setItems(updatedItems);
+      };
+
 
     const handleRemoveItem = async (itemId) => {
         try {
@@ -96,6 +107,8 @@ const Cart = () => {
                                                 name={obj.product.name}
                                                 subcategory={obj.product.subcategory.name}
                                                 cartImage={obj.product.productImages[0]?.url}
+                                                quantity={obj.quantity}
+                                                onQuantityChange={handleQuantityChange}
                                             />
                                         );
                                     })}

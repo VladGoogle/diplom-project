@@ -1,12 +1,30 @@
 import "./style.css"
 import Counter from "../counter/Counter";
+import React from 'react';
+import createAxiosInstance from "../../utils/axios/instance";
 
-function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, onRemoveItem }) {
+function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, quantity, onRemoveItem, onQuantityChange}) {
 
+    const instance = createAxiosInstance();
     const handleRemove = () => {
         onRemoveItem(itemId);
       };
-    
+      
+      const handleUpdateQuantity = async (newQuantity) => {
+        onQuantityChange(itemId, newQuantity);
+        // Отправьте запрос на обновление количества через эндпоинт /cart/updateItem
+        const updateItemData = {
+          cartId: 1,
+          cartItemId: itemId,
+          quantity: newQuantity,
+        };
+        // Отправьте запрос на обновление количества
+        try {
+          await instance.patch('/cart/updateItem', updateItemData);
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
     return (
             <div className="cart__component">
@@ -39,7 +57,11 @@ function CartItem({ cartImage, subcategory, price, name, subTotalPrice, itemId, 
                                     {price}$
                                 </span>
                                 <div className="cart__item-quantity">
-                                    <Counter />
+                                    <Counter 
+                                    count={quantity}
+                                    onPlus={handleUpdateQuantity}
+                                    onMinus={handleUpdateQuantity}
+                                    />
                                 </div>
                                 <div className="cart__item-subtotal">
                                     {subTotalPrice.toFixed(2)}$
