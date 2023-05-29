@@ -51,18 +51,29 @@ export class AuthService {
         password: hashedPassword,
       });
       createdUser.password = undefined;
-      const userToken = await this.stripeService.createCustomerToken(
-        createdUser.firstName,
-        createdUser.lastName,
-        createdUser.email,
-      );
-      await this.prismaService.user.update({
-        where: { id: createdUser.id },
-        data: {
-          customerToken: userToken.id,
-        },
+
+      this.stripeService
+        .createCustomerToken(
+          createdUser.firstName,
+          createdUser.lastName,
+          createdUser.email,
+        )
+        .then(async (token) => {
+          await this.prismaService.user.update({
+            where: { id: createdUser.id },
+            data: {
+              customerToken: token.id,
+            },
+          });
+        });
+
+      const access_token = this.jwtService.sign({
+        id: createdUser.id,
+        email: createdUser.email,
+        roles: createdUser.roles,
+        isBanned: createdUser.isBanned,
       });
-      return createdUser;
+      return { createdUser, access_token };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {

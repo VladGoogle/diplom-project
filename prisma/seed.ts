@@ -4,7 +4,7 @@ import { cities } from '../backend/src/constants/cities.constants';
 const prisma = new PrismaClient();
 async function main(arr: string[]) {
   for (const elem of arr) {
-    const section = await prisma.selfCheckout.findFirst({
+    const section = await prisma.selfCheckout.findUnique({
       where: { city: elem },
     });
 
