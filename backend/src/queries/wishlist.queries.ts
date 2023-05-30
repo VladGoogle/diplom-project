@@ -34,28 +34,6 @@ export class WishlistQueries {
     });
 
     if (!wishlist) {
-      const wishlistObj = await this.prisma.wishlist.create({
-        data: {
-          userId: data.userId,
-          wishlistItems: {
-            create: {
-              productId: data.productId,
-            },
-          },
-        },
-        include: {
-          wishlistItems: {
-            include: {
-              product: {
-                include: {
-                  productImages: true,
-                },
-              },
-            },
-          },
-        },
-      });
-
       await this.prisma.product.update({
         where: { id: data.productId },
         data: {
@@ -64,7 +42,40 @@ export class WishlistQueries {
           },
         },
       });
-      return wishlistObj;
+
+      return this.prisma.wishlist
+        .create({
+          data: {
+            userId: data.userId,
+          },
+          include: {
+            wishlistItems: {
+              include: {
+                product: {
+                  include: {
+                    productImages: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+        .then((wishlist) => {
+          return this.prisma.wishlistItem.create({
+            data: {
+              wishlistId: wishlist.id,
+              productId: data.productId,
+            },
+            include: {
+              wishlist: true,
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          });
+        });
     } else {
       if (
         wishlist.wishlistItems.find((obj) => obj.productId === data.productId)
@@ -74,13 +85,12 @@ export class WishlistQueries {
         );
       }
 
-      await this.prisma.wishlistItem.create({
+      await this.prisma.product.update({
+        where: { id: data.productId },
         data: {
-          wishlistId: wishlist.id,
-          productId: data.productId,
-        },
-        include: {
-          wishlist: true,
+          wishlistCount: {
+            increment: 1,
+          },
         },
       });
 
@@ -93,7 +103,20 @@ export class WishlistQueries {
         },
       });
 
-      return await this.getWishlistById(wishlist.id);
+      return this.prisma.wishlistItem.create({
+        data: {
+          wishlistId: wishlist.id,
+          productId: data.productId,
+        },
+        include: {
+          wishlist: true,
+          product: {
+            include: {
+              productImages: true,
+            },
+          },
+        },
+      });
     }
   }
 
@@ -159,6 +182,20 @@ export class WishlistQueries {
           wishlistItems: true,
         },
       });
+
+      const products = wishlist.wishlistItems.map((item) => {
+        return this.prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            wishlistCount: {
+              decrement: 1,
+            },
+          },
+        });
+      });
+
+      await Promise.all(products);
+
       return { message: `Wishlist with id: ${wishlist.id} has been deleted` };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -175,7 +212,7 @@ export class WishlistQueries {
     wishlistItemId: number,
   ) {
     try {
-      await this.prisma.wishlistItem
+      this.prisma.wishlistItem
         .delete({
           where: { id: wishlistItemId },
         })
@@ -193,6 +230,6 @@ export class WishlistQueries {
       throw e;
     }
 
-    return await this.getWishlistById(wishlistId);
+    return this.getWishlistById(wishlistId);
   }
 }

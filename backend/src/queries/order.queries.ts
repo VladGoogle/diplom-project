@@ -25,7 +25,7 @@ export class OrderQueries {
       });
 
       const cart = await this.cartService.getCartById(cartId);
-      return await this.prisma.order.create({
+      return this.prisma.order.create({
         data: {
           ...data,
           cartId: cartId,
@@ -34,11 +34,13 @@ export class OrderQueries {
             0,
           ),
           orderItems: {
-            create: cart.cartItems.map((item) => ({
-              product: { connect: { id: item.productId } },
-              quantity: item.quantity,
-              subTotalPrice: item.subTotalPrice,
-            })),
+            create: await Promise.all(
+              cart.cartItems.map((item) => ({
+                product: { connect: { id: item.productId } },
+                quantity: item.quantity,
+                subTotalPrice: item.subTotalPrice,
+              })),
+            ),
           },
         },
         include: {
@@ -66,7 +68,7 @@ export class OrderQueries {
 
   async getOrderById(id: number) {
     try {
-      return await this.prisma.order.findUniqueOrThrow({
+      return this.prisma.order.findUniqueOrThrow({
         where: { id: id },
         include: {
           user: {
@@ -121,7 +123,7 @@ export class OrderQueries {
 
   async getAllOrdersByUserId(id: number) {
     try {
-      return await this.prisma.order.findMany({
+      return this.prisma.order.findMany({
         where: { userId: id },
         include: {
           user: {
@@ -166,7 +168,7 @@ export class OrderQueries {
 
   async updateOrderStatus(orderId: number, status: 'RECEIVED' | 'RETURNED') {
     try {
-      return await this.prisma.order.update({
+      return this.prisma.order.update({
         where: { id: orderId },
         data: {
           orderStatus: [status],
@@ -188,7 +190,7 @@ export class OrderQueries {
 
   async setSectionAddressToOrder(data: SetSectionAddressDto) {
     try {
-      return await this.prisma.order.update({
+      return this.prisma.order.update({
         where: { id: data.orderId },
         data: {
           selfCheckoutAddressId: data.sectionId,

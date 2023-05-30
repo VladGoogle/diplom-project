@@ -1,7 +1,6 @@
 import { S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '../services/prisma.service';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { Files, ImageInterface } from '../interfaces/image.interface';
 import { CategoryIconQueries } from '../queries/categoryIcon.queries';
@@ -27,9 +26,9 @@ export class UploadImageService extends ConfigService {
 
   async uploadMultipleImages<T extends Files>(images: T) {
     const s3 = new S3();
-    return Promise.all(
+    return await Promise.all(
       images.files.map(async (image) => {
-        return await s3
+        return s3
           .upload({
             Bucket: super.get('AWS_PUBLIC_BUCKET_NAME'),
             Body: image.buffer,
@@ -52,9 +51,9 @@ export class UploadProductImageService extends UploadImageService {
   async uploadProductImages<T extends Files>(images: T, productId: number) {
     try {
       const imageArray = await super.uploadMultipleImages(images);
-      return Promise.all(
+      return await Promise.all(
         imageArray.map(async (obj) => {
-          return await this.productImageQueries.createImageRecord(
+          return this.productImageQueries.createImageRecord(
             obj.Location,
             obj.Key,
             productId,
@@ -75,9 +74,9 @@ export class UploadCategoryImageService extends UploadImageService {
   async uploadCategoryIcons<T extends Files>(images: T, categoryId: number) {
     try {
       const imageArray = await super.uploadMultipleImages(images);
-      return Promise.all(
+      return await Promise.all(
         imageArray.map(async (obj) => {
-          return await this.categoryIconQueries.createImageRecord(
+          return this.categoryIconQueries.createImageRecord(
             obj.Location,
             obj.Key,
             categoryId,

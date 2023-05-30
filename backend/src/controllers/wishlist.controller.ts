@@ -40,7 +40,7 @@ export class WishlistController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('wishlist/deleteByToken')
-  async deleteWishlistById(@Headers() headers: any) {
+  async deleteWishlistByUserToken(@Headers() headers: any) {
     return await this.wishlistService.deleteWishlistByUserId(
       getTokenFromHeaders(headers),
     );
