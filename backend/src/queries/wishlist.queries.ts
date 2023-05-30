@@ -94,15 +94,6 @@ export class WishlistQueries {
         },
       });
 
-      await this.prisma.product.update({
-        where: { id: data.productId },
-        data: {
-          wishlistCount: {
-            increment: 1,
-          },
-        },
-      });
-
       return this.prisma.wishlistItem.create({
         data: {
           wishlistId: wishlist.id,
