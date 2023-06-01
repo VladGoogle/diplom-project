@@ -1,35 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserDto } from '../dtos/user.dto';
 import { PrismaService } from '../services/prisma.service';
-import { CategoryIcon, Prisma, ProductImage } from '@prisma/client';
-import { S3 } from 'aws-sdk';
-import { ConfigService } from '@nestjs/config';
-import { v4 as uuid } from 'uuid';
-
+import { Prisma, } from '@prisma/client';
 @Injectable()
 export class ProductImageQueries {
   constructor(private prisma: PrismaService) {}
-
-  // async uploadProductImage(
-  //   dataBuffer: Buffer,
-  //   filename: string,
-  // ): Promise<ProductImage> {
-  //   try {
-  //     const s3 = new S3();
-  //     const uploadResult = await s3
-  //       .upload({
-  //         Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
-  //         Body: dataBuffer,
-  //         Key: `${uuid()}-${filename}`,
-  //       })
-  //       .promise()
-  //       .then((data) => {
-  //         return data;
-  //       });
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
 
   async createImageRecord(location: string, key: string, id: number) {
     try {

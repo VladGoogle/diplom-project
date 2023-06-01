@@ -1,12 +1,9 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
-import { ProductDto } from '../dtos/product.dto';
 import { Prisma } from '@prisma/client';
-import { UpdateProductDto } from '../dtos/updateProduct.dto';
 import { CommentDto } from '../dtos/comment.dto';
 import { UpdateCommentDto } from '../dtos/updateComment.dto';
 

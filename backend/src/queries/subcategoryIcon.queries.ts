@@ -1,9 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserDto } from '../dtos/user.dto';
 import { PrismaService } from '../services/prisma.service';
-import { CategoryIcon, Prisma, SubcategoryIcon } from '@prisma/client';
-import { S3 } from 'aws-sdk';
-import { v4 as uuid } from 'uuid';
+import {  Prisma,} from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -12,32 +9,22 @@ export class SubcategoryIconQueries {
     private prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {}
-
-  async uploadSubcategoryIcon(
-    dataBuffer: Buffer,
-    filename: string,
-  ): Promise<SubcategoryIcon> {
+  async createImageRecord(location: string, key: string, id: number) {
     try {
-      const s3 = new S3();
-      const uploadResult = await s3
-        .upload({
-          Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
-          Body: dataBuffer,
-          Key: `${uuid()}-${filename}`,
-        })
-        .promise()
-        .then((data) => {
-          return data;
-        });
       return await this.prisma.subcategoryIcon.create({
         data: {
-          url: uploadResult.Location,
-          key: uploadResult.Key,
+          url: location,
+          key: key,
+          subcategory: {
+            connect: {
+              id: id,
+            },
+          },
         },
         include: { subcategory: true },
       });
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 

@@ -22,6 +22,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { PasswordModule } from './modules/password.module';
 import * as path from 'path';
 import { AddressModule } from './modules/address.module';
+import { SelfCheckoutModule } from './modules/selfCheckout.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { AddressModule } from './modules/address.module';
         },
       },
     }),
+    SelfCheckoutModule,
     PrismaModule,
     UsersModule,
     AuthModule,

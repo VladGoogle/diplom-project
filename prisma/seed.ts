@@ -3,39 +3,27 @@ import { faker } from '@faker-js/faker';
 import { cities } from '../backend/src/constants/cities.constants';
 const prisma = new PrismaClient();
 async function main(arr: string[]) {
-  for (const elem of arr) {
-    const section = await prisma.selfCheckout.findUnique({
-      where: { city: elem },
-    });
-
-    if (section) {
-      await prisma.selfCheckoutSection.updateMany({
-        where: { selfCheckoutId: section.id },
-        data: {
-          sectionNumber: faker.number.int({
-            min: 1,
-            max: 100,
-          }),
-          sectionAddress: faker.location.streetAddress(),
-        },
-      });
-    } else {
-      await prisma.selfCheckout.create({
-        data: {
-          city: elem,
-          selfCheckoutSections: {
-            create: {
-              sectionNumber: faker.number.int({
+  const queries = arr.map((item)=> {
+    return prisma.selfCheckout.upsert({
+      where: { city: item },
+      create: {
+        city: item,
+        selfCheckoutSections: {
+          create:  { sectionNumber: faker.number.int({
                 min: 1,
                 max: 100,
               }),
               sectionAddress: faker.location.streetAddress(),
             },
-          },
         },
-      });
-    }
-  }
+      },
+      update: {
+        city: item
+      },
+    });
+    })
+
+  await Promise.all(queries)
 }
 main(cities)
   .then(async () => {

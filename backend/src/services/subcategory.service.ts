@@ -2,31 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { SubcategoryQueries } from '../queries/subcategory.queries';
 import { SubcategoryDto } from '../dtos/subcategory.dto';
-import { SubcategoryIconService } from './subcategoryIcon.service';
-import { CategoryDto } from '../dtos/category.dto';
 import { Subcategory } from '@prisma/client';
+import { UploadSubcategoryIconService } from '../classes/uploadImage.class';
+import { SubcategoryIconQueries } from '../queries/subcategoryIcon.queries';
+import { UploadImageDto } from '../dtos/uploadImage.dto';
 
 @Injectable()
-export class SubcategoryService {
+export class SubcategoryService extends UploadSubcategoryIconService {
   constructor(
     private prisma: PrismaService,
     private subcategoryQueries: SubcategoryQueries,
-    private subcategoryIconService: SubcategoryIconService,
-  ) {}
+    subcategoryIconQueries: SubcategoryIconQueries,
+  ) {
+    super(subcategoryIconQueries);
+  }
 
   async createSubcategory(
     data: SubcategoryDto,
-    buffer: Buffer,
-    filename: string,
+    imageData: UploadImageDto,
   ): Promise<Subcategory> {
-    const icon = await this.subcategoryIconService.uploadSubcategoryIcon(
-      buffer,
-      filename,
-    );
-    return await this.subcategoryQueries.createSubcategory({
+    const subcategory = await this.subcategoryQueries.createSubcategory({
       ...data,
-      subcategoryIconId: icon.id,
     });
+    await super.uploadSubcategoryIcon(imageData, subcategory.id);
+
+    return await this.findSubcategoryById(subcategory.id);
   }
 
   async findSubcategoryById(id: number) {

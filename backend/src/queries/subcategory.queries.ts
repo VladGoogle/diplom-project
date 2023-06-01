@@ -21,7 +21,8 @@ export class SubcategoryQueries {
           subcategoryIcon: true,
           category: {
             include: {
-              categoryIcons: true,
+              categoryIcon: true,
+              categoryImage: true
             },
           },
         },
@@ -128,7 +129,7 @@ export class SubcategoryQueries {
         where: { name: name },
       });
       return {
-        message: `User with email: ${subcategory.name} has been deleted`,
+        message: `User with email: ${subcategory.id} has been deleted`,
       };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

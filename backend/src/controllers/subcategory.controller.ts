@@ -13,13 +13,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { editFileName } from '../middlewares/fileValdator.middleware';
-import { imageFileFilter } from '../middlewares/fileValdator.middleware';
-import { maxSize } from '../middlewares/fileValdator.middleware';
-import { diskStorage } from 'multer';
 import { SubcategoryService } from '../services/subcategory.service';
 import { SubcategoryDto } from '../dtos/subcategory.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { UploadImageDto } from '../dtos/uploadImage.dto';
 
 @Controller()
 export class SubcategoryController {
@@ -36,10 +33,9 @@ export class SubcategoryController {
 
   @UseGuards(JwtAuthGuard)
   @Post('subcategories')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   async createSubcategory(
-    @UploadedFile() file,
-    @Req() req,
+    @UploadedFile() image: Express.Multer.File,
     @Body() data: SubcategoryDto,
   ) {
     return await this.subcategoryService.createSubcategory(
@@ -47,8 +43,10 @@ export class SubcategoryController {
         ...data,
         categoryId: parseInt(data.categoryId),
       },
-      req.file.buffer,
-      req.file.originalname,
+      {
+        dataBuffer: image.buffer,
+        filename: image.originalname,
+      },
     );
   }
 

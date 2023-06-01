@@ -14,7 +14,8 @@ export class CategoryQueries {
           name: data.name,
         },
         include: {
-          categoryIcons: true,
+          categoryImage: true,
+          categoryIcon: true,
           subcategories: true,
         },
       });
@@ -28,7 +29,8 @@ export class CategoryQueries {
       return await this.prisma.category.findUniqueOrThrow({
         where: { id: id },
         include: {
-          categoryIcons: true,
+          categoryImage: true,
+          categoryIcon: true,
           subcategories: true,
         },
       });
@@ -42,7 +44,8 @@ export class CategoryQueries {
       return await this.prisma.category.findUniqueOrThrow({
         where: { name: name },
         include: {
-          categoryIcons: true,
+          categoryImage: true,
+          categoryIcon: true,
           subcategories: true,
         },
       });
@@ -55,7 +58,8 @@ export class CategoryQueries {
     try {
       return await this.prisma.category.findMany({
         include: {
-          categoryIcons: true,
+          categoryImage: true,
+          categoryIcon: true,
           subcategories: true,
         },
       });
@@ -95,7 +99,8 @@ export class CategoryQueries {
         },
         include: {
           subcategories: true,
-          categoryIcons: true,
+          categoryImage: true,
+          categoryIcon: true,
         },
       });
     } catch (e) {

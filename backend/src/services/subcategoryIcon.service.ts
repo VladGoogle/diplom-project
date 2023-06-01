@@ -7,15 +7,8 @@ import { SubcategoryIconQueries } from '../queries/subcategoryIcon.queries';
 export class SubcategoryIconService {
   constructor(
     private prisma: PrismaService,
-    private subcategoryIconQueries: SubcategoryIconQueries,
+    private readonly subcategoryIconQueries: SubcategoryIconQueries,
   ) {}
-
-  async uploadSubcategoryIcon(data: Buffer, filename: string) {
-    return await this.subcategoryIconQueries.uploadSubcategoryIcon(
-      data,
-      filename,
-    );
-  }
 
   async getSubcategoryIconById(id: number): Promise<SubcategoryIcon> {
     return await this.subcategoryIconQueries.getSubcategoryIconById(id);
