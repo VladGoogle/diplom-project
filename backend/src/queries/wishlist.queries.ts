@@ -203,7 +203,7 @@ export class WishlistQueries {
     wishlistItemId: number,
   ) {
     try {
-      this.prisma.wishlistItem
+      await this.prisma.wishlistItem
         .delete({
           where: { id: wishlistItemId },
         })
@@ -218,6 +218,9 @@ export class WishlistQueries {
           });
         });
     } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+        throw new NotFoundException(`Wishlist item doesn't exist`);
+      }
       throw e;
     }
 

@@ -12,7 +12,15 @@ COPY prisma ./prisma/
 
 RUN yarn install --only=production
 
-COPY . .
+COPY backend ./backend/
+COPY .env* ./
+COPY client.ts ./
+COPY jest-e2e.json ./
+COPY nest-cli.json ./
+COPY singleton.ts ./
+COPY tsconfig.build.json ./
+COPY tsconfig.json ./
+COPY webpack-hmr.config.js ./
 
 EXPOSE 3001
 

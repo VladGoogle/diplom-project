@@ -14,7 +14,6 @@ import { CategoryIconService } from '../services/categoryIcon.service';
 export class CategoryIconController {
   constructor(private categoryIconService: CategoryIconService) {}
 
-
   @Get('categoryIcon/:id')
   async getCategoryIconById(@Param('id', ParseIntPipe) id: number) {
     return await this.categoryIconService.getCategoryIconById(id);

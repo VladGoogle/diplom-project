@@ -1,12 +1,10 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class SubcategoryDto {
+export class UploadImageDto {
+  @IsNotEmpty()
+  dataBuffer: Buffer;
+
   @IsString()
   @IsNotEmpty()
-  name: string;
-
-
-  @IsNotEmpty()
-  categoryId: any;
-
+  filename: string;
 }

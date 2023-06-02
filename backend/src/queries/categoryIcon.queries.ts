@@ -1,25 +1,41 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserDto } from '../dtos/user.dto';
 import { PrismaService } from '../services/prisma.service';
 import { CategoryIcon, Prisma } from '@prisma/client';
-import { S3 } from 'aws-sdk';
-import { ConfigService } from '@nestjs/config';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class CategoryIconQueries {
-  constructor(
-    private prisma: PrismaService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async createImageRecord(location: string, key: string, id: number) {
     try {
-      return await this.prisma.categoryIcon.create({
+      return await this.prisma.categoryImage.create({
         data: {
-          categoryId: id,
           url: location,
           key: key,
+          category: {
+            connect: {
+              id: id,
+            },
+          },
+        },
+        include: { category: true },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async createIconRecord(location: string, key: string, id: number) {
+    try {
+      return await this.prisma.categoryIcon.create({
+        data: {
+          url: location,
+          key: key,
+          category: {
+            connect: {
+              id: id,
+            },
+          },
         },
         include: { category: true },
       });

@@ -2,12 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { CategoryQueries } from '../queries/category.queries';
 import { CategoryDto } from '../dtos/category.dto';
-import { CategoryIconService } from './categoryIcon.service';
-import { Category } from '@prisma/client';
 import { UpdateCategoryDto } from '../dtos/updateCategory.dto';
 import { UploadCategoryImageService } from '../classes/uploadImage.class';
 import { CategoryIconQueries } from '../queries/categoryIcon.queries';
 import { Files } from '../interfaces/image.interface';
+import { UploadImageDto } from '../dtos/uploadImage.dto';
 
 @Injectable()
 export class CategoryService extends UploadCategoryImageService {
@@ -19,13 +18,21 @@ export class CategoryService extends UploadCategoryImageService {
     super(categoryIconQueries);
   }
 
-  async createCategory<T extends Files>(data: CategoryDto, images: T) {
+  async createCategory(
+    data: CategoryDto,
+    imageData: UploadImageDto,
+    iconData: UploadImageDto,
+  ) {
     const category = await this.categoryQueries.createCategory({
       ...data,
     });
 
-    await super.uploadCategoryIcons(images, category.id);
-    return await this.findCategoryById(category.id);
+    await Promise.all([
+      super.uploadCategoryImage(imageData, category.id),
+      super.uploadCategoryIcon(iconData, category.id),
+    ]);
+
+    return this.findCategoryById(category.id);
   }
 
   async findCategoryById(id: number) {

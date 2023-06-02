@@ -4,19 +4,21 @@ import { ConfigService } from '@nestjs/config';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { Files, ImageInterface } from '../interfaces/image.interface';
 import { CategoryIconQueries } from '../queries/categoryIcon.queries';
+import { UploadImageDto } from '../dtos/uploadImage.dto';
+import { SubcategoryIconQueries } from '../queries/subcategoryIcon.queries';
 
 export class UploadImageService extends ConfigService {
   constructor() {
     super();
   }
 
-  async uploadImage(dataBuffer: Buffer, filename: string) {
+  async uploadImage(data: UploadImageDto) {
     const s3 = new S3();
     return await s3
       .upload({
         Bucket: super.get('AWS_PUBLIC_BUCKET_NAME'),
-        Body: dataBuffer,
-        Key: `${uuid()}-${filename}`,
+        Body: data.dataBuffer,
+        Key: `${uuid()}-${data.filename}`,
       })
       .promise()
       .then((data) => {
@@ -52,7 +54,7 @@ export class UploadProductImageService extends UploadImageService {
     try {
       const imageArray = await super.uploadMultipleImages(images);
       return await Promise.all(
-        imageArray.map(async (obj) => {
+        imageArray.map((obj) => {
           return this.productImageQueries.createImageRecord(
             obj.Location,
             obj.Key,
@@ -71,17 +73,45 @@ export class UploadCategoryImageService extends UploadImageService {
     super();
   }
 
-  async uploadCategoryIcons<T extends Files>(images: T, categoryId: number) {
+  async uploadCategoryIcon(data: UploadImageDto, categoryId: number) {
     try {
-      const imageArray = await super.uploadMultipleImages(images);
-      return await Promise.all(
-        imageArray.map(async (obj) => {
-          return this.categoryIconQueries.createImageRecord(
-            obj.Location,
-            obj.Key,
-            categoryId,
-          );
-        }),
+      const icon = await super.uploadImage(data);
+      return this.categoryIconQueries.createIconRecord(
+        icon.Location,
+        icon.Key,
+        categoryId,
+      );
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async uploadCategoryImage(data: UploadImageDto, categoryId: number) {
+    try {
+      const icon = await super.uploadImage(data);
+      return this.categoryIconQueries.createImageRecord(
+        icon.Location,
+        icon.Key,
+        categoryId,
+      );
+    } catch (e) {
+      throw e;
+    }
+  }
+}
+
+export class UploadSubcategoryIconService extends UploadImageService {
+  constructor(private readonly subcategoryIconQueries: SubcategoryIconQueries) {
+    super();
+  }
+
+  async uploadSubcategoryIcon(data: UploadImageDto, subcategoryId: number) {
+    try {
+      const icon = await super.uploadImage(data);
+      return await this.subcategoryIconQueries.createImageRecord(
+        icon.Location,
+        icon.Key,
+        subcategoryId,
       );
     } catch (e) {
       throw e;

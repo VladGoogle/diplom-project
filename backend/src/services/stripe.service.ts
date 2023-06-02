@@ -32,7 +32,7 @@ export default class StripeService {
     token: string,
     data: AddressDto | UpdateAddressDto,
   ) {
-    return await this.stripe.customers.update(token, {
+    return this.stripe.customers.update(token, {
       address: {
         ...data,
       },
@@ -40,19 +40,19 @@ export default class StripeService {
   }
 
   public async createCardToken(userToken: string, cardToken: string) {
-    return await this.stripe.customers.createSource(userToken, {
+    return this.stripe.customers.createSource(userToken, {
       source: cardToken,
     });
   }
 
   public async createCharge(data: ChargeDto) {
-    return await this.stripe.charges.create({
+    return this.stripe.charges.create({
       ...data,
     });
   }
 
   public async createRefund(charge: string) {
-    return await this.stripe.refunds.create({
+    return this.stripe.refunds.create({
       charge: charge,
     });
   }

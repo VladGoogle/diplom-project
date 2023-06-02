@@ -7,12 +7,17 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY yarn.lock ./
-COPY prisma ./prisma/
+#COPY prisma ./prisma/
 
 
 RUN yarn install --production=false
 
-COPY . .
+COPY client ./client/
+COPY .env* ./
+COPY config-overrides.js ./
+COPY tsconfig.build.json ./
+COPY tsconfig.json ./
+COPY webpack-hmr.config.js ./
 
 EXPOSE 3000
 

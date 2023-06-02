@@ -10,18 +10,18 @@ import {
   UseInterceptors,
   UploadedFile,
   ParseIntPipe,
-  UseGuards, UploadedFiles,
+  UseGuards,
+  UploadedFiles,
 } from '@nestjs/common';
 import { CategoryService } from '../services/category.service';
 import { CategoryDto } from '../dtos/category.dto';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { UpdateCategoryDto } from '../dtos/updateCategory.dto';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import {UploadImageDto} from "../dtos/uploadImage.dto";
 
 @Controller()
 export class CategoryController {
@@ -44,12 +44,18 @@ export class CategoryController {
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard)
   @Post('categories')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 5 }]))
-  async createCategory(
-    @UploadedFiles() files,
-    @Body() data: CategoryDto,
-  ) {
-    return await this.categoryService.createCategory(data, files);
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'icon', maxCount: 1 },
+      { name: 'image', maxCount: 1 },
+    ]),
+  )
+  async createCategory(@UploadedFiles() files: { icon?: Express.Multer.File, image?: Express.Multer.File },  @Body() data: CategoryDto) {
+    return await this.categoryService.createCategory(
+      data,
+      { dataBuffer: files.icon[0].buffer, filename: files.icon[0].originalname },
+      { dataBuffer: files.image[0].buffer, filename: files.image[0].originalname },
+    );
   }
 
   @Get('categories')
