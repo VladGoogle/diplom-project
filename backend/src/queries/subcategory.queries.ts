@@ -44,6 +44,7 @@ export class SubcategoryQueries {
       return await this.prisma.subcategory.findUniqueOrThrow({
         where: { id: id },
         include: {
+          subcategoryIcon: true,
           category: true,
         },
       });
@@ -62,6 +63,7 @@ export class SubcategoryQueries {
       return await this.prisma.subcategory.findUniqueOrThrow({
         where: { name: name },
         include: {
+          subcategoryIcon: true,
           category: true,
         },
       });
@@ -79,6 +81,7 @@ export class SubcategoryQueries {
     try {
       return await this.prisma.subcategory.findMany({
         include: {
+          subcategoryIcon: true,
           category: true,
         },
       });
@@ -92,6 +95,7 @@ export class SubcategoryQueries {
       return await this.prisma.subcategory.findMany({
         where: { categoryId: id },
         include: {
+          subcategoryIcon: true,
           category: true,
         },
       });

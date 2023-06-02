@@ -17,11 +17,9 @@ async function main(arr: string[]) {
             },
         },
       },
-      update: {
-        city: item
-      },
+      update: {}
     });
-    })
+  })
 
   await Promise.all(queries)
 }
