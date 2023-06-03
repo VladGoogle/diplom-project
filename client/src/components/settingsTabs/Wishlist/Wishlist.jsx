@@ -1,12 +1,12 @@
 import React from "react";
 import { useEffect } from "react"
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import "./style.css"
 import Card from "../../card/Card";
 
 const Wishlist = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [items, setItems] = React.useState([]);
 
     useEffect(() => {

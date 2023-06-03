@@ -1,6 +1,6 @@
 import './style.css'
 import { useState, useEffect } from 'react';
-import createAxiosInstance from '../../utils/axios/instance';
+import AxiosInstance from '../../utils/axios/instance';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,7 +31,7 @@ const Checkout = () => {
         resolver: yupResolver(schema),
     });
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [userInfo, setUserInfo] = useState({});
     const [card, setCard] = useState(null);
     const [items, setItems] = useState([]);

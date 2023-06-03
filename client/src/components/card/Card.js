@@ -1,12 +1,12 @@
 import './style.css';
 import React from 'react'
-import createAxiosInstance from '../../utils/axios/instance';
+import AxiosInstance from '../../utils/axios/instance';
 import { NavLink } from 'react-router-dom';
 
 
 function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist, id }) {
 
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [isAddedToCart, setIsAddedToCart] = React.useState(false);
   const [isAddingToCart, setIsAddingToCart] = React.useState(false);
   const [isAddedToWishlist, setIsAddedToWishlist] = React.useState(false);

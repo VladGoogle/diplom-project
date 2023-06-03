@@ -2,12 +2,12 @@ import "./style.css"
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import createAxiosInstance from '../../utils/axios/instance.js';  
+import AxiosInstance from '../../utils/axios/instance.js';  
 import React from "react";
 
 const SettingsTabs = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [user, setUser] = React.useState([]);
 
     useEffect(() => {

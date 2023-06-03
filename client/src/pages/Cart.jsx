@@ -1,6 +1,6 @@
 import CartItem from "../components/cart/CartItem";
 import React from "react";
-import createAxiosInstance from "../utils/axios/instance";
+import AxiosInstance from "../utils/axios/instance";
 import { useEffect, useState, useContext } from "react";
 import { NavLink } from 'react-router-dom';
 import { TokenContext } from "../TokenContext";
@@ -8,7 +8,7 @@ import SignedOutCart from "../components/cart/SignedOutCart";
 
 const Cart = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [items, setItems] = React.useState([]);
     const [itemsTotal, setItemsTotal] = React.useState([]);
     const { token } = useContext(TokenContext);

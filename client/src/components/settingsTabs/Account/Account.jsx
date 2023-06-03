@@ -1,6 +1,6 @@
 import "./style.css"
 import { useState } from "react";
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -16,7 +16,7 @@ const schema = yup.object().shape({
 const Account = () => {
 
     
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [isOpen, setIsOpen] = useState([false, false]);
   
     const togglePanel = (index) => {

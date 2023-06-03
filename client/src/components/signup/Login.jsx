@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useState, useContext } from 'react';
 import { TokenContext } from '../../TokenContext';
 import { useNavigate } from 'react-router-dom';
-import createAxiosInstance from '../../utils/axios/instance';
+import AxiosInstance from '../../utils/axios/instance';
 
 const schema = yup.object().shape({
   email: yup
@@ -33,7 +33,7 @@ const Login = (props) => {
   const { setToken } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
 
   const handleFormChange = async (data) => {
     try {

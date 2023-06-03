@@ -1,12 +1,12 @@
 import "./style.css"
 import categories_arrow from "./../../img/categories_icon.svg"
-import createAxiosInstance from "../../utils/axios/instance"
+import AxiosInstance from "../../utils/axios/instance"
 import { useState, useEffect } from "react"
 import advertisment from "./../../img/advertisment.png"
 
 const CatalogPopup = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
   

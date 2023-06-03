@@ -2,12 +2,12 @@ import './style.css';
 import Categories from './Categories';
 import React from "react"
 import { useEffect } from 'react';
-import createAxiosInstance from '../../utils/axios/instance'; 
+import AxiosInstance from '../../utils/axios/instance'; 
 
 
 function  CategoriesPage() {
 
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [categories, setCategories] = React.useState([]);
   const [error, setError] = React.useState(null);
 

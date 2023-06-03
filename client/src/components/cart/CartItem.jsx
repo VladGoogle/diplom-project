@@ -1,12 +1,12 @@
 import "./style.css"
 import Counter from "../counter/Counter";
 import React from 'react';
-import createAxiosInstance from "../../utils/axios/instance";
+import AxiosInstance from "../../utils/axios/instance";
 
 function CartItem({ cartImage, subcategory, price, name, itemId, quantity, onRemoveItem, onQuantityChange}) {
 
     const [subTotalPrice, setSubTotalPrice] = React.useState(price * quantity);
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const handleRemove = () => {
         onRemoveItem(itemId);
       };

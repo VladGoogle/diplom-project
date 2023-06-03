@@ -2,11 +2,11 @@ import Card from '../card/Card.js';
 import './style.css';
 import React from 'react';
 import { useEffect } from 'react';
-import createAxiosInstance from '../../utils/axios/instance.js';  
+import AxiosInstance from '../../utils/axios/instance.js';  
 
 
 function Products() { 
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [items, setItems] = React.useState([]);
   const [addedWishlistItems, setAddedWishlistItems] = React.useState([]);
 

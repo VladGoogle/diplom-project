@@ -8,17 +8,20 @@
     z-index: 12;
   }
 
+.unathorized__popup-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
 .unathorized__popup {
     padding: 20px 20px 40px 20px;
     border-radius: 5px;
     display: flex;
-    align-items: center;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
     background-color: #FDFDFD;
     flex-direction: column;
 }
@@ -40,6 +43,6 @@
 
 .unathorized__icon {
     display: flex;
-    align-items: flex-end;
+    justify-content: flex-end;
     cursor: pointer;
 }

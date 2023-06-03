@@ -2,7 +2,7 @@ import "./style.css"
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import AddedWallet from "./AddedWallet";
 import { useState } from "react";
 
@@ -31,7 +31,7 @@ const schema = yup.object().shape({
 
 const WalletForm = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [showForm, setShowForm] = useState(false);
 
     

@@ -1,13 +1,13 @@
 import ProductsSlider from '../components/swiper/Slider';
 import Recommended from '../components/recommendations/Recommended';
 import { useState, useEffect } from 'react';
-import createAxiosInstance from '../utils/axios/instance';
+import AxiosInstance from '../utils/axios/instance';
 import { useParams } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
 
 const Product = () => {
 
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [productInfo, setProductInfo] = useState([]);
   const [productImages, setProductImages] = useState([]);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
