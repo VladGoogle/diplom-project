@@ -31,8 +31,7 @@ const Product = () => {
 
   const handleAddToCart = async (item) => {
     try {
-      const response = await instance.post("/carts", { productId: item.id, quantity: 1 });
-      setCartItems([...cartItems, response.data]);
+      await instance.post("/carts", { productId: item.id, quantity: 1 });
     } catch (error) {
       console.log(error);
     }
