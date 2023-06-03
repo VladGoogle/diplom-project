@@ -28,6 +28,7 @@ const ProductsSlider = ({images}) => {
   return (
     <div className="slider-container">
       <div className="slider">
+        <div className="big__image-container">
         {images.map((image, id) => (
           <img key={id} 
           src={image?.url} 
@@ -35,6 +36,7 @@ const ProductsSlider = ({images}) => {
           className={`slider-big-image ${id === currentSlide ? 'active' : ''}`}
           />
         ))}
+        </div>
         <div className="slider-controls">
           <button className="slider-button prev-button" onClick={onPrevClick}>
             <PrevIcon />

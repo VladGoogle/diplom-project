@@ -69,7 +69,7 @@ function CartItem({ cartImage, subcategory, price, name, itemId, quantity, onRem
                                     />
                                 </div>
                                 <div className="cart__item-subtotal">
-                                    {subTotalPrice.toFixed(2)}$
+                                    {subTotalPrice.toFixed(0)}$
                                 </div>
                             </div>
                         </div>

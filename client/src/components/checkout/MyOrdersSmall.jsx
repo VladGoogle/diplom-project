@@ -33,7 +33,7 @@ function MyOrdersSmall ({cartImage, subcategory, price, name, itemId, quantity, 
                                 {quantity}
                             </div>
                             <div className="my_order-small__item-subtotal">
-                                {subTotalPrice.toFixed(2)}$
+                                {subTotalPrice.toFixed(0)}$
                             </div>
                         </div>
                     </div>

@@ -22,7 +22,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await instance.get("/cart/1");
+                const response = await instance.get("/cart/getByToken");
                 setItems(response.data.cartItems);
                 setItemsTotal(response.data);
             } catch (error) {

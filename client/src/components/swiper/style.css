@@ -45,18 +45,23 @@
   transform: translateY(-50%);
 }
 
-.slider-big-image {
+.big__image-container {
   max-width: 680px;
-  max-height: 408px;
-  min-height: 308px;
+  height: 408px;
+}
 
+.slider-big-image {
+  width: 100%;
+  height: 100%;
 }
 
 .thumbnail {
-  max-width: 94px;
-  max-height: 80px;
+  width: 94px;
+  height: 80px;
   padding: 5px;
 }
+
+
 
 .slider-big-image {
   display: none;

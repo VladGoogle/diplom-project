@@ -37,7 +37,7 @@ function  CategoriesPage() {
                 <Categories
                   key={obj.id}
                   name={obj.name}
-                  categoryIcon={obj.categoryIcons[0]?.url}
+                  categoryIcon={obj.categoryIcon?.url}
                 />  
               );
             })}

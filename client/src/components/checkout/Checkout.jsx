@@ -170,7 +170,7 @@ const Checkout = () => {
                     </h1>
                     <div className="myorder__titles">
                         <div className="myorder__titles-left">
-                            <span className="myorder__titles-title myorder-title">
+                            <span className="myorder__titles-title">
                                 Title
                             </span>
                         </div>
