@@ -60,7 +60,7 @@ const Account = () => {
                         </div>
                         {isOpen [0] && (
                         <div className="account__tab-content">
-                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} className="account__content">
                                 <div className="account__tab-inputs">
                                         <input id="firstName" name="firstName" placeholder="First name" type="text" className="account__tab-input" {...register('firstName')}/>
                                         <input id="lastName" name="lastName" placeholder="Last name" type="text" className="account__tab-input" {...register('lastName')}/>
@@ -87,7 +87,7 @@ const Account = () => {
                         </div>
                         {isOpen[1] && (
                         <div className="account__tab-content">
-                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} className="account__content">
                                 <div className="account__tab-inputs">
                                         <input placeholder="Phone number" type="text" className="account__tab-input" {...register('phone')}/>
                                         <input placeholder="Email" type="email" className="account__tab-input" {...register('email')}/>

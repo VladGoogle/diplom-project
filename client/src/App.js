@@ -11,13 +11,13 @@ import SuccessRegistration from './components/signup/SuccessReg';
 import Account from './components/settingsTabs/Account/Account';
 import Orders from './components/settingsTabs/Orders/Orders';
 import Wallet from './components/settingsTabs/Wallet/Wallet';
-import Viewed from './components/settingsTabs/Viewed/Viewed';
 import Logout from './components/settingsTabs/Logout/Logout';
 import Wishlist from './components/settingsTabs/Wishlist/Wishlist';
 import Cart from './pages/Cart';
 import TokenProvider from "./TokenContext"
 import Checkout from './components/checkout/Checkout';
 import NotFound from './components/notfound/NotFound';
+import Catalog from './components/catalog/Catalog';
 
 
 function App() {
@@ -32,12 +32,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/catalog" element={<Catalog />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/settings" element={<Settings />}>
             <Route path="account" element={<Account />} />
             <Route path="orders" element={<Orders />} />
             <Route path="wallet" element={<Wallet />} />
-            <Route path="viewed" element={<Viewed />} />
             <Route path="wishlist" element={<Wishlist />} />
             <Route path="logout" element={<Logout />} />
           </Route>

@@ -8,9 +8,8 @@ import createAxiosInstance from "../../../utils/axios/instance";
 const Orders = () => {
 
   const instance = createAxiosInstance();
-  const [ordersTotal, setOrdersTotal] = React.useState([]);
-  const [ordersItem, setOrdersItem] = React.useState([]);
-  const [ordersUser, setOrdersUser] = React.useState([]);
+  const [ordersTotal, setOrdersTotal] = useState([]);
+
   
 
   useEffect(() => {

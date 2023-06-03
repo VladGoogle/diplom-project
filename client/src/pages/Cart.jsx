@@ -64,13 +64,7 @@ const Cart = () => {
         }
     };
 
-    const handleMakeAnOrder = async () => {
-        try {
-          await instance.post("/cart/1/confirm");
-        } catch (error) {
-          console.log(error);
-        }
-      }
+
 
 
 
@@ -138,7 +132,7 @@ const Cart = () => {
                             </div>
                             <div className="cart__buttons">
                                 <NavLink to="/checkout" className="logo">
-                                    <button onClick={handleMakeAnOrder} className="cart__button-buy">
+                                    <button className="cart__button-buy">
                                         BUY FOR <span className="cart__buttons-price">{itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$</span>
                                     </button>
                                 </NavLink>

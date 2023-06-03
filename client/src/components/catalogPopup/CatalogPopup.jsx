@@ -16,7 +16,6 @@ const CatalogPopup = () => {
           const response = await instance.get("/categories");
           setCategories(response.data);
         } catch (error) {
-          setError(error);
           console.log(error);
         }
       };

@@ -1,37 +1,75 @@
 import './style.css'
-import mastercard_1 from "../../img/mastercard_1.svg"
 import { useState, useEffect } from 'react';
 import createAxiosInstance from '../../utils/axios/instance';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import AddedWallet from '../settingsTabs/Wallet/AddedWallet';
+import WalletForm from '../settingsTabs/Wallet/WalletForm';
+import MyOrdersSmall from './MyOrdersSmall';
+
+const schema = yup.object().shape({
+    firstName: yup.string().required('First name is required'),
+    lastName: yup.string().required('Last name is required'),
+    email: yup
+    .string()
+    .email('Invalid email')
+    .lowercase()
+    .trim()
+    .max(255, 'Email must be at most 255 characters')
+    .required('Email is required'),
+    phone: yup.string().required('Phone number is required'),
+    confirmation: yup.boolean()
+});
+
+
+
 
 const Checkout = () => {
 
-    const instance = createAxiosInstance();
-    const [selectedOption, setSelectedOption] = useState('');
+    const { register, handleSubmit, errors } = useForm({
+        resolver: yupResolver(schema),
+    });
 
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
+    const instance = createAxiosInstance();
+    const [userInfo, setUserInfo] = useState({});
+    const [card, setCard] = useState(null);
+    const [items, setItems] = useState([]);
+    const [itemsTotal, setItemsTotal] = useState([]);
+
+
 
     useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            event.preventDefault();
-            event.returnValue = ''; // Необходимо для поддержки старых браузеров
-            handleRemoveOrder(); // Вызов функции для удаления заказа при закрытии страницы
+        const fetchData = async () => {
+            try {
+                const response = await instance.get("/cart/1");
+                setItems(response.data.cartItems);
+                setItemsTotal(response.data)
+            } catch (error) {
+                console.log(error);
+            }
         };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
+        fetchData();
     }, []);
 
-    const handleRemoveOrder = async () => {
-        try {
-            await instance.delete('/account/orders');
-        } catch (error) {
-            console.log(error);
-        }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await instance.get("/user/getByToken");
+                setUserInfo(response.data);
+                setCard(response.data.card);
+            } catch (error) {
+                console.log(error);
+            } 
+        };
+        fetchData();
+    }, []);
+
+
+
+    const onSubmit = (data) => {
+
+        console.log(data);
     };
 
 
@@ -52,13 +90,13 @@ const Checkout = () => {
                                 Personal info
                             </h4>
                         </div>
-                        <div className="checkout__top--bottom">
+                        <div onSubmit={handleSubmit(onSubmit)} className="checkout__top--bottom">
                             <div className="checkout__top-fields_top">
-                                <input className='checkout_input-field checkout_input-mini' type="text" name="firstName" id="firstName" placeholder='First name' />
-                                <input className='checkout_input-field checkout_input-mini' type="text" name="lastName" id="lastName" placeholder='Last name' />
+                                <input className='checkout_input-field checkout_input-mini' type="text" name="firstName" id="firstName" placeholder='First name' {...register('firstName')} defaultValue={userInfo.firstName} />
+                                <input className='checkout_input-field checkout_input-mini' type="text" name="lastName" id="lastName" placeholder='Last name' {...register('lastName')} defaultValue={userInfo.lastName} />
                             </div>
-                            <input className='checkout_input-field' type="email" name="email" id='email' placeholder='Email' />
-                            <input className='checkout_input-field' type="tel" name='tel' id='tel' placeholder='Phone number' />
+                            <input className='checkout_input-field' type="email" name="email" id='email' placeholder='Email' {...register('email')} defaultValue={userInfo.email} />
+                            <input className='checkout_input-field' type="text" name='phone' id='phone' placeholder='Phone number' {...register('phone')} defaultValue={userInfo.phone} />
                             <div className="checkbox__container">
                                 <input className='checkout_checkbox' type="checkbox" id='confirmation' name='confirmation' />
                                 <label className='checkout_checkbox-label' htmlFor="confirmation">Call me for confirmation</label>
@@ -116,39 +154,10 @@ const Checkout = () => {
                             </select>
                             <div>
                                 <div className="checkout__bottom-bank_cards">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        value="mybankcard"
-                                        checked={selectedOption === 'mybankcard'}
-                                        onChange={handleOptionChange}
-                                    />
-                                    ************7053
-                                    <div className="checkout__bottom-bank_cards-info">
-                                        <span className="bank__name">
-                                            Monobank
-                                        </span>
-                                        <img src={mastercard_1} alt="" />
-                                    </div>
-
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        value="addedbankcard"
-                                        checked={selectedOption === 'addedbankcard'}
-                                        onChange={handleOptionChange}
-                                    />
-                                    Add bank card
-
-                                    {selectedOption === 'addedbankcard' && (
-                                        <div>
-                                            <input className='checkout_input-field' placeholder="Card number" name="Card number" type="tel" id="cardNumber" />
-                                            <div className="bank__card-bottom_field">
-                                                <input className='checkout_input-field' placeholder="MM" type="tel" name="Expiry month" id="expMonth" />
-                                                <input className='checkout_input-field' placeholder="YY" type="tel" name="Expiry year" id="expYear" />
-                                                <input className='checkout_input-field' placeholder="CVV" type="tel" name="CVV" id="cvc" />
-                                            </div>
-                                        </div>
+                                    {card ? (
+                                        <AddedWallet card={card} />
+                                    ) : (
+                                        <WalletForm />
                                     )}
                                 </div>
                             </div>
@@ -159,6 +168,62 @@ const Checkout = () => {
                     <h1 className="myorder__title">
                         Your order
                     </h1>
+                    <div className="myorder__titles">
+                        <div className="myorder__titles-left">
+                            <span className="myorder__titles-title myorder-title">
+                                Title
+                            </span>
+                        </div>
+                        <div className="myorder__titles-right">
+                            <span className="myorder__price-title myorder-title">
+                                Price
+                            </span>
+                            <span className="myorder__quantity-title myorder-title">
+                                QTY
+                            </span>
+                            <span className="myorder__subtotal-title myorder-title">
+                                Subtotal
+                            </span>
+                        </div>
+                    </div>
+                    <ul className='myorder__list'>
+                        {items
+                            .map((obj, id) => {
+                                return (
+                                    <MyOrdersSmall
+                                        key={id}
+                                        subTotalPrice={obj.subTotalPrice}
+                                        itemId={obj.id}
+                                        price={obj.product.price}
+                                        name={obj.product.name}
+                                        subcategory={obj.product.subcategory.name}
+                                        cartImage={obj.product.productImages[0]?.url}
+                                        quantity={obj.quantity}
+                                    />
+                                );
+                            })}
+                    </ul>
+                    <div className="myorder__summary">
+                                <div className="myorder__summary-top">
+                                    <span className="myorder__summary-title">
+                                        Summary:
+                                    </span>
+                                    <span className="myorder__summary-price">
+                                    {itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$
+                                    </span>
+                                </div>
+                                <div className="myorder__summary-bottom">
+                                    <span className="delivery__title">
+                                        Delivery:
+                                    </span>
+                                    <span className="delivery__price">
+                                        10.00$
+                                    </span>
+                                </div>
+                            </div>
+                            <button className="myorder__confirmation">
+                            CONFIRM THE ORDER
+                            </button>
                 </section>
             </div>
         </div>
