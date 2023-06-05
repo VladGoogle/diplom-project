@@ -8,19 +8,20 @@ import AxiosInstance from '../../utils/axios/instance.js';
 function Products() { 
   const instance = AxiosInstance();
   const [items, setItems] = React.useState([]);
-  const [addedWishlistItems, setAddedWishlistItems] = React.useState([]);
+  const [wishlistId, setWishlistId] = React.useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await instance.get("/products");
         setItems(response.data);
+        
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [wishlistId]);
 
   const handleAddToCart = async (item) => {
     try {
@@ -33,9 +34,9 @@ function Products() {
   const handleAddToWishlist = async (item) => {
     try {
       const response = await instance.post("/wishlists", { productId: item.id });
-      setAddedWishlistItems([...addedWishlistItems, response.data.id]);
+      setWishlistId(response.data.id);
     } catch (error) {
-      console.log(error);
+      console.log(error); 
     }
   }
 
@@ -58,6 +59,7 @@ function Products() {
           <ul className="products-card-list">
             {items
             .map((obj, id) => {
+              const isInWishlist = obj.wishlistItems.length > 0;
               return (
                 <Card
                   key={id}
@@ -70,6 +72,7 @@ function Products() {
                   onAddToCart={ () => handleAddToCart(obj)}
                   onAddToWishlist={ () => handleAddToWishlist(obj)}
                   onRemoveFromWishlist={() => handleRemoveFromWishlist(obj.wishlistItems[0]?.id)}
+                  itsInWishlist={isInWishlist}
                 />
               );
             })}

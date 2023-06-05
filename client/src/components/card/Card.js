@@ -1,38 +1,15 @@
 import './style.css';
 import React from 'react'
-import AxiosInstance from '../../utils/axios/instance';
 import { NavLink } from 'react-router-dom';
 
 
-function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist, id }) {
+function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist, id, itsInWishlist }) {
 
-  const instance = AxiosInstance();
   const [isAddedToCart, setIsAddedToCart] = React.useState(false);
   const [isAddingToCart, setIsAddingToCart] = React.useState(false);
-  const [isAddedToWishlist, setIsAddedToWishlist] = React.useState(false);
-  const [isAddingToWishlist, setIsAddingToWishlist] = React.useState(false);
-  const [isInWishlist, setIsInWishlist] = React.useState(false);
+  const [isInWishlist, setIsInWishlist] = React.useState(itsInWishlist);
+
   
-
-
-
-  const checkWishlist = () => {
-    // Отправка GET-запроса на сервер для проверки наличия карточки в wishlist
-    const response = instance.get(`/product/${id}`)
-      .then(response => {
-        // Проверка наличия карточки в wishlist
-        const isInWishlist = response.data.wishlistItems.length > 0;
-        setIsInWishlist(isInWishlist);
-      })
-      .catch(error => {
-        // Обработка ошибки
-        console.log(error);
-      });
-  };
-
-  React.useEffect(() => {
-    checkWishlist();
-  }, []);
 
   const handleAddToCartClick = () => {
     if (!isAddingToCart) {
@@ -50,26 +27,26 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
   };
 
   const handleAddToWishlistClick = () => {
-    if (!isAddingToWishlist) {
-      setIsAddingToWishlist(true);
-      onAddToWishlist().then(() => {
-        setIsAddedToWishlist(true);
-        setIsAddingToWishlist(false);
-        setIsInWishlist(true); // Обновление состояния isInWishlist
-      });
+    if (!isInWishlist) {
+      onAddToWishlist()
+        .then(() => {
+          setIsInWishlist(true);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
 
   const handleRemoveFromWishlist = () => {
     if (isInWishlist) {
-      if (!isAddingToWishlist) {
-        setIsAddingToWishlist(true);
-        onRemoveFromWishlist().then(() => {
-          setIsAddedToWishlist(false);
-          setIsAddingToWishlist(false);
-          setIsInWishlist(false); // Обновление состояния isInWishlist
+      onRemoveFromWishlist()
+        .then(() => {
+          setIsInWishlist(false);
+        })
+        .catch((error) => {
+          console.error(error);
         });
-      }
     }
   };
 

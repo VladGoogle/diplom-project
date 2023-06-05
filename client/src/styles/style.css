@@ -242,6 +242,10 @@ input::placeholder {
   font-weight: 700;
   font-size: 32px;
   line-height: 39px;
+  color: #1C7FF3;
+}
+
+.goods__price-new--text.red {
   color: rgba(228, 40, 40, 0.7);
 }
 
@@ -392,7 +396,7 @@ input::placeholder {
   font-size: 24px;
   line-height: 29px;
   margin-left: 16px;
-  color: #1c7ff3;
+  color: #1c7ff3; 
 }
 
 .care__instructions {
@@ -402,6 +406,7 @@ input::placeholder {
   border-radius: 30px;
   max-width: 100%;
   background-color: #f9f9f9;
+  margin-top: 60px;
 }
 
 .care_instructions-text {
@@ -565,4 +570,28 @@ input::placeholder {
 
 .cart__empty-title {
   text-align: center;
+}
+
+.product__reviews {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 59px;
+  margin-bottom: 30px;
+}
+
+
+.comment__link {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  color: #1C7FF3;
+  cursor: pointer;
+}
+
+.comment__link:hover {
+  color: rgba(237, 45, 45, 0.7);
+  text-decoration-line: underline;
+  transition: all .2s ease-in-out;
 }
