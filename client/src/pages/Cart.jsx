@@ -1,6 +1,6 @@
 import CartItem from "../components/cart/CartItem";
 import React from "react";
-import createAxiosInstance from "../utils/axios/instance";
+import AxiosInstance from "../utils/axios/instance";
 import { useEffect, useState, useContext } from "react";
 import { NavLink } from 'react-router-dom';
 import { TokenContext } from "../TokenContext";
@@ -8,7 +8,7 @@ import SignedOutCart from "../components/cart/SignedOutCart";
 
 const Cart = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [items, setItems] = React.useState([]);
     const [itemsTotal, setItemsTotal] = React.useState([]);
     const { token } = useContext(TokenContext);
@@ -22,7 +22,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await instance.get("/cart/1");
+                const response = await instance.get("/cart/getByToken");
                 setItems(response.data.cartItems);
                 setItemsTotal(response.data);
             } catch (error) {
@@ -64,13 +64,7 @@ const Cart = () => {
         }
     };
 
-    const handleMakeAnOrder = async () => {
-        try {
-          await instance.post("/cart/1/confirm");
-        } catch (error) {
-          console.log(error);
-        }
-      }
+
 
 
 
@@ -138,7 +132,7 @@ const Cart = () => {
                             </div>
                             <div className="cart__buttons">
                                 <NavLink to="/checkout" className="logo">
-                                    <button onClick={handleMakeAnOrder} className="cart__button-buy">
+                                    <button className="cart__button-buy">
                                         BUY FOR <span className="cart__buttons-price">{itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$</span>
                                     </button>
                                 </NavLink>

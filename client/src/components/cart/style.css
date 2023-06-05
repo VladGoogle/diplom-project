@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -22,7 +23,7 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-left: 265px;
+    
 }
 
 .cart__component .goods__counter-number {
@@ -128,7 +129,8 @@
 .cart__item-prices {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 8%;
     width: 100%;
 }
 

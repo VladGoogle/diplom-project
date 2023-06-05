@@ -1,6 +1,6 @@
 import "./style.css"
 import { useState } from "react";
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -16,7 +16,7 @@ const schema = yup.object().shape({
 const Account = () => {
 
     
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [isOpen, setIsOpen] = useState([false, false]);
   
     const togglePanel = (index) => {
@@ -60,7 +60,7 @@ const Account = () => {
                         </div>
                         {isOpen [0] && (
                         <div className="account__tab-content">
-                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} className="account__content">
                                 <div className="account__tab-inputs">
                                         <input id="firstName" name="firstName" placeholder="First name" type="text" className="account__tab-input" {...register('firstName')}/>
                                         <input id="lastName" name="lastName" placeholder="Last name" type="text" className="account__tab-input" {...register('lastName')}/>
@@ -87,7 +87,7 @@ const Account = () => {
                         </div>
                         {isOpen[1] && (
                         <div className="account__tab-content">
-                            <form onSubmit={handleSubmit(onSubmit)} action="" className="account__content">
+                            <form onSubmit={handleSubmit(onSubmit)} className="account__content">
                                 <div className="account__tab-inputs">
                                         <input placeholder="Phone number" type="text" className="account__tab-input" {...register('phone')}/>
                                         <input placeholder="Email" type="email" className="account__tab-input" {...register('email')}/>

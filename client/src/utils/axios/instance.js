@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { TokenContext } from "../../TokenContext";
 
-const createAxiosInstance = () => {
+const AxiosInstance = () => {
   const { token } = useContext(TokenContext);
 
   const instance = axios.create({
@@ -17,4 +17,4 @@ const createAxiosInstance = () => {
   return instance;
 };
 
-export default createAxiosInstance;
+export default AxiosInstance;

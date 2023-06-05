@@ -1,12 +1,12 @@
 import React from "react";
 import { useEffect } from "react"
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import "./style.css"
 import Card from "../../card/Card";
 
 const Wishlist = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [items, setItems] = React.useState([]);
 
     useEffect(() => {
@@ -23,8 +23,7 @@ const Wishlist = () => {
 
       const handleAddToCart = async (item) => {
         try {
-          const response = await instance.post("/carts", { productId: item.id, quantity: 1 });
-          setCartItems([...cartItems, response.data]);
+          await instance.post("/carts", { productId: item.id, quantity: 1 });
         } catch (error) {
           console.log(error);
         }
@@ -46,7 +45,6 @@ const Wishlist = () => {
                   discountPrice={obj.product.discountPrice}
                   img={obj.product.productImages[0].url}
                   onAddToCart={ () => handleAddToCart(obj)}
-                  onAddToWishlist={ () => handleAddToWishlist(obj)}
                 />
               );
             })}

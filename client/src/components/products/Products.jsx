@@ -2,15 +2,12 @@ import Card from '../card/Card.js';
 import './style.css';
 import React from 'react';
 import { useEffect } from 'react';
-import createAxiosInstance from '../../utils/axios/instance.js';  
+import AxiosInstance from '../../utils/axios/instance.js';  
 
 
 function Products() { 
-
-
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [items, setItems] = React.useState([]);
-  const [cartItems, setCartItems] = React.useState([]);
   const [addedWishlistItems, setAddedWishlistItems] = React.useState([]);
 
   useEffect(() => {
@@ -27,18 +24,16 @@ function Products() {
 
   const handleAddToCart = async (item) => {
     try {
-      const response = await instance.post("/carts", { productId: item.id, quantity: 1 });
-      setCartItems([...cartItems, response.data]);
+      await instance.post("/carts", { productId: item.id, quantity: 1 });
     } catch (error) {
       console.log(error);
     }
   }
 
-
   const handleAddToWishlist = async (item) => {
     try {
-      const response = await instance.post("/wishlists", { productId: item.id});
-      setAddedWishlistItems([...addedWishlistItems, response.data]);
+      const response = await instance.post("/wishlists", { productId: item.id });
+      setAddedWishlistItems([...addedWishlistItems, response.data.id]);
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +41,7 @@ function Products() {
 
   const handleRemoveFromWishlist = async (wishlistItemId) => {
     try {
-      await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId});
+      await instance.patch("/wishlist/removeItem", { wishlistId: 1, wishlistItemId });
     } catch (error) {
       console.log(error);
     }

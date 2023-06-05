@@ -1,12 +1,12 @@
 import AddedWallet from "./AddedWallet";
 import WalletForm from "./WalletForm";
 import { useState, useEffect } from "react"
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 import "./style.css"
 
 const Wallet = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [card, setCard] = useState(null);
     const [loading, setLoading] = useState(true);
 

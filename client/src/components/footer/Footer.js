@@ -497,7 +497,7 @@ const Footer = () => {
         <div className="footer__copyright">
           <p className="footer__copyright-text">
             © 2023 Всі права захищені | <b>LaPigeon</b> — інтернет-магазин
-            музичних інструментів
+            побутової техніки
           </p>
         </div>
       </div>

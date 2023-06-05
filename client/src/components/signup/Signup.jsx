@@ -1,6 +1,6 @@
 import './style.css';
 import React from 'react';
-import createAxiosInstance from '../../utils/axios/instance'
+import AxiosInstance from '../../utils/axios/instance'
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
 
 const Registration = (props) => {
   const [formValid, setFormValid] = useState(false);
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const navigate = useNavigate();
   const { setToken } = useContext(TokenContext);
   const [showPassword, setShowPassword] = useState(false);

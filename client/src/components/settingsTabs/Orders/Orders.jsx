@@ -2,15 +2,14 @@ import "./style.css"
 import Order from "../../order/Order.jsx"
 import React from 'react';
 import { useState, useEffect } from 'react';
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 
 
 const Orders = () => {
 
-  const instance = createAxiosInstance();
-  const [ordersTotal, setOrdersTotal] = React.useState([]);
-  const [ordersItem, setOrdersItem] = React.useState([]);
-  const [ordersUser, setOrdersUser] = React.useState([]);
+  const instance = AxiosInstance();
+  const [ordersTotal, setOrdersTotal] = useState([]);
+
   
 
   useEffect(() => {

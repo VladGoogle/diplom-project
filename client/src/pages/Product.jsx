@@ -1,15 +1,17 @@
 import ProductsSlider from '../components/swiper/Slider';
 import Recommended from '../components/recommendations/Recommended';
 import { useState, useEffect } from 'react';
-import createAxiosInstance from '../utils/axios/instance';
+import AxiosInstance from '../utils/axios/instance';
 import { useParams } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
 
 const Product = () => {
 
-  const instance = createAxiosInstance();
+  const instance = AxiosInstance();
   const [productInfo, setProductInfo] = useState([]);
   const [productImages, setProductImages] = useState([]);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const { id } = useParams();
   const discountPercentage = ((productInfo.price - productInfo.discountPrice) / productInfo.price) * 100;
 
@@ -26,6 +28,27 @@ const Product = () => {
       };
       fetchData();
   }, [id]);
+
+  const handleAddToCart = async (item) => {
+    try {
+      await instance.post("/carts", { productId: item.id, quantity: 1 });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleAddToCartClick = async () => {
+    if (!isAddingToCart) {
+      setIsAddingToCart(true);
+      try {
+        await handleAddToCart(productInfo); // Используйте await для дожидания завершения операции
+        setIsAddedToCart(true);
+      } catch (error) {
+        console.error(error);
+      }
+      setIsAddingToCart(false);
+    }
+  };
 
   return (
     <>
@@ -234,7 +257,15 @@ const Product = () => {
               </div>
               <span className="goods__in-stock">In stock: {productInfo.qtyInStock}</span>
               <div className="goods__buttons">
-                <button className="goods__buttons-add">ADD TO CART</button>
+                {!isAddedToCart ?
+                    (
+                      <button className="goods__buttons-add" onClick={handleAddToCartClick}>ADD TO CART</button>
+                    )
+                    :
+                    (
+                      <button className="goods__buttons-add" style={{ backgroundColor: '#57DC19', color: "#FDFDFD"}}>Thank you!</button>
+                    )
+                  }
                 <button className="goods__buttons-buy">BUY IN ONE CLICK</button>
               </div>
               {/* <div className="goods__details">

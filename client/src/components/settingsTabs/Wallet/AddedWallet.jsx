@@ -3,11 +3,11 @@ import React from "react";
 import mastercard from "../../../img/mastercard_big.svg"
 import WalletForm from "./WalletForm";
 import { useState, useEffect } from "react";
-import createAxiosInstance from "../../../utils/axios/instance";
+import AxiosInstance from "../../../utils/axios/instance";
 
 const AddedWallet = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [items, setItems] = React.useState({});
     const [showForm, setShowForm] = useState(false);
 

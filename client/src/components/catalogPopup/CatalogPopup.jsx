@@ -1,12 +1,12 @@
 import "./style.css"
 import categories_arrow from "./../../img/categories_icon.svg"
-import createAxiosInstance from "../../utils/axios/instance"
+import AxiosInstance from "../../utils/axios/instance"
 import { useState, useEffect } from "react"
 import advertisment from "./../../img/advertisment.png"
 
 const CatalogPopup = () => {
 
-    const instance = createAxiosInstance();
+    const instance = AxiosInstance();
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
   
@@ -16,7 +16,6 @@ const CatalogPopup = () => {
           const response = await instance.get("/categories");
           setCategories(response.data);
         } catch (error) {
-          setError(error);
           console.log(error);
         }
       };
@@ -40,7 +39,7 @@ const CatalogPopup = () => {
                     <ul className="catalog__categories-list">
                     {categories.map((category) => (
                         <li className="catalog__categories-item" key={category.id} onClick={() => handleCategoryClick(category)}>
-                          <img src={category.categoryIcons[1]?.url} alt="" className="category__icon" />
+                          <img src={category.categoryImage ?.url} alt="" className="category__icon" />
                             <div className="catalog__categories-item--right">
                                 <span className="categorie__name">{category.name}</span>
                                 <img src={categories_arrow} alt="" className="categories__icon-arrow" />
@@ -93,7 +92,7 @@ const CatalogPopup = () => {
             )}
                 </div>
                 <div className="catalog__image-box">
-                    <img src={advertisment} alt="discount" className="catalog__image" />
+                    <img src={advertisment} alt="discount advertisment" className="catalog__image" />
                 </div>
             </div>
             </div>

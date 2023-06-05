@@ -1,5 +1,4 @@
 import "./style.css"
-import { NavLink } from 'react-router-dom';
 
 const SignedOutCart = () => {
     return ( 

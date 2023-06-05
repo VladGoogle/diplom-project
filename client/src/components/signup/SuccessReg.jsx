@@ -1,7 +1,7 @@
 import './style.css'
 import { NavLink } from 'react-router-dom';
 
-const SuccessRegistration = (props) => {
+const SuccessRegistration = () => {
   return (
     <div className="container">
       <div className="success__registration-inner">
