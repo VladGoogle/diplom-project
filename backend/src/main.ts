@@ -19,7 +19,7 @@ async function bootstrap() {
     secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
     region: configService.get('AWS_REGION'),
   });
-  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }));
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.SERVER_PORT);
   if (module.hot) {
     module.hot.accept();

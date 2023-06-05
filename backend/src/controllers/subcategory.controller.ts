@@ -11,12 +11,15 @@ import {
   UploadedFile,
   UseGuards,
   ParseIntPipe,
+  ParseFilePipeBuilder,
+  HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SubcategoryService } from '../services/subcategory.service';
 import { SubcategoryDto } from '../dtos/subcategory.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { UploadImageDto } from '../dtos/uploadImage.dto';
+import { MaxFileSizeValidator } from '../validators/fileValidator.validator';
 
 @Controller()
 export class SubcategoryController {
@@ -35,7 +38,16 @@ export class SubcategoryController {
   @Post('subcategories')
   @UseInterceptors(FileInterceptor('image'))
   async createSubcategory(
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile('image',
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: /(jpg|jpeg|png)$/,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    image: Express.Multer.File,
     @Body() data: SubcategoryDto,
   ) {
     return await this.subcategoryService.createSubcategory(

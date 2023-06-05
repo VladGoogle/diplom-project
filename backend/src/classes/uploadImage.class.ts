@@ -2,7 +2,7 @@ import { S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { ProductImageQueries } from '../queries/productImage.queries';
-import { Files, ImageInterface } from '../interfaces/image.interface';
+import { ImageInterface } from '../interfaces/image.interface';
 import { CategoryIconQueries } from '../queries/categoryIcon.queries';
 import { UploadImageDto } from '../dtos/uploadImage.dto';
 import { SubcategoryIconQueries } from '../queries/subcategoryIcon.queries';
@@ -26,10 +26,10 @@ export class UploadImageService extends ConfigService {
       });
   }
 
-  async uploadMultipleImages<T extends Files>(images: T) {
+  async uploadMultipleImages(images: ImageInterface[]) {
     const s3 = new S3();
     return await Promise.all(
-      images.files.map(async (image) => {
+      images.map((image) => {
         return s3
           .upload({
             Bucket: super.get('AWS_PUBLIC_BUCKET_NAME'),
@@ -50,7 +50,7 @@ export class UploadProductImageService extends UploadImageService {
     super();
   }
 
-  async uploadProductImages<T extends Files>(images: T, productId: number) {
+  async uploadProductImages(images: ImageInterface[], productId: number) {
     try {
       const imageArray = await super.uploadMultipleImages(images);
       return await Promise.all(

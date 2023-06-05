@@ -36,17 +36,17 @@ export class PaymentService {
 
     //Update products quantity
     const orderItems = order.orderItems;
-    await Promise.all(
-      orderItems.map(async (orderItem) => {
-        const product = await this.prisma.product.findUnique({
-          where: { id: orderItem.productId },
-        });
-        await this.prisma.product.update({
-          where: { id: product.id },
-          data: { qtyInStock: product.qtyInStock - orderItem.quantity },
-        });
-      }),
-    );
+    const queries = orderItems.map((item)=>{
+      return this.prisma.product.update({
+        where: { id: item.productId },
+        data: {
+          qtyInStock:{
+            decrement: item.quantity
+          }
+        },
+      });
+    })
+    await Promise.all(queries);
 
     //Create payment record in the DB
     return await this.paymentQueries.createPayment({
@@ -63,21 +63,21 @@ export class PaymentService {
       order.payment.chargeToken,
     );
 
-    await this.orderService.updateOrderStatus(orderId, 'RETURNED');
+    this.orderService.updateOrderStatus(orderId, 'RETURNED');
 
     //Update products quantity
     const orderItems = order.orderItems;
-    await Promise.all(
-      orderItems.map(async (orderItem) => {
-        const product = await this.prisma.product.findUnique({
-          where: { id: orderItem.productId },
-        });
-        await this.prisma.product.update({
-          where: { id: product.id },
-          data: { qtyInStock: product.qtyInStock + orderItem.quantity },
-        });
-      }),
-    );
+    const queries = orderItems.map((item)=>{
+      return this.prisma.product.update({
+        where: { id: item.productId },
+        data: {
+          qtyInStock:{
+            increment: item.quantity
+          }
+        },
+      });
+    })
+    await Promise.all(queries);
 
     //Update payment record in the DB
     return await this.paymentQueries.createRefundForPayment(refund.id, orderId);

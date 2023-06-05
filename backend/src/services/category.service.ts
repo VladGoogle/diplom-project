@@ -5,7 +5,6 @@ import { CategoryDto } from '../dtos/category.dto';
 import { UpdateCategoryDto } from '../dtos/updateCategory.dto';
 import { UploadCategoryImageService } from '../classes/uploadImage.class';
 import { CategoryIconQueries } from '../queries/categoryIcon.queries';
-import { Files } from '../interfaces/image.interface';
 import { UploadImageDto } from '../dtos/uploadImage.dto';
 
 @Injectable()

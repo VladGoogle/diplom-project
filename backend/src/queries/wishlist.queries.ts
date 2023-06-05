@@ -218,7 +218,10 @@ export class WishlistQueries {
           });
         });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
         throw new NotFoundException(`Wishlist item doesn't exist`);
       }
       throw e;

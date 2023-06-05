@@ -1,9 +1,4 @@
-import {
-  Controller,
-  Param,
-  Get,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Param, Get, ParseIntPipe } from '@nestjs/common';
 
 import { SubcategoryIconService } from '../services/subcategoryIcon.service';
 

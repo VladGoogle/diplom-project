@@ -2,16 +2,16 @@ import {
   Controller,
   Body,
   Post,
-  Req,
   Param,
   Get,
   Delete,
   Patch,
   UseInterceptors,
-  UploadedFile,
   ParseIntPipe,
   UseGuards,
   UploadedFiles,
+  ParseFilePipeBuilder,
+  HttpStatus, ParseFilePipe,
 } from '@nestjs/common';
 import { CategoryService } from '../services/category.service';
 import { CategoryDto } from '../dtos/category.dto';
@@ -21,7 +21,7 @@ import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import {UploadImageDto} from "../dtos/uploadImage.dto";
+import { FileTypeValidator, MaxFileSizeValidator } from '../validators/fileValidator.validator';
 
 @Controller()
 export class CategoryController {
@@ -50,11 +50,20 @@ export class CategoryController {
       { name: 'image', maxCount: 1 },
     ]),
   )
-  async createCategory(@UploadedFiles() files: { icon?: Express.Multer.File, image?: Express.Multer.File },  @Body() data: CategoryDto) {
+  async createCategory(
+    @UploadedFiles() files: { icon?: Express.Multer.File; image?: Express.Multer.File },
+    @Body() data: CategoryDto,
+  ) {
     return await this.categoryService.createCategory(
       data,
-      { dataBuffer: files.icon[0].buffer, filename: files.icon[0].originalname },
-      { dataBuffer: files.image[0].buffer, filename: files.image[0].originalname },
+      {
+        dataBuffer: files.icon[0].buffer,
+        filename: files.icon[0].originalname,
+      },
+      {
+        dataBuffer: files.image[0].buffer,
+        filename: files.image[0].originalname,
+      },
     );
   }
 

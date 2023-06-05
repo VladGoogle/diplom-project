@@ -5,8 +5,6 @@ export class SubcategoryDto {
   @IsNotEmpty()
   name: string;
 
-
   @IsNotEmpty()
   categoryId: any;
-
 }
