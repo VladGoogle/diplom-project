@@ -3,6 +3,6 @@ export interface ImageInterface {
   originalname: string;
 }
 
-export interface Files {
-  files: ImageInterface[];
-}
+// export interface Files {
+//   files: ImageInterface[];
+// }

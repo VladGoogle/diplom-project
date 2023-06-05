@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
-  Param,
+  Get, HttpStatus,
+  Param, ParseFilePipe, ParseFilePipeBuilder,
   ParseIntPipe,
   Patch,
   Post,
@@ -19,7 +19,7 @@ import { ProductDto } from '../dtos/product.dto';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
+  FileInterceptor, FilesInterceptor,
 } from '@nestjs/platform-express';
 import { SearchInterface } from '../interfaces/search.interface';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -30,6 +30,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../services/prisma.service';
 import { ProductQueries } from '../queries/product.queries';
 import { ProductImageQueries } from '../queries/productImage.queries';
+import { FileTypeValidator, MaxFileSizeValidator } from '../validators/fileValidator.validator';
 
 @Controller()
 export class ProductController extends ProductService {
@@ -120,9 +121,9 @@ export class ProductController extends ProductService {
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard)
   @Post('products')
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 10 }]))
+  @UseInterceptors(FilesInterceptor('files'))
   async addProduct(
-    @UploadedFiles() files,
+    @UploadedFiles() files: any,
     @Req() req,
     @Body() data: ProductDto,
   ) {

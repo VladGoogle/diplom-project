@@ -23,10 +23,11 @@ export class PasswordQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`User doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`User doesn't exist`);
       }
       throw e;
     }
@@ -41,10 +42,11 @@ export class PasswordQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Token doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Token doesn't exist`);
       }
       throw e;
     }
@@ -65,10 +67,11 @@ export class PasswordQueries {
 
       return { message: 'Password has been successfully restored!' };
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Token doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Token doesn't exist`);
       }
       throw e;
     }
@@ -84,10 +87,11 @@ export class PasswordQueries {
       });
       return { message: `Token with id:${token.id} has been deleted` };
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Token doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Token doesn't exist`);
       }
       throw e;
     }

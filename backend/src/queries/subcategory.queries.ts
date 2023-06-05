@@ -22,7 +22,7 @@ export class SubcategoryQueries {
           category: {
             include: {
               categoryIcon: true,
-              categoryImage: true
+              categoryImage: true,
             },
           },
         },

@@ -20,10 +20,10 @@ export class PasswordController {
   @Patch('reset/:token')
   async resetPassword(
     @Param('token') token: string,
-    @Body('password') data: ForgotPasswordDto,
+    @Body() data: ForgotPasswordDto,
   ) {
     await this.passwordService.resetPassword(data, token);
-    return { message: 'Password reset successful' };
+    return { message: 'Password reset successfully' };
   }
 }
 

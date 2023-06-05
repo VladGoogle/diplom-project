@@ -153,7 +153,7 @@ export class ProductQueries {
           category: {
             include: {
               categoryIcon: true,
-              categoryImage: true
+              categoryImage: true,
             },
           },
           subcategory: {
@@ -200,7 +200,7 @@ export class ProductQueries {
           category: {
             include: {
               categoryIcon: true,
-              categoryImage: true
+              categoryImage: true,
             },
           },
           subcategory: {
@@ -248,7 +248,7 @@ export class ProductQueries {
           category: {
             include: {
               categoryIcon: true,
-              categoryImage: true
+              categoryImage: true,
             },
           },
           subcategory: {
@@ -310,7 +310,7 @@ export class ProductQueries {
           category: {
             include: {
               categoryIcon: true,
-              categoryImage: true
+              categoryImage: true,
             },
           },
           subcategory: {

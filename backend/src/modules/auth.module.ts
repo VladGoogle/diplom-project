@@ -21,7 +21,7 @@ dotenv.config();
         useFactory: async (configService: ConfigService) => ({
           secretOrKeyProvider: () => configService.get<string>('JWTKEY'),
           signOptions: {
-            expiresIn: "2h",
+            expiresIn: '2h',
           },
         }),
         inject: [ConfigService],
