@@ -307,10 +307,10 @@ const Product = () => {
                       />
                     );
                   })}
-              </ul>
-              <a className="comment__link">
+              </ul> 
+              <NavLink to={`/reviews/${id}`} className="comment__link">
                     More Reviews
-              </a>
+              </NavLink>
               <div className="care__instructions">
                 <div className="care__instrucions-top">
                   <svg

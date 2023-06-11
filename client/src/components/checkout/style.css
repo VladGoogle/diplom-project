@@ -56,7 +56,7 @@ body {
 }
 
 .checkout__top--bottom {
-    padding-bottom: 112px;
+    padding-bottom: 40px;
     margin-bottom: 22px;
 }
 
@@ -69,6 +69,12 @@ body {
     display: flex;
     flex-direction: row;
     gap: 30px;
+    width: 100%;
+}
+
+.checkout_input-field--name,
+.checkout_input-field--surname {
+    width: 100%;
 }
 
 select.checkout_input-field {
@@ -357,4 +363,32 @@ select.checkout_input-field {
     font-size: 20px;
     line-height: 24px;
     cursor: pointer;
+  }
+
+  .checkout_input-button {
+    background: #FDEB46;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    border: none;
+    width: 100%;
+    padding: 28px 0;
+    margin-top: 40px;
+    cursor: pointer;
+  }
+  
+  .custom-select .css-1pahdxg-control,
+  .custom-select .css-1wa3eu0-placeholder,
+  .custom-select .css-xb97g5-container,
+  .custom-select .css-13cymwt-control {
+    border: none;
+    box-shadow: none;
+    outline: none;
+  }
+  
+  .custom-select .css-1wa3eu0-placeholder,
+  .custom-select .css-1pcexqc-singleValue {
+    color: #000; /* Цвет текста для плейсхолдера и выбранного значения */
   }

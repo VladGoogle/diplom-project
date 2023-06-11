@@ -1,4 +1,4 @@
-import Card from '../card/Card.js';
+import Card from '../card/Card';
 import './style.css';
 import React from 'react';
 import { useEffect } from 'react';

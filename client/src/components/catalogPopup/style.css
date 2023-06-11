@@ -64,7 +64,7 @@
 
 .catalog__list {
     height: 100%;
-    padding: 17px;
+    padding: 0 17px;
     max-width: 288px;
     width: 100%;
 }

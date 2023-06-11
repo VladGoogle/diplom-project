@@ -1,0 +1,148 @@
+.reviews {
+    width: 100%;
+    max-width: 735px;
+    margin-top: 48px;
+    min-height: 100vh;
+}
+
+.reviews__title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 59px;
+    margin-bottom: 40px;
+}
+
+.reviews__send-box {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    max-width: 735px;
+    width: 100%;
+    margin: 44px 0;
+    background: #F9F9F9;
+    border-radius: 30px;
+}
+
+.reviews__send-box--title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 39px;
+}
+
+.reviews__send-box--button {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 18px 0;
+    width: 100%;
+    max-width: 290px;
+    background: #FDEB46;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.review__bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 12;
+  }
+
+.review__form {
+    padding: 20px 20px 40px 20px;
+    border-radius: 5px;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FDFDFD;
+    flex-direction: column;
+    max-width: 720px;
+    width: 100%;
+}
+
+.review__form-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.review__form-title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 39px;
+}
+
+.review__form-close {
+    cursor: pointer;
+}
+
+.review__form-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;
+}
+
+.review__form-stars {
+    margin-bottom: 40px;
+}
+
+.review__form-hint {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    margin-bottom: 35px;
+}
+
+.review__form-text {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #D9D9D9;
+}
+
+.review__form-button {
+    margin-top: 50px;
+    padding: 18px 0;
+    border-radius: 5px;
+    background-color: #FDEB46;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.review__form-stars--list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.review__form-star {
+    cursor: pointer;
+}
+
+.review__form-text {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+}

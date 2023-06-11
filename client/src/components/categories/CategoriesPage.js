@@ -38,6 +38,7 @@ function  CategoriesPage() {
                   key={obj.id}
                   name={obj.name}
                   categoryIcon={obj.categoryIcon?.url}
+                  categoryId={obj.id}
                 />  
               );
             })}

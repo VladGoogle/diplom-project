@@ -59,6 +59,7 @@ const Wishlist = () => {
               return (
                 <Card
                   key={id}
+                  id={obj.product.id}
                   name={obj.product.name}
                   price={obj.product.price}
                   discountPrice={obj.product.discountPrice}

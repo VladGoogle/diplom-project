@@ -18,20 +18,24 @@ import TokenProvider from "./TokenContext"
 import Checkout from './components/checkout/Checkout';
 import NotFound from './components/notfound/NotFound';
 import Catalog from './components/catalog/Catalog';
+import ReviewsPage from './components/reviews/ReviewsPage';
+import ReviewForm from './components/reviews/ReviewForm';
 
 
 function App() {
 
   return (
     <div className="App">
-      <TokenProvider>
       <Router>
+      <TokenProvider>
         <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/reviews/:id" element={<ReviewsPage />} />
+          <Route path="/reviewForm/:id" element={<ReviewForm />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/settings" element={<Settings />}>
@@ -45,8 +49,8 @@ function App() {
           <Route path="*" element={<NotFound />}/>
         </Routes>
         <Footer />
+        </TokenProvider>
       </Router>
-      </TokenProvider>
     </div>
   );
 }

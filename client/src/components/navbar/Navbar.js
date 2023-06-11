@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './style.css';
 import React, { useContext, useEffect, useState } from 'react';
 import { TokenContext } from './../../TokenContext';
@@ -9,10 +9,19 @@ function Navbar(props) {
 
   const { token } = useContext(TokenContext);
   const [showSettingsButton, setShowSettingsButton] = useState(!!token);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setShowSettingsButton(!!token);
   }, [token]);
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const searchQuery = event.target.elements.search.value;
+  
+    const url = `/catalog?searchQuery=${encodeURIComponent(searchQuery)}`;
+    navigate(url);
+  };
 
   return (
     <header className="header">
@@ -142,7 +151,7 @@ function Navbar(props) {
               </svg>
             </button>
             <div className="header__search-field">
-              <form action="/search" method="get">
+              <form onSubmit={handleSearchSubmit} method="get">
                 <div className="header__search-box">
                   <button className="search-field__button">
                     <svg

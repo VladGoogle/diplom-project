@@ -435,7 +435,7 @@ input::placeholder {
 }
 
 .settings__screen {
-  height: 100vh;
+  min-height: 100vh;
   overflow: auto;
 }
 

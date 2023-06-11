@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
-import Unathorized from './components/unathorized/Unathorized';
 import mitt from 'mitt';
+import jwt from 'jsonwebtoken';
+import Unathorized from './components/unathorized/Unathorized';
 
 export const TokenContext = createContext({
   token: '',
@@ -9,15 +10,22 @@ export const TokenContext = createContext({
 const TokenProvider = ({ children }) => {
   const [token, setTokenState] = useState(() => {
     const savedToken = localStorage.getItem('access_token');
-    return savedToken ?? '';
+    try {
+      return savedToken ? JSON.parse(window.atob(savedToken)) : '';
+    } catch (error) {
+      console.error('Failed to parse token:', error);
+      return '';
+    }
   });
 
   const [showPopup, setShowPopup] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const emitter = mitt();
 
   const setToken = (newToken) => {
     setTokenState(newToken);
-    localStorage.setItem('access_token', newToken);
+    const encodedToken = window.btoa(JSON.stringify(newToken));
+    localStorage.setItem('access_token', encodedToken);
     emitter.emit('tokenChange', newToken);
   };
 
@@ -28,25 +36,36 @@ const TokenProvider = ({ children }) => {
   };
 
   const checkTokenExpiration = () => {
-    const savedToken = localStorage.getItem('access_token');
-    if (savedToken) {
-      const tokenData = JSON.parse(decodeURIComponent(window.atob(savedToken.split('.')[1])));
-      const expirationDate = new Date(tokenData.exp * 1000); // Convert expiration timestamp to Date object
-      const currentTime = new Date();
+    if (token) {
+      try {
+        const decoded = jwt.decode(token);
 
-      // Check if the current time is after the token expiration time
-      return currentTime > expirationDate;
+        if (!decoded.exp) {
+          console.error('Token does not contain expiration time');
+          return true;
+        }
+
+        const expirationDate = new Date(decoded.exp * 1000);
+        const currentTime = new Date();
+        const tokenExpired = currentTime > expirationDate;
+
+        if (loggedIn && tokenExpired) {
+          logout();
+          return true;
+        }
+
+        if (!loggedIn && !tokenExpired) {
+          setLoggedIn(true);
+        }
+
+        return tokenExpired;
+      } catch (error) {
+        console.error('Failed to parse token data:', error);
+      }
     }
-    return true; // Token is considered expired if not found in localStorage
+
+    return true;
   };
-
-  useEffect(() => {
-    const tokenExpired = checkTokenExpiration();
-    if (tokenExpired) {
-      logout();
-      setShowPopup(true);
-    }
-  }, []);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -56,6 +75,7 @@ const TokenProvider = ({ children }) => {
     const handleTokenChange = (newToken) => {
       setShowPopup(false);
       setTokenState(newToken);
+      setLoggedIn(!!newToken);
     };
 
     emitter.on('tokenChange', handleTokenChange);
@@ -64,6 +84,15 @@ const TokenProvider = ({ children }) => {
       emitter.off('tokenChange', handleTokenChange);
     };
   }, []);
+
+  useEffect(() => {
+    const tokenExpired = checkTokenExpiration();
+    if (loggedIn && tokenExpired) {
+      setLoggedIn(false);
+      logout();
+      setShowPopup(true);
+    }
+  }, [loggedIn, token]);
 
   return (
     <TokenContext.Provider value={{ token, setToken, logout }}>
