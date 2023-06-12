@@ -36,16 +36,16 @@ export class PaymentService {
 
     //Update products quantity
     const orderItems = order.orderItems;
-    const queries = orderItems.map((item)=>{
+    const queries = orderItems.map((item) => {
       return this.prisma.product.update({
         where: { id: item.productId },
         data: {
-          qtyInStock:{
-            decrement: item.quantity
-          }
+          qtyInStock: {
+            decrement: item.quantity,
+          },
         },
       });
-    })
+    });
     await Promise.all(queries);
 
     //Create payment record in the DB
@@ -67,16 +67,16 @@ export class PaymentService {
 
     //Update products quantity
     const orderItems = order.orderItems;
-    const queries = orderItems.map((item)=>{
+    const queries = orderItems.map((item) => {
       return this.prisma.product.update({
         where: { id: item.productId },
         data: {
-          qtyInStock:{
-            increment: item.quantity
-          }
+          qtyInStock: {
+            increment: item.quantity,
+          },
         },
       });
-    })
+    });
     await Promise.all(queries);
 
     //Update payment record in the DB

@@ -44,6 +44,11 @@ export class OrderQueries {
           },
         },
         include: {
+          selfCheckoutAddress: {
+            include:{
+              selfCheckout: true
+            }
+          },
           user: {
             select: {
               address: true,
@@ -71,6 +76,11 @@ export class OrderQueries {
       return this.prisma.order.findUniqueOrThrow({
         where: { id: id },
         include: {
+          selfCheckoutAddress: {
+            include:{
+              selfCheckout: true
+            }
+          },
           user: {
             select: {
               address: true,
@@ -102,6 +112,11 @@ export class OrderQueries {
     return this.prisma.order.findUnique({
       where: { cartId: id },
       include: {
+        selfCheckoutAddress: {
+          include:{
+            selfCheckout: true
+          }
+        },
         user: {
           select: {
             address: true,
@@ -126,6 +141,11 @@ export class OrderQueries {
       return this.prisma.order.findMany({
         where: { userId: id },
         include: {
+          selfCheckoutAddress: {
+            include:{
+              selfCheckout: true
+            }
+          },
           user: {
             select: {
               address: true,
@@ -174,6 +194,16 @@ export class OrderQueries {
           orderStatus: [status],
         },
         include: {
+          selfCheckoutAddress: {
+            include:{
+              selfCheckout: true
+            }
+          },
+          user:{
+            include:{
+              address: true,
+            }
+          },
           orderItems: true,
           payment: true,
         },
@@ -195,6 +225,18 @@ export class OrderQueries {
         data: {
           selfCheckoutAddressId: data.sectionId,
         },
+        include:{
+          selfCheckoutAddress: {
+            include:{
+              selfCheckout: true
+            }
+          },
+          user:{
+            include:{
+              address: true
+            }
+          }
+        }
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

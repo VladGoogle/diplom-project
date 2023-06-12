@@ -1,4 +1,7 @@
-import { MaxFileSizeValidator as DefaultMaxFileSizeValidator, FileTypeValidator as DefaultFileTypeValidator } from '@nestjs/common';
+import {
+  MaxFileSizeValidator as DefaultMaxFileSizeValidator,
+  FileTypeValidator as DefaultFileTypeValidator,
+} from '@nestjs/common';
 
 export class MaxFileSizeValidator extends DefaultMaxFileSizeValidator {
   isValid(fileOrFiles: Express.Multer.File | Express.Multer.File[]): boolean {
@@ -9,7 +12,6 @@ export class MaxFileSizeValidator extends DefaultMaxFileSizeValidator {
     return super.isValid(fileOrFiles);
   }
 }
-
 
 export class FileTypeValidator extends DefaultFileTypeValidator {
   isValid(fileOrFiles: Express.Multer.File | Express.Multer.File[]): boolean {
