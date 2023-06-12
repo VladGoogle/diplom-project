@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
 import mitt from 'mitt';
-import jwt from 'jsonwebtoken';
 import Unathorized from './components/unathorized/Unathorized';
 
 export const TokenContext = createContext({
@@ -17,7 +16,7 @@ const TokenProvider = ({ children }) => {
       return '';
     }
   });
-
+  
   const [showPopup, setShowPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const emitter = mitt();
@@ -36,36 +35,56 @@ const TokenProvider = ({ children }) => {
   };
 
   const checkTokenExpiration = () => {
-    if (token) {
+    const savedToken = localStorage.getItem('access_token');
+    console.log('Saved Token:', savedToken);
+    if (savedToken) {
       try {
-        const decoded = jwt.decode(token);
-
-        if (!decoded.exp) {
+        const decodedTokenData = window.atob(savedToken);
+        console.log('Decoded Token Data:', decodedTokenData);
+        const tokenData = JSON.parse(decodedTokenData);
+        console.log('Token Data:', tokenData);
+        console.log('Token Expiration:', tokenData.exp);
+  
+        if (!tokenData.exp) {
           console.error('Token does not contain expiration time');
           return true;
-        }
-
-        const expirationDate = new Date(decoded.exp * 1000);
+        } 
+  
+        const expirationDate = new Date(tokenData.exp * 1000);
+        console.log('Expiration Date:', expirationDate);
         const currentTime = new Date();
         const tokenExpired = currentTime > expirationDate;
-
+  
         if (loggedIn && tokenExpired) {
-          logout();
+          logout(); // Выход из аккаунта по истечению токена
           return true;
         }
-
+        console.log('loggedIn:', loggedIn);
+        console.log('tokenExpired:', tokenExpired);
+        console.log('Expiration Date:', expirationDate);
+        console.log('Current Time:', currentTime);
+  
         if (!loggedIn && !tokenExpired) {
-          setLoggedIn(true);
+          setLoggedIn(true); // Установка значения loggedIn в true, когда токен действителен
         }
-
+  
         return tokenExpired;
       } catch (error) {
         console.error('Failed to parse token data:', error);
       }
     }
-
     return true;
   };
+
+useEffect(() => {
+  console.log('Checking token expiration...');
+  const tokenExpired = checkTokenExpiration();
+  if (loggedIn && tokenExpired) {
+    setLoggedIn(false);
+    logout(); // Выход из аккаунта по истечению токена
+    setShowPopup(true);
+  }
+}, [loggedIn, token]);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -89,7 +108,7 @@ const TokenProvider = ({ children }) => {
     const tokenExpired = checkTokenExpiration();
     if (loggedIn && tokenExpired) {
       setLoggedIn(false);
-      logout();
+      logout(); // Выход из аккаунта по истечению токена
       setShowPopup(true);
     }
   }, [loggedIn, token]);
