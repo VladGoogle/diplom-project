@@ -7,6 +7,8 @@ import { UploadProductImageService } from '../classes/uploadImage.class';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { PrismaService } from './prisma.service';
 import { ImageInterface } from '../interfaces/image.interface';
+import { WishlistQueries } from '../queries/wishlist.queries';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class ProductService extends UploadProductImageService {
@@ -14,6 +16,8 @@ export class ProductService extends UploadProductImageService {
     private prisma: PrismaService,
     private productQueries: ProductQueries,
     productImageQueries: ProductImageQueries,
+    private wishlistQueries: WishlistQueries,
+    private tokenService: TokenService,
   ) {
     super(productImageQueries);
   }
@@ -21,20 +25,35 @@ export class ProductService extends UploadProductImageService {
   async createProduct(
     data: ProductDto,
     images: ImageInterface[],
-  ): Promise<Product> {
+    authHeader: string
+  ): Promise<any>{
     const product = await this.productQueries.createProduct({
       ...data,
     });
     await super.uploadProductImages(images, product.id);
-    return await this.findProductById(product.id);
+    return await this.findProductById(product.id, authHeader);
   }
 
-  async findProductById(id: number) {
-    return await this.productQueries.findProductById(id);
+  async findProductById(id: number, authHeader: string) {
+    if(authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const product = await this.productQueries.findProductById(id);
+      const wishlist = await this.wishlistQueries.getWishlistByUserIdWithoutError(decodedPayload.id)
+      return {product, wishlist}
+    } else {
+      return await this.productQueries.findProductById(id);
+    }
   }
 
-  async findProductByName(name: string) {
-    return await this.productQueries.findProductByName(name);
+  async findProductByName(name: string, authHeader: string) {
+    if(authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const product = await this.productQueries.findProductByName(name);
+      const wishlist = await this.wishlistQueries.getWishlistByUserIdWithoutError(decodedPayload.id)
+      return {product, wishlist}
+    } else {
+      return await this.productQueries.findProductByName(name);
+    }
   }
 
   async findAllProductsByCategoryId(

@@ -12,7 +12,6 @@ import { WishlistItemDto } from '../dtos/wishlistItem.dto';
 export class WishlistQueries {
   constructor(
     private prisma: PrismaService,
-    private productService: ProductService,
   ) {}
 
   async addProductToWishlist(data: WishlistItemDto) {
@@ -159,6 +158,27 @@ export class WishlistQueries {
           throw new NotFoundException(`Wishlist doesn't exist`);
         }
       }
+      throw e;
+    }
+  }
+
+  async getWishlistByUserIdWithoutError(id: number) {
+    try {
+      return await this.prisma.wishlist.findUnique({
+        where: { userId: id },
+        include: {
+          wishlistItems: {
+            include: {
+              product: {
+                include: {
+                  productImages: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (e) {
       throw e;
     }
   }

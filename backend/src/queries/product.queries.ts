@@ -19,7 +19,6 @@ export class ProductQueries {
           ...data,
         },
         include: {
-          wishlistItems: true,
           productImages: true,
           category: true,
           subcategory: true,
@@ -42,7 +41,6 @@ export class ProductQueries {
       return await this.prisma.product.findUniqueOrThrow({
         where: { id: id },
         include: {
-          wishlistItems: true,
           productImages: true,
           category: true,
           subcategory: true,
@@ -90,7 +88,6 @@ export class ProductQueries {
           productImages: true,
           category: true,
           subcategory: true,
-          wishlistItems: true,
         },
       });
     } catch (e) {
@@ -153,7 +150,6 @@ export class ProductQueries {
           },
         },
         include: {
-          wishlistItems: true,
           productImages: true,
           category: {
             include: {
@@ -203,7 +199,6 @@ export class ProductQueries {
           },
         },
         include: {
-          wishlistItems: true,
           productImages: true,
           category: {
             include: {
@@ -264,11 +259,6 @@ export class ProductQueries {
           subcategory: {
             include: {
               subcategoryIcon: true,
-            },
-          },
-          wishlistItems: {
-            include: {
-              wishlist: true,
             },
           },
         },

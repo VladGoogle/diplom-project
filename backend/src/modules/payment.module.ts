@@ -15,6 +15,7 @@ import { ProductQueries } from '../queries/product.queries';
 import { ProductImageQueries } from '../queries/productImage.queries';
 import { ProductImageService } from '../services/productImage.service';
 import { TokenService } from '../services/token.service';
+import { WishlistQueries } from '../queries/wishlist.queries';
 
 @Module({
   providers: [
@@ -33,6 +34,7 @@ import { TokenService } from '../services/token.service';
     ProductQueries,
     ProductImageQueries,
     ProductImageService,
+    WishlistQueries
   ],
   exports: [PaymentService],
   controllers: [PaymentController],

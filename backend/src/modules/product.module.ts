@@ -11,6 +11,7 @@ import { UserService } from '../services/users.service';
 import { UserQueries } from '../queries/user.queries';
 import StripeService from '../services/stripe.service';
 import { TokenService } from '../services/token.service';
+import { WishlistQueries } from '../queries/wishlist.queries';
 
 @Module({
   providers: [
@@ -25,6 +26,7 @@ import { TokenService } from '../services/token.service';
     TokenService,
     UserQueries,
     StripeService,
+    WishlistQueries
   ],
   exports: [ProductService],
   controllers: [ProductController],

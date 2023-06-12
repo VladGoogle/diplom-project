@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, Headers,
   HttpStatus,
   Param,
   ParseFilePipe,
@@ -38,6 +38,9 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
 } from '../validators/fileValidator.validator';
+import { getTokenFromHeaders } from '../utilities/getAuthToken.utility';
+import { WishlistQueries } from '../queries/wishlist.queries';
+import { TokenService } from '../services/token.service';
 
 @Controller()
 export class ProductController extends ProductService {
@@ -45,8 +48,10 @@ export class ProductController extends ProductService {
     prisma: PrismaService,
     productQueries: ProductQueries,
     productImageQueries: ProductImageQueries,
+    wishlistQueries: WishlistQueries,
+    tokenService: TokenService
   ) {
-    super(prisma, productQueries, productImageQueries);
+    super(prisma, productQueries, productImageQueries, wishlistQueries, tokenService);
   }
 
   @Get('search')
@@ -71,8 +76,8 @@ export class ProductController extends ProductService {
   }
 
   @Get('product/findByName')
-  async getProductByName(@Body() name: string) {
-    return await super.findProductByName(name);
+  async getProductByName(@Body() name: string, @Headers() headers: any) {
+    return await super.findProductByName(name, getTokenFromHeaders(headers));
   }
   @UseGuards(RolesGuard)
   @Roles(Role.NETWORK_ADMIN, Role.ADMIN)
@@ -133,6 +138,7 @@ export class ProductController extends ProductService {
     @UploadedFiles() files: any,
     @Req() req,
     @Body() data: ProductDto,
+    @Headers() headers: any
   ) {
     return await super.createProduct(
       {
@@ -143,6 +149,7 @@ export class ProductController extends ProductService {
         qtyInStock: parseInt(data.qtyInStock.toString()),
       },
       files,
+      getTokenFromHeaders(headers)
     );
   }
 
@@ -166,8 +173,8 @@ export class ProductController extends ProductService {
   }
 
   @Get('product/:id')
-  async getProductById(@Param('id', ParseIntPipe) id: number) {
-    return await super.findProductById(id);
+  async getProductById(@Param('id', ParseIntPipe) id: number, @Headers() headers: any) {
+    return await super.findProductById(id, getTokenFromHeaders(headers));
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -7,6 +7,8 @@ import { ProductImageQueries } from '../queries/productImage.queries';
 import { DiscountQueries } from '../queries/discount.queries';
 import { DiscountService } from '../services/discount.service';
 import { DiscountController } from '../controllers/discount.controller';
+import { WishlistQueries } from '../queries/wishlist.queries';
+import { TokenService } from '../services/token.service';
 
 @Module({
   providers: [
@@ -17,6 +19,8 @@ import { DiscountController } from '../controllers/discount.controller';
     ProductQueries,
     ProductImageService,
     ProductImageQueries,
+    WishlistQueries,
+    TokenService
   ],
   exports: [DiscountService],
   controllers: [DiscountController],

@@ -4,7 +4,7 @@ import { PayloadInterface } from '../interfaces/payload.interface';
 
 @Injectable()
 export class TokenService extends JwtService {
-  public async decodeAuthToken(authHeader: string) {
+  public decodeAuthToken(authHeader: string) {
     return super.decode(authHeader) as PayloadInterface;
   }
 }

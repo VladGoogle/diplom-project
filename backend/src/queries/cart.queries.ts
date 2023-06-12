@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
 import { CartItemDto } from '../dtos/cartItem.dto';
-import { ProductService } from '../services/product.service';
 import { Prisma } from '@prisma/client';
 import { UpdateCartItemQuantityDto } from '../dtos/updateCartItemQuantity.dto';
 import { RemoveItemFromCartDto } from '../dtos/removeItemFromCart.dto';
+import { ProductQueries } from './product.queries';
 
 @Injectable()
 export class CartQueries {
   constructor(
     private prisma: PrismaService,
-    private productService: ProductService,
+    private productQueries: ProductQueries,
   ) {}
 
   async addProductToCart(data: CartItemDto) {
@@ -23,7 +23,7 @@ export class CartQueries {
           cartItems: true,
         },
       });
-      const product = await this.productService.findProductById(data.productId);
+      const product = await this.productQueries.findProductById(data.productId);
 
       if (!cart) {
         if (product.discountPrice !== null) {

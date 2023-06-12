@@ -13,6 +13,7 @@ import { ProductImageQueries } from '../queries/productImage.queries';
 import StripeService from '../services/stripe.service';
 import { CartGateway } from '../gateways/cart.gateway';
 import { TokenService } from '../services/token.service';
+import { WishlistQueries } from '../queries/wishlist.queries';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { TokenService } from '../services/token.service';
     ProductImageQueries,
     StripeService,
     CartGateway,
+    WishlistQueries,
   ],
   exports: [CartService],
   controllers: [CartController],
