@@ -19,6 +19,7 @@ export class ProductQueries {
           ...data,
         },
         include: {
+          wishlistItems: true,
           productImages: true,
           category: true,
           subcategory: true,
@@ -26,12 +27,11 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2002') {
-          throw new BadRequestException(
-            `Product with such name already exists`,
-          );
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        throw new BadRequestException(`Product with such name already exists`);
       }
       throw e;
     }
@@ -42,6 +42,7 @@ export class ProductQueries {
       return await this.prisma.product.findUniqueOrThrow({
         where: { id: id },
         include: {
+          wishlistItems: true,
           productImages: true,
           category: true,
           subcategory: true,
@@ -49,10 +50,11 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Product doesn't exist`);
       }
       throw e;
     }
@@ -88,6 +90,7 @@ export class ProductQueries {
           productImages: true,
           category: true,
           subcategory: true,
+          wishlistItems: true,
         },
       });
     } catch (e) {
@@ -107,10 +110,11 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Product doesn't exist`);
       }
       throw e;
     }
@@ -149,6 +153,7 @@ export class ProductQueries {
           },
         },
         include: {
+          wishlistItems: true,
           productImages: true,
           category: {
             include: {
@@ -167,11 +172,13 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Category doesn't exist`);
       }
+      throw e;
     }
   }
 
@@ -196,6 +203,7 @@ export class ProductQueries {
           },
         },
         include: {
+          wishlistItems: true,
           productImages: true,
           category: {
             include: {
@@ -214,11 +222,13 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Subcategory doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Subcategory doesn't exist`);
       }
+      throw e;
     }
   }
 
@@ -275,11 +285,13 @@ export class ProductQueries {
       });
       return { message: `Product with id: ${product.id} has been deleted` };
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Product doesn't exist`);
       }
+      throw e;
     }
   }
 
@@ -290,11 +302,13 @@ export class ProductQueries {
       });
       return { message: `Product '${product.name}' has been deleted` };
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Product doesn't exist`);
       }
+      throw e;
     }
   }
 
@@ -306,6 +320,7 @@ export class ProductQueries {
           ...data,
         },
         include: {
+          wishlistItems: true,
           productImages: true,
           category: {
             include: {
@@ -321,14 +336,16 @@ export class ProductQueries {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') {
-          throw new NotFoundException(`Product doesn't exist`);
-        } else if (e.code === 'P2002') {
-          throw new BadRequestException(
-            `Product with such name already exists`,
-          );
-        }
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Product doesn't exist`);
+      } else if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        throw new BadRequestException(`Product with such name already exists`);
       }
       throw e;
     }

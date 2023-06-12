@@ -20,7 +20,7 @@ export class CategoryQueries {
         },
       });
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 

@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpStatus,
-  Param, ParseFilePipe, ParseFilePipeBuilder,
+  Get,
+  HttpStatus,
+  Param,
+  ParseFilePipe,
+  ParseFilePipeBuilder,
   ParseIntPipe,
   Patch,
   Post,
@@ -19,7 +22,8 @@ import { ProductDto } from '../dtos/product.dto';
 import { UpdateProductDto } from '../dtos/updateProduct.dto';
 import {
   FileFieldsInterceptor,
-  FileInterceptor, FilesInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
 } from '@nestjs/platform-express';
 import { SearchInterface } from '../interfaces/search.interface';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -30,7 +34,10 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../services/prisma.service';
 import { ProductQueries } from '../queries/product.queries';
 import { ProductImageQueries } from '../queries/productImage.queries';
-import { FileTypeValidator, MaxFileSizeValidator } from '../validators/fileValidator.validator';
+import {
+  FileTypeValidator,
+  MaxFileSizeValidator,
+} from '../validators/fileValidator.validator';
 
 @Controller()
 export class ProductController extends ProductService {

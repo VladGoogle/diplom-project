@@ -11,7 +11,8 @@ import {
   UseGuards,
   UploadedFiles,
   ParseFilePipeBuilder,
-  HttpStatus, ParseFilePipe,
+  HttpStatus,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { CategoryService } from '../services/category.service';
 import { CategoryDto } from '../dtos/category.dto';
@@ -21,7 +22,10 @@ import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { FileTypeValidator, MaxFileSizeValidator } from '../validators/fileValidator.validator';
+import {
+  FileTypeValidator,
+  MaxFileSizeValidator,
+} from '../validators/fileValidator.validator';
 
 @Controller()
 export class CategoryController {
@@ -51,7 +55,8 @@ export class CategoryController {
     ]),
   )
   async createCategory(
-    @UploadedFiles() files: { icon?: Express.Multer.File; image?: Express.Multer.File },
+    @UploadedFiles()
+    files: { icon?: Express.Multer.File; image?: Express.Multer.File },
     @Body() data: CategoryDto,
   ) {
     return await this.categoryService.createCategory(
