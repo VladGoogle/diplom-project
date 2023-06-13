@@ -37,6 +37,7 @@ const Checkout = () => {
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +102,7 @@ const Checkout = () => {
       (city) => city.id === selectedOption.value,
     );
     setAddresses(selectedCityData ? selectedCityData.selfCheckoutSections : []);
+    setSelectedAddress(null); // Сбросить выбранный адрес
   };
 
   return (
@@ -133,71 +135,72 @@ const Checkout = () => {
               className="checkout__top--bottom"
             >
               <div className="checkout__top-fields_top">
-              {userInfo.firstName && (
-                <div className="checkout_input-field--name">
-                  <input
-                    className="checkout_input-field checkout_input-mini"
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    placeholder="First name"
-                    {...register('firstName')}
-                    defaultValue={userInfo.firstName}
-                  />
-                  {errors && errors.firstName && (
-                    <p className="error-message">{errors.firstName.message}</p>
-                  )}
-                </div>
+                {userInfo.firstName && (
+                  <div className="checkout_input-field--name">
+                    <input
+                      className="checkout_input-field checkout_input-mini"
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      placeholder="First name"
+                      {...register('firstName')}
+                      defaultValue={userInfo.firstName}
+                    />
+                    {errors && errors.firstName && (
+                      <p className="error-message">
+                        {errors.firstName.message}
+                      </p>
+                    )}
+                  </div>
                 )}
                 {userInfo.lastName && (
-                <div className="checkout_input-field--surname">
-                
-                  <input
-                    className="checkout_input-field checkout_input-mini"
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    placeholder="Last name"
-                    {...register('lastName')}
-                    defaultValue={userInfo.lastName}
-                  />
-                  {errors && errors.lastName && (
-                    <p className="error-message">{errors.lastName.message}</p>
-                  )}
-                </div>
+                  <div className="checkout_input-field--surname">
+                    <input
+                      className="checkout_input-field checkout_input-mini"
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      placeholder="Last name"
+                      {...register('lastName')}
+                      defaultValue={userInfo.lastName}
+                    />
+                    {errors && errors.lastName && (
+                      <p className="error-message">{errors.lastName.message}</p>
+                    )}
+                  </div>
                 )}
               </div>
               {userInfo.email && (
-            <div className="checkout__input-box">
-              <input
-                className="checkout_input-field"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                {...register('email')}
-                defaultValue={userInfo.email}
-              />
-              {errors && errors.email && (
-                <p className="error-message">{errors.email.message}</p>
-              )}
-              </div>
+                <div className="checkout__input-box">
+                  <input
+                    className="checkout_input-field"
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                    {...register('email')}
+                    defaultValue={userInfo.email}
+                  />
+                  {errors && errors.email && (
+                    <p className="error-message">{errors.email.message}</p>
+                  )}
+                </div>
               )}
               {userInfo.phone && (
-              <div className="checkout__input-box">
-              <input
-                className="checkout_input-field"
-                type="text"
-                name="phone"
-                id="phone"
-                placeholder="Phone number"
-                {...register('phone')}
-                defaultValue={userInfo.phone}
-              />
-              {errors && errors.phone && (
-                <p className="error-message">{errors.phone.message}</p>
-              )}
-              </div>
+                <div className="checkout__input-box">
+                  <input
+                    className="checkout_input-field"
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    placeholder="Phone number"
+                    {...register('phone')}
+                    defaultValue={userInfo.phone}
+                  />
+                  {errors && errors.phone && (
+                    <p className="error-message">{errors.phone.message}</p>
+                  )}
+                </div>
               )}
               <div className="checkbox__container">
                 <input
@@ -271,6 +274,10 @@ const Checkout = () => {
                   label: address.sectionAddress,
                 }))}
                 isSearchable={true}
+                value={selectedAddress} // Привязать выбранный адрес
+                onChange={(selectedOption) =>
+                  setSelectedAddress(selectedOption)
+                }
               />
               <textarea
                 className="delivery_comment"

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import mitt from 'mitt';
 import Unathorized from './components/unathorized/Unathorized';
+import jwt_decode from "jwt-decode";
 
 export const TokenContext = createContext({
   token: '',
@@ -34,47 +35,46 @@ const TokenProvider = ({ children }) => {
     emitter.emit('tokenChange', '');
   };
 
-  const checkTokenExpiration = () => {
-    const savedToken = localStorage.getItem('access_token');
-    console.log('Saved Token:', savedToken);
-    if (savedToken) {
-      try {
-        const decodedTokenData = window.atob(savedToken);
-        console.log('Decoded Token Data:', decodedTokenData);
-        const tokenData = JSON.parse(decodedTokenData);
-        console.log('Token Data:', tokenData);
-        console.log('Token Expiration:', tokenData.exp);
-  
-        if (!tokenData.exp) {
-          console.error('Token does not contain expiration time');
-          return true;
-        } 
-  
-        const expirationDate = new Date(tokenData.exp * 1000);
-        console.log('Expiration Date:', expirationDate);
-        const currentTime = new Date();
-        const tokenExpired = currentTime > expirationDate;
-  
-        if (loggedIn && tokenExpired) {
-          logout(); // Выход из аккаунта по истечению токена
-          return true;
-        }
-        console.log('loggedIn:', loggedIn);
-        console.log('tokenExpired:', tokenExpired);
-        console.log('Expiration Date:', expirationDate);
-        console.log('Current Time:', currentTime);
-  
-        if (!loggedIn && !tokenExpired) {
-          setLoggedIn(true); // Установка значения loggedIn в true, когда токен действителен
-        }
-  
-        return tokenExpired;
-      } catch (error) {
-        console.error('Failed to parse token data:', error);
+const checkTokenExpiration = () => {
+  const savedToken = localStorage.getItem('access_token');
+  console.log('Saved Token:', savedToken);
+  if (savedToken) {
+    try {
+      const decodedTokenData = window.atob(savedToken);
+      console.log('Decoded Token Data:', decodedTokenData);
+      const tokenData =  jwt_decode(decodedTokenData);
+      console.log('Token Expiration:', tokenData.exp);
+
+      if (!tokenData.exp) {
+        console.error('Token does not contain expiration time');
+        return true;
+      } 
+
+      const expirationDate = new Date(tokenData.exp * 1000);
+      console.log('Expiration Date:', expirationDate);
+      const currentTime = new Date();
+      const tokenExpired = currentTime > expirationDate;
+
+      if (loggedIn && tokenExpired) {
+        logout(); // Выход из аккаунта по истечению токена
+        return true;
       }
+      console.log('loggedIn:', loggedIn);
+      console.log('tokenExpired:', tokenExpired);
+      console.log('Expiration Date:', expirationDate);
+      console.log('Current Time:', currentTime);
+
+      if (!loggedIn && !tokenExpired) {
+        setLoggedIn(true); // Установка значения loggedIn в true, когда токен действителен
+      }
+
+      return tokenExpired;
+    } catch (error) {
+      console.error('Failed to parse token data:', error);
     }
-    return true;
-  };
+  }
+  return true;
+};
 
 useEffect(() => {
   console.log('Checking token expiration...');
