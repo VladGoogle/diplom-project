@@ -26,7 +26,7 @@ import { WishlistQueries } from '../queries/wishlist.queries';
     TokenService,
     UserQueries,
     StripeService,
-    WishlistQueries
+    WishlistQueries,
   ],
   exports: [ProductService],
   controllers: [ProductController],

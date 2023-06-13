@@ -34,7 +34,7 @@ import { WishlistQueries } from '../queries/wishlist.queries';
     ProductQueries,
     ProductImageQueries,
     ProductImageService,
-    WishlistQueries
+    WishlistQueries,
   ],
   exports: [PaymentService],
   controllers: [PaymentController],

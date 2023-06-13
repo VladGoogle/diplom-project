@@ -20,7 +20,7 @@ import { TokenService } from '../services/token.service';
     ProductImageService,
     ProductImageQueries,
     WishlistQueries,
-    TokenService
+    TokenService,
   ],
   exports: [DiscountService],
   controllers: [DiscountController],

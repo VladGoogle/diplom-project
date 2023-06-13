@@ -10,9 +10,7 @@ import { WishlistItemDto } from '../dtos/wishlistItem.dto';
 
 @Injectable()
 export class WishlistQueries {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async addProductToWishlist(data: WishlistItemDto) {
     const wishlist = await this.prisma.wishlist.findFirst({

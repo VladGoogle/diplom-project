@@ -29,7 +29,7 @@ import { WishlistQueries } from '../queries/wishlist.queries';
     ProductQueries,
     ProductImageQueries,
     ProductImageService,
-    WishlistQueries
+    WishlistQueries,
   ],
   exports: [OrderService],
   controllers: [OrderController],

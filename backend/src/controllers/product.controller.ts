@@ -2,7 +2,8 @@ import {
   Body,
   Controller,
   Delete,
-  Get, Headers,
+  Get,
+  Headers,
   HttpStatus,
   Param,
   ParseFilePipe,
@@ -49,9 +50,15 @@ export class ProductController extends ProductService {
     productQueries: ProductQueries,
     productImageQueries: ProductImageQueries,
     wishlistQueries: WishlistQueries,
-    tokenService: TokenService
+    tokenService: TokenService,
   ) {
-    super(prisma, productQueries, productImageQueries, wishlistQueries, tokenService);
+    super(
+      prisma,
+      productQueries,
+      productImageQueries,
+      wishlistQueries,
+      tokenService,
+    );
   }
 
   @Get('search')
@@ -63,6 +70,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
+    @Headers() headers: any
   ) {
     return await super.findAllProductsBySearchQuery(
       search.searchQuery,
@@ -72,6 +80,7 @@ export class ProductController extends ProductService {
       +take,
       +minPrice,
       +maxPrice,
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -96,6 +105,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
+    @Headers() headers: any
   ) {
     return await super.findAllProductsByCategoryId(
       id,
@@ -105,6 +115,7 @@ export class ProductController extends ProductService {
       +take,
       +minPrice,
       +maxPrice,
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -117,6 +128,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
+    @Headers() headers: any
   ) {
     return await super.findAllProductsBySubcategoryId(
       id,
@@ -126,6 +138,7 @@ export class ProductController extends ProductService {
       +take,
       +minPrice,
       +maxPrice,
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -138,7 +151,7 @@ export class ProductController extends ProductService {
     @UploadedFiles() files: any,
     @Req() req,
     @Body() data: ProductDto,
-    @Headers() headers: any
+    @Headers() headers: any,
   ) {
     return await super.createProduct(
       {
@@ -149,7 +162,7 @@ export class ProductController extends ProductService {
         qtyInStock: parseInt(data.qtyInStock.toString()),
       },
       files,
-      getTokenFromHeaders(headers)
+      getTokenFromHeaders(headers),
     );
   }
 
@@ -161,6 +174,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
+    @Headers() headers: any
   ) {
     return await super.getSortedProducts(
       sortBy,
@@ -169,11 +183,15 @@ export class ProductController extends ProductService {
       +take,
       +minPrice,
       +maxPrice,
+      getTokenFromHeaders(headers),
     );
   }
 
   @Get('product/:id')
-  async getProductById(@Param('id', ParseIntPipe) id: number, @Headers() headers: any) {
+  async getProductById(
+    @Param('id', ParseIntPipe) id: number,
+    @Headers() headers: any,
+  ) {
     return await super.findProductById(id, getTokenFromHeaders(headers));
   }
 

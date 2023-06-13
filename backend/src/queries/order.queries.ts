@@ -45,9 +45,9 @@ export class OrderQueries {
         },
         include: {
           selfCheckoutAddress: {
-            include:{
-              selfCheckout: true
-            }
+            include: {
+              selfCheckout: true,
+            },
           },
           user: {
             select: {
@@ -77,9 +77,9 @@ export class OrderQueries {
         where: { id: id },
         include: {
           selfCheckoutAddress: {
-            include:{
-              selfCheckout: true
-            }
+            include: {
+              selfCheckout: true,
+            },
           },
           user: {
             select: {
@@ -113,9 +113,9 @@ export class OrderQueries {
       where: { cartId: id },
       include: {
         selfCheckoutAddress: {
-          include:{
-            selfCheckout: true
-          }
+          include: {
+            selfCheckout: true,
+          },
         },
         user: {
           select: {
@@ -142,9 +142,9 @@ export class OrderQueries {
         where: { userId: id },
         include: {
           selfCheckoutAddress: {
-            include:{
-              selfCheckout: true
-            }
+            include: {
+              selfCheckout: true,
+            },
           },
           user: {
             select: {
@@ -195,14 +195,14 @@ export class OrderQueries {
         },
         include: {
           selfCheckoutAddress: {
-            include:{
-              selfCheckout: true
-            }
+            include: {
+              selfCheckout: true,
+            },
           },
-          user:{
-            include:{
+          user: {
+            include: {
               address: true,
-            }
+            },
           },
           orderItems: true,
           payment: true,
@@ -225,18 +225,18 @@ export class OrderQueries {
         data: {
           selfCheckoutAddressId: data.sectionId,
         },
-        include:{
+        include: {
           selfCheckoutAddress: {
-            include:{
-              selfCheckout: true
-            }
+            include: {
+              selfCheckout: true,
+            },
           },
-          user:{
-            include:{
-              address: true
-            }
-          }
-        }
+          user: {
+            include: {
+              address: true,
+            },
+          },
+        },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

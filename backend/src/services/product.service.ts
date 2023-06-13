@@ -25,8 +25,8 @@ export class ProductService extends UploadProductImageService {
   async createProduct(
     data: ProductDto,
     images: ImageInterface[],
-    authHeader: string
-  ): Promise<any>{
+    authHeader: string,
+  ): Promise<any> {
     const product = await this.productQueries.createProduct({
       ...data,
     });
@@ -35,22 +35,28 @@ export class ProductService extends UploadProductImageService {
   }
 
   async findProductById(id: number, authHeader: string) {
-    if(authHeader) {
+    if (authHeader) {
       const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
       const product = await this.productQueries.findProductById(id);
-      const wishlist = await this.wishlistQueries.getWishlistByUserIdWithoutError(decodedPayload.id)
-      return {product, wishlist}
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { product, wishlist };
     } else {
       return await this.productQueries.findProductById(id);
     }
   }
 
   async findProductByName(name: string, authHeader: string) {
-    if(authHeader) {
+    if (authHeader) {
       const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
       const product = await this.productQueries.findProductByName(name);
-      const wishlist = await this.wishlistQueries.getWishlistByUserIdWithoutError(decodedPayload.id)
-      return {product, wishlist}
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { product, wishlist };
     } else {
       return await this.productQueries.findProductByName(name);
     }
@@ -64,16 +70,35 @@ export class ProductService extends UploadProductImageService {
     take: number,
     minPrice: number,
     maxPrice: number,
+    authHeader: string,
   ) {
-    return await this.productQueries.findAllProductsByCategoryId(
-      id,
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      minPrice,
-      maxPrice,
-    );
+    if (authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const products = await this.productQueries.findAllProductsByCategoryId(
+        id,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { products, wishlist };
+    } else {
+      return await this.productQueries.findAllProductsByCategoryId(
+        id,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+    }
   }
 
   async findAllProductsBySubcategoryId(
@@ -84,16 +109,35 @@ export class ProductService extends UploadProductImageService {
     take: number,
     minPrice: number,
     maxPrice: number,
+    authHeader: string,
   ) {
-    return await this.productQueries.findAllProductsBySubcategoryId(
-      id,
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      minPrice,
-      maxPrice,
-    );
+    if (authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const products = await this.productQueries.findAllProductsBySubcategoryId(
+        id,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { products, wishlist };
+    } else {
+      return await this.productQueries.findAllProductsBySubcategoryId(
+        id,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+    }
   }
 
   async findAllProductsBySearchQuery(
@@ -104,16 +148,35 @@ export class ProductService extends UploadProductImageService {
     take: number,
     minPrice: number,
     maxPrice: number,
+    authHeader: string,
   ) {
-    return await this.productQueries.findAllProductsBySearchQuery(
-      query,
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      minPrice,
-      maxPrice,
-    );
+    if (authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const products = await this.productQueries.findAllProductsBySearchQuery(
+        query,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { products, wishlist };
+    } else {
+      return await this.productQueries.findAllProductsBySearchQuery(
+        query,
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+    }
   }
 
   async getSortedProducts(
@@ -123,15 +186,33 @@ export class ProductService extends UploadProductImageService {
     take: number,
     minPrice: number,
     maxPrice: number,
+    authHeader: string,
   ) {
-    return await this.productQueries.getSortedProducts(
-      sortBy,
-      sortOrder,
-      skip,
-      take,
-      minPrice,
-      maxPrice,
-    );
+    if (authHeader) {
+      const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+      const products = await this.productQueries.getSortedProducts(
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+      const wishlist =
+        await this.wishlistQueries.getWishlistByUserIdWithoutError(
+          decodedPayload.id,
+        );
+      return { products, wishlist };
+    } else {
+      return await this.productQueries.getSortedProducts(
+        sortBy,
+        sortOrder,
+        skip,
+        take,
+        minPrice,
+        maxPrice,
+      );
+    }
   }
 
   async removeProductById(id: number) {
