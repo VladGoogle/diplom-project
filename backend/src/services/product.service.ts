@@ -42,7 +42,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { product, wishlist };
+      if (!wishlist) {
+        return product;
+      } else {
+        return { product, wishlist };
+      }
     } else {
       return await this.productQueries.findProductById(id);
     }
@@ -56,7 +60,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { product, wishlist };
+      if (!wishlist) {
+        return product;
+      } else {
+        return { product, wishlist };
+      }
     } else {
       return await this.productQueries.findProductByName(name);
     }
@@ -87,7 +95,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { products, wishlist };
+      if (!wishlist) {
+        return products;
+      } else {
+        return { products, wishlist };
+      }
     } else {
       return await this.productQueries.findAllProductsByCategoryId(
         id,
@@ -126,7 +138,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { products, wishlist };
+      if (!wishlist) {
+        return products;
+      } else {
+        return { products, wishlist };
+      }
     } else {
       return await this.productQueries.findAllProductsBySubcategoryId(
         id,
@@ -165,7 +181,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { products, wishlist };
+      if (!wishlist) {
+        return products;
+      } else {
+        return { products, wishlist };
+      }
     } else {
       return await this.productQueries.findAllProductsBySearchQuery(
         query,
@@ -202,7 +222,11 @@ export class ProductService extends UploadProductImageService {
         await this.wishlistQueries.getWishlistByUserIdWithoutError(
           decodedPayload.id,
         );
-      return { products, wishlist };
+      if (!wishlist) {
+        return products;
+      } else {
+        return { products, wishlist };
+      }
     } else {
       return await this.productQueries.getSortedProducts(
         sortBy,
