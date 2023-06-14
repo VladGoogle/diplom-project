@@ -70,7 +70,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
-    @Headers() headers: any
+    @Headers() headers: any,
   ) {
     return await super.findAllProductsBySearchQuery(
       search.searchQuery,
@@ -105,7 +105,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
-    @Headers() headers: any
+    @Headers() headers: any,
   ) {
     return await super.findAllProductsByCategoryId(
       id,
@@ -128,7 +128,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
-    @Headers() headers: any
+    @Headers() headers: any,
   ) {
     return await super.findAllProductsBySubcategoryId(
       id,
@@ -174,7 +174,7 @@ export class ProductController extends ProductService {
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
     @Query('maxPrice') maxPrice = '9999',
-    @Headers() headers: any
+    @Headers() headers: any,
   ) {
     return await super.getSortedProducts(
       sortBy,
