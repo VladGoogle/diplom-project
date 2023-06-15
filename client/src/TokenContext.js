@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import mitt from 'mitt';
 import Unathorized from './components/unathorized/Unathorized';
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
 export const TokenContext = createContext({
   token: '',
@@ -17,7 +17,7 @@ const TokenProvider = ({ children }) => {
       return '';
     }
   });
-  
+
   const [showPopup, setShowPopup] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const emitter = mitt();
@@ -35,56 +35,56 @@ const TokenProvider = ({ children }) => {
     emitter.emit('tokenChange', '');
   };
 
-const checkTokenExpiration = () => {
-  const savedToken = localStorage.getItem('access_token');
-  console.log('Saved Token:', savedToken);
-  if (savedToken) {
-    try {
-      const decodedTokenData = window.atob(savedToken);
-      console.log('Decoded Token Data:', decodedTokenData);
-      const tokenData =  jwt_decode(decodedTokenData);
-      console.log('Token Expiration:', tokenData.exp);
+  const checkTokenExpiration = () => {
+    const savedToken = localStorage.getItem('access_token');
+    console.log('Saved Token:', savedToken);
+    if (savedToken) {
+      try {
+        const decodedTokenData = window.atob(savedToken);
+        console.log('Decoded Token Data:', decodedTokenData);
+        const tokenData = jwt_decode(decodedTokenData);
+        console.log('Token Expiration:', tokenData.exp);
 
-      if (!tokenData.exp) {
-        console.error('Token does not contain expiration time');
-        return true;
-      } 
+        if (!tokenData.exp) {
+          console.error('Token does not contain expiration time');
+          return true;
+        }
 
-      const expirationDate = new Date(tokenData.exp * 1000);
-      console.log('Expiration Date:', expirationDate);
-      const currentTime = new Date();
-      const tokenExpired = currentTime > expirationDate;
+        const expirationDate = new Date(tokenData.exp * 1000);
+        console.log('Expiration Date:', expirationDate);
+        const currentTime = new Date();
+        const tokenExpired = currentTime > expirationDate;
 
-      if (loggedIn && tokenExpired) {
-        logout(); // Выход из аккаунта по истечению токена
-        return true;
+        if (loggedIn && tokenExpired) {
+          logout(); // Выход из аккаунта по истечению токена
+          return true;
+        }
+        console.log('loggedIn:', loggedIn);
+        console.log('tokenExpired:', tokenExpired);
+        console.log('Expiration Date:', expirationDate);
+        console.log('Current Time:', currentTime);
+
+        if (!loggedIn && !tokenExpired) {
+          setLoggedIn(true); // Установка значения loggedIn в true, когда токен действителен
+        }
+
+        return tokenExpired;
+      } catch (error) {
+        console.error('Failed to parse token data:', error);
       }
-      console.log('loggedIn:', loggedIn);
-      console.log('tokenExpired:', tokenExpired);
-      console.log('Expiration Date:', expirationDate);
-      console.log('Current Time:', currentTime);
-
-      if (!loggedIn && !tokenExpired) {
-        setLoggedIn(true); // Установка значения loggedIn в true, когда токен действителен
-      }
-
-      return tokenExpired;
-    } catch (error) {
-      console.error('Failed to parse token data:', error);
     }
-  }
-  return true;
-};
+    return true;
+  };
 
-useEffect(() => {
-  console.log('Checking token expiration...');
-  const tokenExpired = checkTokenExpiration();
-  if (loggedIn && tokenExpired) {
-    setLoggedIn(false);
-    logout(); // Выход из аккаунта по истечению токена
-    setShowPopup(true);
-  }
-}, [loggedIn, token]);
+  useEffect(() => {
+    console.log('Checking token expiration...');
+    const tokenExpired = checkTokenExpiration();
+    if (loggedIn && tokenExpired) {
+      setLoggedIn(false);
+      logout(); // Выход из аккаунта по истечению токена
+      setShowPopup(true);
+    }
+  }, [loggedIn, token]);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -94,7 +94,6 @@ useEffect(() => {
     const handleTokenChange = (newToken) => {
       setShowPopup(false);
       setTokenState(newToken);
-      setLoggedIn(!!newToken);
     };
 
     emitter.on('tokenChange', handleTokenChange);
@@ -103,6 +102,13 @@ useEffect(() => {
       emitter.off('tokenChange', handleTokenChange);
     };
   }, []);
+
+  useEffect(() => {
+    // Проверка, что токен не пустой
+    if (token) {
+      setLoggedIn(true);
+    }
+  }, [token]);
 
   useEffect(() => {
     const tokenExpired = checkTokenExpiration();
@@ -114,7 +120,7 @@ useEffect(() => {
   }, [loggedIn, token]);
 
   return (
-    <TokenContext.Provider value={{ token, setToken, logout }}>
+    <TokenContext.Provider value={{ token, setToken, loggedIn, logout}}>
       {children}
       {showPopup && <Unathorized onClose={closePopup} />}
     </TokenContext.Provider>

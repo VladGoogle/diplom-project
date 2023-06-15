@@ -1,14 +1,16 @@
 import ProductsSlider from '../components/swiper/Slider';
 import Recommended from '../components/recommendations/Recommended';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import AxiosInstance from '../utils/axios/instance';
 import { useParams } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
 import Comment from '../components/comment/Comment';
+import { TokenContext } from '../TokenContext';
 
 const Product = () => {
 
   const instance = AxiosInstance();
+  const { loggedIn } = useContext(TokenContext);
   const [productInfo, setProductInfo] = useState([]);
   const [productImages, setProductImages] = useState([]);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
@@ -22,8 +24,13 @@ const Product = () => {
     const fetchData = async () => {
       try {
         const response = await instance.get(`/product/${id}`);
-        setProductInfo(response.data);
-        setProductImages(response.data.productImages);
+        if (loggedIn) {
+          setProductInfo(response.data.product);
+          setProductImages(response.data.product.productImages);
+        } else {
+          setProductInfo(response.data);
+          setProductImages(response.data.productImages);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -63,6 +70,8 @@ const Product = () => {
       setIsAddingToCart(false);
     }
   };
+
+  
 
   return (
     <>
@@ -289,9 +298,11 @@ const Product = () => {
                 }
                 <button className="goods__buttons-buy">BUY IN ONE CLICK</button>
               </div>
+              
               <h3 className="product__reviews">
                 Reviews
               </h3>
+              {commentInfo.length > 0 ? (
               <ul className="cart-list">
                 {commentInfo
                   .slice(0, 2)
@@ -308,6 +319,11 @@ const Product = () => {
                     );
                   })}
               </ul> 
+              ) : (
+                <h4 className="product__reviews-empty">
+                  There are no reviews on this product yet. You can write them by clicking on the link below
+                </h4>
+              )}
               <NavLink to={`/reviews/${id}`} className="comment__link">
                     More Reviews
               </NavLink>

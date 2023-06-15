@@ -1,9 +1,10 @@
 import "./style.css"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Comment from "../comment/Comment";
 import { useParams } from "react-router-dom";
 import AxiosInstance from "../../utils/axios/instance";
 import ReviewForm from "./ReviewForm";
+import { TokenContext } from "../../TokenContext";
 
 const ReviewsPage = () => {
 
@@ -11,8 +12,9 @@ const ReviewsPage = () => {
     const [commentInfo, setCommentInfo] = useState([]);
     const [productInfo, setProductInfo] = useState(null);
     const instance = AxiosInstance();
+    const { loggedIn } = useContext(TokenContext);
     const { id } = useParams();
-
+  
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -34,6 +36,7 @@ const ReviewsPage = () => {
                     Reviews on {productInfo.name}
                     </h1>
                 )}
+                {loggedIn && (
             <div className="reviews__send-box">
                 <h2 className="reviews__send-box--title">
                     Leave your review
@@ -42,6 +45,7 @@ const ReviewsPage = () => {
                     REVIEW
                 </button>
             </div>
+                )}
             <ul className="cart-list">
                 {commentInfo
                   .map((obj, id) => {

@@ -1,6 +1,8 @@
 import './style.css';
 import React from 'react'
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { TokenContext } from '../../TokenContext';
 
 
 function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discountPrice, onRemoveFromWishlist, id, itsInWishlist }) {
@@ -8,6 +10,7 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
   const [isAddedToCart, setIsAddedToCart] = React.useState(false);
   const [isAddingToCart, setIsAddingToCart] = React.useState(false);
   const [isInWishlist, setIsInWishlist] = React.useState(itsInWishlist);
+  const { loggedIn } = useContext(TokenContext);
 
   
 
@@ -52,17 +55,19 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
 
 
 
+
   return (
     <li className="products__card">
       <div className="products__card-top">
         {discountPrice ? (<span className="products-card__status">Discount</span>) : (<span className="products-card__status--regular">Regular</span>)}
-        {isInWishlist ? 
+        {loggedIn && isInWishlist ? 
         (
             <svg onClick={handleRemoveFromWishlist}
                   className="products__card-like" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M33.75 13.2188C33.75 23.0625 19.1545 31.0303 18.533 31.3594C18.3691 31.4475 18.186 31.4936 18 31.4936C17.814 31.4936 17.6309 31.4475 17.467 31.3594C16.8455 31.0303 2.25 23.0625 2.25 13.2188C2.25261 10.9072 3.17202 8.69106 4.80654 7.05654C6.44106 5.42202 8.65719 4.50261 10.9688 4.5C13.8727 4.5 16.4152 5.74875 18 7.85953C19.5848 5.74875 22.1273 4.5 25.0312 4.5C27.3428 4.50261 29.5589 5.42202 31.1935 7.05654C32.828 8.69106 33.7474 10.9072 33.75 13.2188Z" fill="#FDEB46"/>
            </svg>
         ) : (
+          loggedIn && (
           <svg onClick={handleAddToWishlistClick}
           className="products__card-like"
           width="36"
@@ -76,6 +81,7 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
             fill="#FDEB46"
           />
         </svg>
+          )
         )}
       </div>
       <div className="product__card-content">

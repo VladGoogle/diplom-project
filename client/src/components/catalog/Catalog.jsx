@@ -1,9 +1,10 @@
 import './style.css';
 import AxiosInstance from '../../utils/axios/instance';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Card from '../card/Card';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { TokenContext } from '../../TokenContext';
 
 const Catalog = () => {
   const instance = AxiosInstance();
@@ -11,6 +12,7 @@ const Catalog = () => {
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get('searchQuery');
   const navigate = useNavigate();
+  const { loggedIn } = useContext(TokenContext);
 
   const queryParams = new URLSearchParams(location.search);
   const selectedCategoryParam = queryParams.get('category');
@@ -43,6 +45,7 @@ const Catalog = () => {
 
   const [items, setItems] = useState([]);
   const [wishlistId, setWishlistId] = useState(null);
+  const [wishlistItems, setWishlistItems] = React.useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [minPrice, setMinPrice] = useState('');
@@ -74,21 +77,30 @@ const Catalog = () => {
     const fetchData = async () => {
       try {
         let response;
-
         if (searchQuery) {
           response = await instance.get(`/search/?searchQuery=${searchQuery}`);
         } else {
           response = await instance.get('/products');
         }
-
-        setItems(response.data);
+        if (loggedIn) {
+          setItems(response.data.products);
+          setWishlistItems(response.data.wishlist);
+        } else {
+          setItems(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchData();
-  }, [wishlistId, selectedCategory, selectedSubcategories, searchQuery]);
+  }, [
+    wishlistId,
+    selectedCategory,
+    selectedSubcategories,
+    searchQuery,
+    loggedIn,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,12 +151,17 @@ const Catalog = () => {
     }
   };
 
-  const handleRemoveFromWishlist = async (wishlistItemId) => {
+  const handleRemoveFromWishlist = async (item) => {
     try {
-      await instance.patch('/wishlist/removeItem', {
-        wishlistId: 1,
-        wishlistItemId,
-      });
+      const wishlistItem = wishlistItems.wishlistItems.find(
+        (wishlistItem) => wishlistItem.productId === item.id,
+      );
+      if (wishlistItem) {
+        await instance.patch('/wishlist/removeItem', {
+          wishlistId: wishlistItems.id,
+          wishlistItemId: wishlistItem.id,
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -299,53 +316,57 @@ const Catalog = () => {
           </div>
           <div className="catalog__items">
             <ul className="catalog-card-list">
-              {items
-
-                .filter((item) =>
-                  selectedCategory
-                    ? item.subcategory.categoryId === selectedCategory
-                    : true,
-                )
-                .filter((item) =>
-                  selectedSubcategories.length === 0
-                    ? true
-                    : selectedSubcategories.includes(item.subcategoryId),
-                )
-
-                .filter(
-                  (item) =>
-                    minPrice === '' || Number(item.price) >= Number(minPrice),
-                )
-                .filter(
-                  (item) =>
-                    maxPrice === '' || Number(item.price) <= Number(maxPrice),
-                )
-                .map((obj, id) => {
-                  const isInWishlist =
-                    obj.wishlistItems && obj.wishlistItems.length > 0;
-
-                  return (
-                    <Card
-                      key={id}
-                      id={obj.id}
-                      name={
-                        obj.name.length > 15
-                          ? obj.name.slice(0, 13) + '...'
-                          : obj.name
-                      }
-                      category={obj.subcategory.name}
-                      price={obj.price}
-                      discountPrice={obj.discountPrice}
-                      img={obj.productImages[0].url}
-                      onAddToCart={() => handleAddToCart(obj)}
-                      onAddToWishlist={() => handleAddToWishlist(obj)}
-                      onRemoveFromWishlist={() =>
-                        handleRemoveFromWishlist(obj.wishlistItems[0]?.id)
-                      }
-                      itsInWishlist={isInWishlist}
-                    />
-                  );
-                })}
+              {Array.isArray(items) ? (
+                items
+                  .filter((item) =>
+                    selectedCategory
+                      ? item.subcategory.categoryId === selectedCategory
+                      : true,
+                  )
+                  .filter((item) =>
+                    selectedSubcategories.length === 0
+                      ? true
+                      : selectedSubcategories.includes(item.subcategoryId),
+                  )
+                  .filter(
+                    (item) =>
+                      minPrice === '' || Number(item.price) >= Number(minPrice),
+                  )
+                  .filter(
+                    (item) =>
+                      maxPrice === '' || Number(item.price) <= Number(maxPrice),
+                  )
+                  .map((obj, id) => {
+                    const isInWishlist =
+                      loggedIn &&
+                      wishlistItems?.wishlistItems?.some(
+                        (wishlistItem) => wishlistItem.productId === obj.id,
+                      );
+                    return (
+                      <Card
+                        key={id}
+                        id={obj.id}
+                        name={
+                          obj.name.length > 15
+                            ? obj.name.slice(0, 13) + '...'
+                            : obj.name
+                        }
+                        category={obj.subcategory.name}
+                        price={obj.price}
+                        discountPrice={obj.discountPrice}
+                        img={obj.productImages[0].url}
+                        onAddToCart={() => handleAddToCart(obj)}
+                        onAddToWishlist={() => handleAddToWishlist(obj)}
+                        onRemoveFromWishlist={() =>
+                          handleRemoveFromWishlist(obj)
+                        }
+                        itsInWishlist={isInWishlist}
+                      />
+                    );
+                  })
+              ) : (
+                <p>Loading...</p>
+              )}
             </ul>
           </div>
         </div>

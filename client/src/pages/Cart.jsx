@@ -5,18 +5,14 @@ import { useEffect, useState, useContext } from "react";
 import { NavLink } from 'react-router-dom';
 import { TokenContext } from "../TokenContext";
 import SignedOutCart from "../components/cart/SignedOutCart";
+import EmptyCart from "../components/cart/EmptyCart";
 
 const Cart = () => {
 
     const instance = AxiosInstance();
-    const [items, setItems] = React.useState([]);
-    const [itemsTotal, setItemsTotal] = React.useState([]);
-    const { token } = useContext(TokenContext);
-    const [ShowCartItems, setShowCartItems] = useState(!!token);
+    const [items, setItems] = useState([]);
 
-    useEffect(() => {
-        setShowCartItems(!!token);
-    }, [token]);
+    const { loggedIn } = useContext(TokenContext);
 
 
     useEffect(() => {
@@ -24,16 +20,14 @@ const Cart = () => {
             try {
                 const response = await instance.get("/cart/getByToken");
                 setItems(response.data.cartItems);
-                setItemsTotal(response.data);
+
             } catch (error) {
                 console.log(error);
             }
         };
         fetchData();
     }, []);
-
     const handleQuantityChange = (itemId, newQuantity) => {
-        // Find the item in the items list and update its quantity
         const updatedItems = items.map((item) => {
           if (item.id === itemId) {
             return { ...item, quantity: newQuantity };
@@ -41,28 +35,26 @@ const Cart = () => {
           return item;
         });
         setItems(updatedItems);
-        const newTotalPrice = updatedItems.reduce((total, item) => {
-            return total + item.product.price * item.quantity;
-          }, 0);
-          // Обновите подитоговую сумму всех товаров в компоненте
-          setItemsTotal((prevTotal) => ({ ...prevTotal, totalPrice: newTotalPrice }));
       };
 
+      const totalPrice = items.reduce((total, item) => {
+        return total + item.product.price * item.quantity;
+      }, 0);
 
-    const handleRemoveItem = async (itemId) => {
+
+      const handleRemoveItem = async (itemId) => {
         try {
-            await instance.patch('/cart/removeItem', {
-                cartId: 1,
-                cartItemId: itemId,
-            });
-
-            // Обновите список элементов в корзине после успешного удаления
-            const updatedItems = items.filter((item) => item.id !== itemId);
-            setItems(updatedItems);
+          await instance.patch('/cart/removeItem', {
+            cartId: 1,
+            cartItemId: itemId,
+          });
+    
+          const updatedItems = items.filter((item) => item.id !== itemId);
+          setItems(updatedItems);
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    };
+      };
 
 
 
@@ -70,9 +62,11 @@ const Cart = () => {
 
     return (
         <section className="cart">
-            {ShowCartItems ?
+            {loggedIn ?
                 (
                     <>
+                    {items.length > 0 ? (
+                        <>
                         <div className="container">
                             <h2 className="cart__header">Your shopping cart</h2>
                             <div className="cart__titles">
@@ -118,7 +112,7 @@ const Cart = () => {
                                         Summary:
                                     </span>
                                     <span className="cart__summary-price">
-                                        {itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$
+                                    {totalPrice.toFixed(2)}$
                                     </span>
                                 </div>
                                 <div className="cart__summary-bottom">
@@ -133,7 +127,7 @@ const Cart = () => {
                             <div className="cart__buttons">
                                 <NavLink to="/checkout" className="logo">
                                     <button className="cart__button-buy">
-                                        BUY FOR <span className="cart__buttons-price">{itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$</span>
+                                        BUY FOR <span className="cart__buttons-price">{totalPrice.toFixed(2)}$</span>
                                     </button>
                                 </NavLink>
                                 <NavLink to="/" className="logo">
@@ -143,9 +137,15 @@ const Cart = () => {
                                 </NavLink>
                             </div>
                         </div>
+                        </>
+                        ) : (
+                           <EmptyCart /> // Отобразить EmptyCart, если корзина пуста
+                        )}
                     </>
                 ) : (
-                    <SignedOutCart />
+                    <div className="cart__full-screen">
+                        <SignedOutCart />
+                    </div>
                 )}
 
         </section>
