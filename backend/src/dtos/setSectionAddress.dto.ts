@@ -1,8 +1,7 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SetSectionAddressDto {
-  @IsInt()
-  @IsNotEmpty()
+  @IsOptional()
   orderId: number;
 
   @IsInt()

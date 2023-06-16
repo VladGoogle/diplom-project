@@ -220,7 +220,7 @@ export class OrderQueries {
 
   async setSectionAddressToOrder(data: SetSectionAddressDto) {
     try {
-      return this.prisma.order.update({
+      return await this.prisma.order.update({
         where: { id: data.orderId },
         data: {
           selfCheckoutAddressId: data.sectionId,
