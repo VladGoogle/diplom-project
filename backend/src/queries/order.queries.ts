@@ -25,7 +25,7 @@ export class OrderQueries {
       });
 
       const cart = await this.cartService.getCartById(cartId);
-      return this.prisma.order.create({
+      return await this.prisma.order.create({
         data: {
           ...data,
           cartId: cartId,
@@ -34,13 +34,11 @@ export class OrderQueries {
             0,
           ),
           orderItems: {
-            create: await Promise.all(
-              cart.cartItems.map((item) => ({
+            create: cart.cartItems.map((item) => ({
                 product: { connect: { id: item.productId } },
                 quantity: item.quantity,
                 subTotalPrice: item.subTotalPrice,
               })),
-            ),
           },
         },
         include: {
@@ -51,6 +49,9 @@ export class OrderQueries {
           },
           user: {
             select: {
+              firstName: true,
+              lastName: true,
+              email: true,
               address: true,
             },
           },
@@ -83,6 +84,9 @@ export class OrderQueries {
           },
           user: {
             select: {
+              firstName: true,
+              lastName: true,
+              email: true,
               address: true,
             },
           },
@@ -119,6 +123,9 @@ export class OrderQueries {
         },
         user: {
           select: {
+            firstName: true,
+            lastName: true,
+            email: true,
             address: true,
           },
         },
@@ -148,6 +155,9 @@ export class OrderQueries {
           },
           user: {
             select: {
+              firstName: true,
+              lastName: true,
+              email: true,
               address: true,
             },
           },
@@ -200,7 +210,10 @@ export class OrderQueries {
             },
           },
           user: {
-            include: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
               address: true,
             },
           },
@@ -232,7 +245,10 @@ export class OrderQueries {
             },
           },
           user: {
-            include: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
               address: true,
             },
           },

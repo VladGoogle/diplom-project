@@ -13,12 +13,16 @@ export class AddressService {
     private tokenService: TokenService,
   ) {}
 
-  async addUserAddress(data: AddressDto) {
-    return await this.addressQueries.addUserAddress(data);
+  async addUserAddress(data: AddressDto, authHeader: string) {
+    const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
+    return await this.addressQueries.addUserAddress({
+      ...data,
+      userId: decodedPayload.id,
+    });
   }
 
   async updateUserAddress(data: UpdateAddressDto, authHeader: string) {
-    const decodedPayload = await this.tokenService.decodeAuthToken(authHeader);
+    const decodedPayload = this.tokenService.decodeAuthToken(authHeader);
     return await this.addressQueries.updateUserAddress(data, decodedPayload.id);
   }
 

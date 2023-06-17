@@ -19,8 +19,13 @@ export class AddressController {
 
   @UseGuards(JwtAuthGuard)
   @Post('account/address')
-  async addUserAddress(data: AddressDto) {
-    return await this.addressService.addUserAddress(data);
+  async addUserAddress(@Body() data: AddressDto, @Headers() headers: any) {
+    return await this.addressService.addUserAddress(
+      {
+        ...data,
+      },
+      getTokenFromHeaders(headers),
+    );
   }
 
   @UseGuards(JwtAuthGuard)
