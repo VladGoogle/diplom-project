@@ -18,6 +18,11 @@ body {
     padding: 0 90px;
 }
 
+.myorder__info {
+    position: sticky;
+    top: 40px;
+}
+
 .checkout__title,
 .myorder__title {
     font-style: normal;
@@ -53,7 +58,10 @@ body {
     margin-left: 30px;
     border-left: 5px solid #D9D9D9;
     margin-right: 51px;
+    
 }
+
+
 
 .checkout__top--bottom {
     padding-bottom: 40px;
@@ -65,15 +73,15 @@ body {
     padding-bottom: 20px;
 }
 
+.checkout__bottom--bottom {
+    padding-bottom: 40px;
+    margin-bottom: 22px;
+}
+
 .checkout__top-fields_top {
     display: flex;
     flex-direction: row;
     gap: 30px;
-    width: 100%;
-}
-
-.checkout_input-field--name,
-.checkout_input-field--surname {
     width: 100%;
 }
 
@@ -91,7 +99,6 @@ select.checkout_input-field {
     border-radius: 5px;
     padding: 18px 0 18px 20px;
     width: 100%;
-    margin-bottom: 20px;
     font-family: 'Montserrat';
     font-style: normal;
     font-weight: 400;
@@ -99,6 +106,15 @@ select.checkout_input-field {
     line-height: 24px;
     padding-right: 20px;
 
+}
+
+.delivery_comment {
+    margin-bottom: 20px;
+}
+
+.checkout__input-box {
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .checkbox__container {
@@ -353,18 +369,6 @@ select.checkout_input-field {
     margin-right: 17px;
   }
 
-  .myorder__confirmation {
-    width: 100%;
-    padding: 28px 0;
-    border-radius: 5px;
-    background-color: #FDEB46;
-    border: none;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    cursor: pointer;
-  }
-
   .checkout_input-button {
     background: #FDEB46;
     border-radius: 5px;
@@ -379,6 +383,10 @@ select.checkout_input-field {
     cursor: pointer;
   }
   
+  .select__box {
+    margin-bottom: 20px;
+  }
+
   .custom-select .css-1pahdxg-control,
   .custom-select .css-1wa3eu0-placeholder,
   .custom-select .css-xb97g5-container,
@@ -392,3 +400,47 @@ select.checkout_input-field {
   .custom-select .css-1pcexqc-singleValue {
     color: #000; /* Цвет текста для плейсхолдера и выбранного значения */
   }
+
+  .checkout__form-button {
+    width: 100%;
+    padding: 28px 0;
+    border-radius: 5px;
+    background-color: #FDEB46;
+    border: none;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+  }
+
+  .checkout__bottom-bank_cards {
+
+    margin-bottom: 20px;
+  }
+
+  .checkout__input-bottom {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .checkout_input-field-card {
+    text-align: center;
+  }
+
+  .checkout__wallet-input-expired {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+
+  }
+
+  .checkout__product-image_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+
+}

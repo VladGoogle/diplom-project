@@ -7,7 +7,9 @@ function MyOrdersSmall ({cartImage, subcategory, price, name, itemId, quantity, 
             <li className="my_order-small__item">
                 <div className="my_order-small__item-inner">
                     <div className="my_order-small__item-left">
+                        <div className="checkout__product-image_container">
                         <img src={cartImage} className="my_order-small__image" alt="my_order-small__image" />
+                        </div>
                         <div className="my_order-small__item-info">
                             <div className="my_order-small__item-info--top">
                                 <span className="my_order-small__item-category">

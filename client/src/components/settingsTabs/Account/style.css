@@ -19,7 +19,15 @@
     padding: 52px 40px;
     display: flex;
     margin-bottom: 20px;
-    width: 800px;
+    min-width: 800px;
+    width: 100%;
+}
+
+
+
+.account__tabs {
+    width: 100%;
+    max-width: 800px;
 }
 
 .account__tab-top {
@@ -27,6 +35,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    max-width: 800px;
 }
 
 .account__tab-content {

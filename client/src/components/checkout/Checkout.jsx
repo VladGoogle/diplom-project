@@ -4,10 +4,11 @@ import AxiosInstance from '../../utils/axios/instance';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import AddedWallet from '../settingsTabs/Wallet/AddedWallet';
-import WalletForm from '../settingsTabs/Wallet/WalletForm';
 import MyOrdersSmall from './MyOrdersSmall';
 import Select from 'react-select';
+import AddedWallet from '../settingsTabs/Wallet/AddedWallet';
+import WalletForm from '../settingsTabs/Wallet/WalletForm';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
@@ -19,32 +20,46 @@ const schema = yup.object().shape({
     .trim()
     .max(255, 'Email must be at most 255 characters')
     .required('Email is required'),
-  phone: yup.string().required('Phone number is required'),
+  phone: yup
+    .string()
+    .matches(/^\+?\d{1,}$/g, 'Invalid phone number')
+    .required('Phone number is required')
+    .min(9, 'Phone number must be at least 9 characters'),
   confirmation: yup.boolean(),
 });
 
 const Checkout = () => {
-  const { register, handleSubmit, errors } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
   const instance = AxiosInstance();
+  const navigate = useNavigate();
   const defaultOption = { value: '', label: 'Pickup from Nova Poshta' };
+  const defaultCardOption = { value: '', label: 'Online Payment' };
   const [userInfo, setUserInfo] = useState({});
-  const [card, setCard] = useState(null);
+  const [card, setCard] = useState({});
   const [items, setItems] = useState([]);
   const [itemsTotal, setItemsTotal] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [cartId, setCartId] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [selectedAddressError, setSelectedAddressError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await instance.get('/cart/1');
+        const response = await instance.get('/cart/getByToken');
         setItems(response.data.cartItems);
         setItemsTotal(response.data);
+        setCartId(response.data.cartItems[0].cartId);
       } catch (error) {
         console.log(error);
       }
@@ -82,10 +97,34 @@ const Checkout = () => {
 
   const onSubmit = async (data) => {
     try {
+      await schema.validate(data);
       const response = await instance.patch('/account/userInfo', data);
       console.log(response.data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSubmitOrder = async (event) => {
+    event.preventDefault();
+    if (!selectedAddress) {
+      setSelectedAddressError(true);
+      return;
+    }
+    setSelectedAddressError(false);
+    try {
+      const response = await instance.post(`cart/${cartId}/confirm`); 
+      const orderId = response.data.orderItems[0]?.orderId;
+      await instance.patch(`order/${orderId}`, {
+        sectionId: selectedAddressId,
+      });
+      await instance.post(`order/${orderId}/checkout`);
+
+      navigate("/settings/orders");
+      console.log('Order placed successfully');
+    } catch (error) {
+      console.error(error);
+      navigate("/settings/orders");
     }
   };
 
@@ -102,13 +141,14 @@ const Checkout = () => {
       (city) => city.id === selectedOption.value,
     );
     setAddresses(selectedCityData ? selectedCityData.selfCheckoutSections : []);
-    setSelectedAddress(null); // Сбросить выбранный адрес
+    setSelectedAddress(null);
+    setSelectedAddressId(null); // Сбросить выбранный id адреса
   };
 
   return (
     <div className="container">
       <div className="checkout__page-inner">
-        <section className="checkout__section">
+        <div className="checkout__section">
           <h1 className="checkout__title">Checkout</h1>
           <div className="checkout__top-inner">
             <div className="checkout__top--top">
@@ -136,7 +176,7 @@ const Checkout = () => {
             >
               <div className="checkout__top-fields_top">
                 {userInfo.firstName && (
-                  <div className="checkout_input-field--name">
+                  <div className="checkout__input-box">
                     <input
                       className="checkout_input-field checkout_input-mini"
                       type="text"
@@ -146,7 +186,7 @@ const Checkout = () => {
                       {...register('firstName')}
                       defaultValue={userInfo.firstName}
                     />
-                    {errors && errors.firstName && (
+                    {errors?.firstName && (
                       <p className="error-message">
                         {errors.firstName.message}
                       </p>
@@ -154,7 +194,7 @@ const Checkout = () => {
                   </div>
                 )}
                 {userInfo.lastName && (
-                  <div className="checkout_input-field--surname">
+                  <div className="checkout__input-box">
                     <input
                       className="checkout_input-field checkout_input-mini"
                       type="text"
@@ -164,7 +204,7 @@ const Checkout = () => {
                       {...register('lastName')}
                       defaultValue={userInfo.lastName}
                     />
-                    {errors && errors.lastName && (
+                    {errors?.lastName && (
                       <p className="error-message">{errors.lastName.message}</p>
                     )}
                   </div>
@@ -181,7 +221,7 @@ const Checkout = () => {
                     {...register('email')}
                     defaultValue={userInfo.email}
                   />
-                  {errors && errors.email && (
+                  {errors?.email && (
                     <p className="error-message">{errors.email.message}</p>
                   )}
                 </div>
@@ -197,7 +237,7 @@ const Checkout = () => {
                     {...register('phone')}
                     defaultValue={userInfo.phone}
                   />
-                  {errors && errors.phone && (
+                  {errors?.phone && (
                     <p className="error-message">{errors.phone.message}</p>
                   )}
                 </div>
@@ -239,53 +279,19 @@ const Checkout = () => {
                   fill="#FDFDFD"
                 />
               </svg>
-              <h4 className="checkout__topright--title">
-                Delivery information
-              </h4>
+              <h4 className="checkout__topright--title">Payment</h4>
             </div>
             <div className="checkout__middle--bottom">
+              <div className="select__box">
               <Select
                 className="checkout_input-field custom-select"
-                name="city"
-                id="city"
-                options={cities.map((city) => ({
-                  value: city.id,
-                  label: city.city,
-                }))}
-                isSearchable={true}
-                onChange={handleCityChange}
-                value={selectedCity}
+                name="payment_method"
+                id="payment_method"
+                options={[defaultCardOption]}
+                defaultValue={defaultCardOption}
               />
-              <Select
-                className="checkout_input-field custom-select"
-                name="delivery_type"
-                id="delivery_type"
-                options={[defaultOption]}
-                defaultValue={defaultOption}
-              />
-              <Select
-                className="checkout_input-field custom-select"
-                name="addresses"
-                id="addresses"
-                type="text"
-                placeholder="Choose the address"
-                options={addresses.map((address) => ({
-                  value: address.id,
-                  label: address.sectionAddress,
-                }))}
-                isSearchable={true}
-                value={selectedAddress} // Привязать выбранный адрес
-                onChange={(selectedOption) =>
-                  setSelectedAddress(selectedOption)
-                }
-              />
-              <textarea
-                className="delivery_comment"
-                name="delivery_comment"
-                id="delivery_comment"
-                cols="30"
-                rows="10"
-              ></textarea>
+              </div>
+              {card ? <AddedWallet card={card} /> : <WalletForm />}
             </div>
           </div>
           <div className="checkout__bottom-inner">
@@ -306,67 +312,123 @@ const Checkout = () => {
                   fill="#FDFDFD"
                 />
               </svg>
-              <h4 className="checkout__topright--title">Payment</h4>
+              <h4 className="checkout__topright--title">
+                Delivery information
+              </h4>
             </div>
-            <div className="checkout__bottom--bottom">
-              <select
-                className="checkout_input-field"
-                name="payment_method"
-                id="payment_method"
-              >
-                <option value="online_payment">Online Payment</option>
-              </select>
-              <div>
-                <div className="checkout__bottom-bank_cards">
-                  {card ? <AddedWallet card={card} /> : <WalletForm />}
-                </div>
+            <form
+              onSubmit={handleSubmitOrder}
+              className="checkout__bottom--bottom"
+            >
+              <div className="select__box">
+              <Select
+                className="checkout_input-field custom-select"
+                name="city"
+                id="city"
+                options={cities.map((city) => ({
+                  value: city.id,
+                  label: city.city,
+                }))}
+                isSearchable={true}
+                onChange={handleCityChange}
+                value={selectedCity}
+              />
+              </div>
+              <div className="select__box">
+              <Select
+                className="checkout_input-field custom-select"
+                name="delivery_type"
+                id="delivery_type"
+                options={[defaultOption]}
+                defaultValue={defaultOption}
+              />
+              </div>
+              <div className="select__box">
+              <Select
+                className="checkout_input-field custom-select"
+                name="addresses"
+                id="addresses"
+                type="text"
+                placeholder="Choose the address"
+                options={addresses.map((address) => ({
+                  value: address.id,
+                  label: address.sectionAddress,
+                }))}
+                isSearchable={true}
+                value={selectedAddress} // Привязать выбранный адрес
+                onChange={(selectedOption) => {
+                  setSelectedAddress(selectedOption);
+                  setSelectedAddressId(selectedOption.value); // Сохранить выбранный id адреса
+                }}
+              />
+              {selectedAddressError && (
+                <p className="error-message">Please select an address</p>
+              )}
+              </div>
+              <textarea
+                className="delivery_comment"
+                name="delivery_comment"
+                id="delivery_comment"
+                cols="30"
+                rows="10"
+              ></textarea>
+              <button type="submit" className="checkout__form-button">
+                CONFIRM THE ORDER
+              </button>
+            </form>
+          </div>
+        </div>
+        <section className="myorder__section">
+          <aside className="myorder__info">
+            <h1 className="myorder__title">Your order</h1>
+            <div className="myorder__titles">
+              <div className="myorder__titles-left">
+                <span className="myorder__titles-title">Title</span>
+              </div>
+              <div className="myorder__titles-right">
+                <span className="myorder__price-title myorder-title">
+                  Price
+                </span>
+                <span className="myorder__quantity-title myorder-title">
+                  QTY
+                </span>
+                <span className="myorder__subtotal-title myorder-title">
+                  Subtotal
+                </span>
               </div>
             </div>
-          </div>
-        </section>
-        <section className="myorder__section">
-          <h1 className="myorder__title">Your order</h1>
-          <div className="myorder__titles">
-            <div className="myorder__titles-left">
-              <span className="myorder__titles-title">Title</span>
+            <ul className="myorder__list">
+              {items.map((obj, id) => {
+                return (
+                  <MyOrdersSmall
+                    key={id}
+                    subTotalPrice={obj.subTotalPrice}
+                    itemId={obj.id}
+                    price={obj.product.price}
+                    name={obj.product.name}
+                    subcategory={obj.product.subcategory.name}
+                    cartImage={obj.product.productImages[0]?.url}
+                    quantity={obj.quantity}
+                  />
+                );
+              })}
+            </ul>
+            <div className="myorder__summary">
+              <div className="myorder__summary-top">
+                <span className="myorder__summary-title">Summary:</span>
+                <span className="myorder__summary-price">
+                  {itemsTotal.totalPrice
+                    ? itemsTotal.totalPrice.toFixed(2)
+                    : ''}
+                  $
+                </span>
+              </div>
+              <div className="myorder__summary-bottom">
+                <span className="delivery__title">Delivery:</span>
+                <span className="delivery__price">10.00$</span>
+              </div>
             </div>
-            <div className="myorder__titles-right">
-              <span className="myorder__price-title myorder-title">Price</span>
-              <span className="myorder__quantity-title myorder-title">QTY</span>
-              <span className="myorder__subtotal-title myorder-title">
-                Subtotal
-              </span>
-            </div>
-          </div>
-          <ul className="myorder__list">
-            {items.map((obj, id) => {
-              return (
-                <MyOrdersSmall
-                  key={id}
-                  subTotalPrice={obj.subTotalPrice}
-                  itemId={obj.id}
-                  price={obj.product.price}
-                  name={obj.product.name}
-                  subcategory={obj.product.subcategory.name}
-                  cartImage={obj.product.productImages[0]?.url}
-                  quantity={obj.quantity}
-                />
-              );
-            })}
-          </ul>
-          <div className="myorder__summary">
-            <div className="myorder__summary-top">
-              <span className="myorder__summary-title">Summary:</span>
-              <span className="myorder__summary-price">
-                {itemsTotal.totalPrice ? itemsTotal.totalPrice.toFixed(2) : ''}$
-              </span>
-            </div>
-            <div className="myorder__summary-bottom">
-              <span className="delivery__title">Delivery:</span>
-              <span className="delivery__price">10.00$</span>
-            </div>
-          </div>
-          <button className="myorder__confirmation">CONFIRM THE ORDER</button>
+          </aside>
         </section>
       </div>
     </div>

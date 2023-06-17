@@ -6,6 +6,15 @@
     font-weight: 400;
     font-size: 20px;
     line-height: 24px;
+    width: 100;
+}
+
+.orders__list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 1278px;
 }
 
 .orders__settings h4 {

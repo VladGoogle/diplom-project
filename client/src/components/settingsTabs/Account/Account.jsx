@@ -45,7 +45,7 @@ const Account = () => {
                     Account
                 </h1>
                 <ul className="account__tabs">
-                    <li className="account__tab">
+                <li className={`account__tab ${isOpen[0] ? 'open' : ''}`}>
                         <div className="account__tab-top" onClick={() => togglePanel(0)}>
                             <h2 className="account__tab-title">
                                 Personal info

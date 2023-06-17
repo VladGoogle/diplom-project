@@ -23,6 +23,7 @@ const Orders = () => {
     };
     fetchData();
   }, []);
+ 
 
   return (
     <div>
@@ -81,16 +82,22 @@ const Orders = () => {
           </form>
         </div>
         <ul className="orders__list">
-        {ordersTotal.map((ordersTotal, id) => {
+        {ordersTotal.map((order, id) => {
+          const selfCheckoutAddress = order.selfCheckoutAddress;
+          const address = selfCheckoutAddress && selfCheckoutAddress.sectionAddress;
+          const city = selfCheckoutAddress && selfCheckoutAddress.selfCheckout && selfCheckoutAddress.selfCheckout.city;
               return (
                 <Order
                   key={id}
-                  total={ordersTotal.amount}
-                  firstName={ordersTotal.user.firstName}
-                  lastName={ordersTotal.user.lastName}
-                  email={ordersTotal.user.email}
-                  subTotalPrice={ordersTotal.orderItems.subTotalPrice}
-                  quantity={ordersTotal.orderItems.quantity}
+                  orderId={order.orderItems[0].orderId}
+                  date={order.createdAt}
+                  total={order.amount}
+                  subTotalPrice={order.orderItems[0].subTotalPrice}
+                  quantity={order.orderItems.quantity}
+                  phone={order.user.phone}
+                  city={city}
+                  address={address}
+                  product={order.orderItems}
                 />
               );
             })}
