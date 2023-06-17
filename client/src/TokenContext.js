@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useStateб } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import mitt from 'mitt';
 import Unathorized from './components/unathorized/Unathorized';
 import jwt_decode from 'jwt-decode';
@@ -16,6 +16,7 @@ const TokenProvider = ({ children }) => {
       console.error('Failed to parse token:', error);
       return '';
     }
+    
   });
 
   const [showPopup, setShowPopup] = useState(false);
