@@ -122,6 +122,11 @@
   cursor: pointer;
 }
 
+.product__button:hover {
+  transition: all .2s ease-in-out;
+  background-color: #FAFF00;
+}
+
 .products__card-image {
   display: flex;
   align-self: center;

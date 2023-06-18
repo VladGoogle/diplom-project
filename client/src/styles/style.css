@@ -308,6 +308,16 @@ input::placeholder {
   width: 100%;
 }
 
+.goods__buttons-add:hover {
+  transition: .2s ease-in-out;
+  background-color: #FAFF00;
+}
+
+.goods__buttons-buy:hover {
+  transition: .2s ease-in-out;
+  background-color: #fdeb46;
+}
+
 .goods__buttons-buy {
   font-style: normal;
   font-weight: 700;
@@ -403,7 +413,7 @@ input::placeholder {
   display: flex;
   flex-direction: column;
   padding: 40px;
-  border-radius: 30px;
+  border-radius: 5px;
   max-width: 100%;
   background-color: #f9f9f9;
   margin-top: 60px;
@@ -542,7 +552,7 @@ input::placeholder {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 27px 47px;
+  padding: 29px 47px;
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -567,6 +577,17 @@ input::placeholder {
   background-color: transparent;
   border: 2px solid #FDEB46;
 }
+
+.cart__button-buy:hover {
+  transition: .2s ease-in-out;
+  background-color: #FAFF00;
+}
+
+.cart__button-continue:hover {
+  transition: .2s ease-in-out;
+  background-color: #FDEB46;
+}
+
 
 .cart__empty-title {
   text-align: center;

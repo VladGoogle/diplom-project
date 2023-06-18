@@ -382,6 +382,12 @@ select.checkout_input-field {
     margin-top: 40px;
     cursor: pointer;
   }
+
+  .checkout_input-button:hover,
+  .checkout__form-button:hover {
+    transition: .2s ease-in-out;
+    background-color: #FAFF00;
+  }
   
   .select__box {
     margin-bottom: 20px;

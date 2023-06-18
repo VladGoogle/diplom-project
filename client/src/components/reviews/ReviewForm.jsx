@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "react-router-dom";
+import ReviewPopup from "./ReviewPopup";
 
 const schema = yup.object().shape({
   rate: yup.string().required(),
@@ -16,6 +17,8 @@ const ReviewForm = (props) => {
   const [selectedStars, setSelectedStars] = useState(1);
   const instance = AxiosInstance();
   const [rate, setRate] = useState("ONE");
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(true);
 
   const handleStarHover = (starIndex) => {
     setSelectedStars(starIndex);
@@ -36,13 +39,22 @@ const ReviewForm = (props) => {
     data.rate = ["ONE", "TWO", "THREE", "FOUR", "FIVE"][selectedStars - 1];
     try {
       const response = await instance.post(`/product/${id}/comments`, data);
+      setShowReviewPopup(true);
+      setShowReviewForm(false);
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const closeReviewPopup = () => {
+    setShowReviewPopup(false);
+  };
+
 
   return (
+    <>
+    {showReviewForm && (
     <div className="review__bg">
       <div className="review__form">
         <div className="review__form-top">
@@ -116,7 +128,11 @@ const ReviewForm = (props) => {
           </button>
         </form>
       </div>
+      
     </div>
+    )}
+    {showReviewPopup && <ReviewPopup onClose={closeReviewPopup} />}
+     </>
   );
 };
 

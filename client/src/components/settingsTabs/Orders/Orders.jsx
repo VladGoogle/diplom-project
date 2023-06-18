@@ -82,19 +82,23 @@ const Orders = () => {
           </form>
         </div>
         <ul className="orders__list">
-        {ordersTotal.map((order, id) => {
+        {ordersTotal.slice().reverse().map((order, id) => {
           const selfCheckoutAddress = order.selfCheckoutAddress;
           const address = selfCheckoutAddress && selfCheckoutAddress.sectionAddress;
           const city = selfCheckoutAddress && selfCheckoutAddress.selfCheckout && selfCheckoutAddress.selfCheckout.city;
               return (
                 <Order
                   key={id}
+                  id={order.id}
                   orderId={order.orderItems[0].orderId}
                   date={order.createdAt}
                   total={order.amount}
-                  subTotalPrice={order.orderItems[0].subTotalPrice}
+                  subTotalPrice={order.orderItems.subTotalPrice}
                   quantity={order.orderItems.quantity}
-                  phone={order.user.phone}
+                  phone={order.user?.phone}
+                  name={order.user.firstName}
+                  surname={order.user.lastName}
+                  email={order.user.email}
                   city={city}
                   address={address}
                   product={order.orderItems}

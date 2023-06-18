@@ -1,5 +1,4 @@
 import ProductsSlider from '../components/swiper/Slider';
-import Recommended from '../components/recommendations/Recommended';
 import { useState, useEffect, useContext } from 'react';
 import AxiosInstance from '../utils/axios/instance';
 import { useParams } from "react-router-dom";
@@ -31,12 +30,26 @@ const Product = () => {
           setProductInfo(response.data);
           setProductImages(response.data.productImages);
         }
+  
+        // Сохраняем данные в localStorage
+        localStorage.setItem(`productInfo_${id}`, JSON.stringify(response.data.product));
+        localStorage.setItem(`productImages_${id}`, JSON.stringify(response.data.product.productImages));
       } catch (error) {
         console.log(error);
       }
     };
-    fetchData();
-  }, [id]);
+  
+    // При загрузке компонента проверяем наличие сохраненных данных в localStorage
+    const storedProductInfo = localStorage.getItem(`productInfo_${id}`);
+    const storedProductImages = localStorage.getItem(`productImages_${id}`);
+    
+    if (storedProductInfo && storedProductImages) {
+      setProductInfo(JSON.parse(storedProductInfo));
+      setProductImages(JSON.parse(storedProductImages));
+    } else {
+      fetchData();
+    }
+  }, [id, loggedIn]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -188,7 +201,7 @@ const Product = () => {
             <div className="goods__right">
               <div className="goods__name">
                 <div className="goods__name-top">
-                  <div className="goods__company">APPLE</div>
+                  <div className="goods__company">{productInfo.subcategory && productInfo.subcategory.name}</div>
                   <div className="goods__id">
                     Article №: <b>{productInfo.id}</b>
                   </div>
@@ -367,7 +380,6 @@ const Product = () => {
           </div>
         </div>
       </section>
-      <Recommended />
     </>
   );
 };

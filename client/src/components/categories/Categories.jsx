@@ -13,7 +13,9 @@ function Categories({ name, categoryIcon, categoryId }) {
           />
         </Link>
       </div>
-      <h4 className="categories__title">{name}</h4>
+      <Link to={`/catalog?category=${categoryId}`}>
+        <h4 className="categories__title">{name}</h4>
+      </Link>
     </li>
   );
 }
