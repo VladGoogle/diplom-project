@@ -92,6 +92,11 @@
     cursor: pointer;
 }
 
+.wallet__button-submit:hover {
+    transition: .2s ease-in-out;
+    background-color: #FAFF00;
+}
+
 .wallet__inner {
     margin: 0 5px 0 5px;
     font-style: normal;

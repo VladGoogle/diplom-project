@@ -1,5 +1,6 @@
 import CatalogPopup from '../catalogPopup/CatalogPopup';
 import Navbar from '../navbar/Navbar';
+import NavbarTop from '../navbar/NavbarTop';
 import Login from '../signup/Login';
 import Registration from '../signup/Signup';
 import React from 'react';
@@ -24,15 +25,15 @@ const Header = () => {
             }}
           />
         )}
+        <NavbarTop />
         <Navbar
-          catalogOpened={catalogOpened}
           onClickCatalog={toggleCatalog}
           onClickSignup={() => {
             setRegistrationOpened(!registrationOpened);
             setLoginOpened(false);
           }}
         />
-      {catalogOpened && (
+        {catalogOpened && (
         <CatalogPopup 
           onCloseCatalog={toggleCatalog}
         />

@@ -1,20 +1,21 @@
 import './style.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import status from '../../img/status__image.png';
 import AxiosInstance from '../../utils/axios/instance';
 
 const Order = ({
   orderId,
   total,
-  quantity,
-  subTotalPrice,
+  email,
+  surname,
+  name,
+  phone,
   city,
   address,
   date,
   product,
 }) => {
   const [showContent, setShowContent] = useState(false);
-  const [user, setUser] = useState([]);
   const instance = AxiosInstance();
 
   const toggleContent = () => {
@@ -29,18 +30,6 @@ const Order = ({
     day: 'numeric',
     year: 'numeric',
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await instance.get('/user/getByToken');
-        setUser(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleRefund = async () => {
     try {
@@ -121,7 +110,7 @@ const Order = ({
             <div className="delivery__info-personal">
               <div className="delivery__info-receiver">
                 <p className="delivery__info-reveiver--name">
-                  {user.firstName + ' ' + user.lastName}
+                  {name + ' ' + surname}
                 </p>
                 <svg
                   width="24"
@@ -140,9 +129,9 @@ const Order = ({
                 </svg>
               </div>
               <p className="delivery__info-receiver-tel">
-                {user.phone && user.phone}
+                {phone && phone}
               </p>
-              <p className="delivery__info-receiver-email">{user.email}</p>
+              <p className="delivery__info-receiver-email">{email}</p>
             </div>
             <div className="delivery__info-links">
               <button className="delivery__info-receipt">
@@ -180,8 +169,8 @@ const Order = ({
           <div className="orders__content-right">
             <ul className="orders__products">
               <h4 className="orders__products-title">Product</h4>
-              {product.map((item) => (
-                <li key={orderId} className="orders__product">
+              {product.map((item, id) => (
+                <li key={id} className="orders__product">
                   <div className="order__product-image_container">
                   <img
                     src={item.product.productImages[0]?.url}
@@ -207,7 +196,7 @@ const Order = ({
                   <div className="orders__product-total">
                     <h4 className="orders__product-total--title">Total</h4>
                     <span className="orders__product-total--text">
-                      {subTotalPrice}$
+                      {item.subTotalPrice}$
                     </span>
                   </div>
                 </li>

@@ -3,19 +3,19 @@ import Counter from "../counter/Counter";
 import React from 'react';
 import AxiosInstance from "../../utils/axios/instance";
 
-function CartItem({ cartImage, subcategory, price, name, itemId, quantity, onRemoveItem, onQuantityChange}) {
+function CartItem({ cartImage, subcategory, price, name, itemId, quantity, onRemoveItem, onQuantityChange, cartId}) {
 
     const [subTotalPrice, setSubTotalPrice] = React.useState(price * quantity);
     const instance = AxiosInstance();
     const handleRemove = () => {
-        onRemoveItem(itemId);
+        onRemoveItem(itemId, cartId);
       };
       
       const handleUpdateQuantity = async (newQuantity) => {
         onQuantityChange(itemId, newQuantity);
         // Отправьте запрос на обновление количества через эндпоинт /cart/updateItem
         const updateItemData = {
-          cartId: 1,
+          cartId: cartId,
           cartItemId: itemId,
           quantity: newQuantity,
         };

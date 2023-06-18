@@ -10,6 +10,14 @@
   padding-bottom: 30px;
 }
 
+.footer__top-middleright {
+  text-align: center;
+}
+
+.footer__top-right {
+  text-align: right;
+}
+
 .footer__phone-number {
   font-family: 'Montserrat';
   font-style: normal;

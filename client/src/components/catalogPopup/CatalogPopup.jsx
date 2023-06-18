@@ -1,9 +1,9 @@
-import "./style.css";
-import categories_arrow from "./../../img/categories_icon.svg";
-import AxiosInstance from "../../utils/axios/instance";
-import { useState, useEffect } from "react";
-import advertisment from "./../../img/advertisment.png";
-import { useNavigate } from "react-router-dom";
+import './style.css';
+import categories_arrow from './../../img/categories_icon.svg';
+import AxiosInstance from '../../utils/axios/instance';
+import { useState, useEffect } from 'react';
+import advertisment from './../../img/advertisment.png';
+import { useNavigate } from 'react-router-dom';
 
 const CatalogPopup = (props) => {
   const instance = AxiosInstance();
@@ -14,7 +14,7 @@ const CatalogPopup = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await instance.get("/categories");
+        const response = await instance.get('/categories');
         setCategories(response.data);
       } catch (error) {
         console.log(error);
@@ -28,7 +28,9 @@ const CatalogPopup = (props) => {
   };
 
   const handleSubcategoryClick = (subcategory) => {
-    navigate(`/catalog?category=${selectedCategory?.id}&subcategory=${subcategory.id}`);
+    navigate(
+      `/catalog?category=${selectedCategory?.id}&subcategory=${subcategory.id}`,
+    );
   };
 
   const firstSubcategories = selectedCategory?.subcategories.slice(0, 11);
@@ -42,11 +44,23 @@ const CatalogPopup = (props) => {
           <div className="catalog__categories">
             <ul className="catalog__categories-list">
               {categories.map((category) => (
-                <li className="catalog__categories-item" key={category.id} onClick={() => handleCategoryClick(category)}>
-                  <img src={category.categoryImage?.url} alt="" className="category__icon" />
+                <li
+                  className="catalog__categories-item"
+                  key={category.id}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  <img
+                    src={category.categoryImage?.url}
+                    alt=""
+                    className="category__icon"
+                  />
                   <div className="catalog__categories-item--right">
                     <span className="categorie__name">{category.name}</span>
-                    <img src={categories_arrow} alt="" className="categories__icon-arrow" />
+                    <img
+                      src={categories_arrow}
+                      alt=""
+                      className="categories__icon-arrow"
+                    />
                   </div>
                 </li>
               ))}
@@ -58,16 +72,17 @@ const CatalogPopup = (props) => {
                 firstSubcategories.map((subcategory, index) => (
                   <li
                     className={`catalog__subcategories-item ${
-                      index % 5 === 0 ? "every-fifth" : ""
+                      index % 5 === 0 ? 'every-fifth' : ''
                     }`}
                     key={subcategory.id}
                     onClick={() => {
                       handleSubcategoryClick(subcategory);
                       props.onCloseCatalog();
                     }}
-                    subcategoryId={subcategory.id}
                   >
-                    <span className="subcategorie__name">{subcategory.name}</span>
+                    <span className="subcategorie__name">
+                      {subcategory.name}
+                    </span>
                   </li>
                 ))}
             </ul>
@@ -76,16 +91,17 @@ const CatalogPopup = (props) => {
                 {secondSubcategories.map((subcategory, index) => (
                   <li
                     className={`catalog__subcategories-item ${
-                      index % 5 === 0 ? "every-fifth" : ""
+                      index % 5 === 0 ? 'every-fifth' : ''
                     }`}
                     key={subcategory.id}
                     onClick={() => {
                       handleSubcategoryClick(subcategory);
                       props.onCloseCatalog();
                     }}
-                    subcategoryId={subcategory.id}
                   >
-                    <span className="subcategorie__name">{subcategory.name}</span>
+                    <span className="subcategorie__name">
+                      {subcategory.name}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -95,22 +111,27 @@ const CatalogPopup = (props) => {
                 {thirdSubcategories.map((subcategory, index) => (
                   <li
                     className={`catalog__subcategories-item ${
-                      index % 5 === 0 ? "every-fifth" : ""
+                      index % 5 === 0 ? 'every-fifth' : ''
                     }`}
                     key={subcategory.id}
                     onClick={() => {
                       handleSubcategoryClick(subcategory);
                       props.onCloseCatalog();
                     }}
-                    subcategoryId={subcategory.id}
                   >
-                    <span className="subcategorie__name">{subcategory.name}</span>
+                    <span className="subcategorie__name">
+                      {subcategory.name}
+                    </span>
                   </li>
                 ))}
               </ul>
             )}
           </div>
-          <img src={advertisment} alt="discount advertisment" className="catalog__image" />
+          <img
+            src={advertisment}
+            alt="discount advertisment"
+            className="catalog__image"
+          />
         </div>
       </div>
     </div>

@@ -16,7 +16,6 @@ const TokenProvider = ({ children }) => {
       console.error('Failed to parse token:', error);
       return '';
     }
-    
   });
 
   const [showPopup, setShowPopup] = useState(false);
@@ -80,7 +79,6 @@ const TokenProvider = ({ children }) => {
     }
     return true;
   }
-  
 
   useEffect(() => {
     console.log('Checking token expiration...');

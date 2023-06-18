@@ -9,6 +9,7 @@ import Select from 'react-select';
 import AddedWallet from '../settingsTabs/Wallet/AddedWallet';
 import WalletForm from '../settingsTabs/Wallet/WalletForm';
 import { useNavigate } from 'react-router-dom';
+import OrderPopup from '../order/OrderPopup';
 
 const schema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
@@ -52,6 +53,7 @@ const Checkout = () => {
   const [cartId, setCartId] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [selectedAddressError, setSelectedAddressError] = useState(false);
+  const [showOrderPopup, setShowOrderPopup] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,19 +115,19 @@ const Checkout = () => {
     }
     setSelectedAddressError(false);
     try {
+
       const response = await instance.post(`cart/${cartId}/confirm`); 
       const orderId = response.data.orderItems[0]?.orderId;
       await instance.patch(`order/${orderId}`, {
         sectionId: selectedAddressId,
       });
       await instance.post(`order/${orderId}/checkout`);
-
-      navigate("/settings/orders");
+      setShowOrderPopup(true);
       console.log('Order placed successfully');
     } catch (error) {
       console.error(error);
-      navigate("/settings/orders");
     }
+
   };
 
   useEffect(() => {
@@ -143,6 +145,11 @@ const Checkout = () => {
     setAddresses(selectedCityData ? selectedCityData.selfCheckoutSections : []);
     setSelectedAddress(null);
     setSelectedAddressId(null); // Сбросить выбранный id адреса
+  };
+
+  const closeOrderPopup = () => {
+    setShowOrderPopup(false);
+    navigate("/settings/orders");
   };
 
   return (
@@ -431,6 +438,7 @@ const Checkout = () => {
           </aside>
         </section>
       </div>
+      {showOrderPopup && <OrderPopup onCloseOrderPopup={closeOrderPopup}/>}
     </div>
   );
 };

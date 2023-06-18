@@ -87,6 +87,11 @@
     cursor: pointer;
 }
 
+.account__submit-button:hover {
+    transition: .2s ease-in-out;
+    background-color: #FAFF00;
+  }
+
 .account__tab-top {
     cursor: pointer;
 }
