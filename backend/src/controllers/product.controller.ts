@@ -69,7 +69,7 @@ export class ProductController extends ProductService {
     @Query('skip') skip = '0',
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
-    @Query('maxPrice') maxPrice = '9999',
+    @Query('maxPrice') maxPrice = '9999999',
     @Headers() headers: any,
   ) {
     return await super.findAllProductsBySearchQuery(
@@ -104,7 +104,7 @@ export class ProductController extends ProductService {
     @Query('skip') skip = '0',
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
-    @Query('maxPrice') maxPrice = '9999',
+    @Query('maxPrice') maxPrice = '9999999',
     @Headers() headers: any,
   ) {
     return await super.findAllProductsByCategoryId(
@@ -127,7 +127,7 @@ export class ProductController extends ProductService {
     @Query('skip') skip = '0',
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
-    @Query('maxPrice') maxPrice = '9999',
+    @Query('maxPrice') maxPrice = '9999999',
     @Headers() headers: any,
   ) {
     return await super.findAllProductsBySubcategoryId(
@@ -173,7 +173,7 @@ export class ProductController extends ProductService {
     @Query('skip') skip = '0',
     @Query('take') take = '10',
     @Query('minPrice') minPrice = '0',
-    @Query('maxPrice') maxPrice = '9999',
+    @Query('maxPrice') maxPrice = '9999999',
     @Headers() headers: any,
   ) {
     return await super.getSortedProducts(
