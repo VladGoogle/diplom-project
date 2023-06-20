@@ -10,6 +10,7 @@ import AddedWallet from '../settingsTabs/Wallet/AddedWallet';
 import WalletForm from '../settingsTabs/Wallet/WalletForm';
 import { useNavigate } from 'react-router-dom';
 import OrderPopup from '../order/OrderPopup';
+import EmptyCart from '../cart/EmptyCart';
 
 const schema = yup.object().shape({
   firstName: yup.string().required('First name is required'),
@@ -54,6 +55,9 @@ const Checkout = () => {
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [selectedAddressError, setSelectedAddressError] = useState(false);
   const [showOrderPopup, setShowOrderPopup] = useState(false);
+  const [orderCreated, setOrderCreated] = useState(false);
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,20 +119,30 @@ const Checkout = () => {
     }
     setSelectedAddressError(false);
     try {
-
-      const response = await instance.post(`cart/${cartId}/confirm`); 
+      const response = await instance.post(`cart/${cartId}/confirm`);
       const orderId = response.data.orderItems[0]?.orderId;
       await instance.patch(`order/${orderId}`, {
         sectionId: selectedAddressId,
       });
       await instance.post(`order/${orderId}/checkout`);
       setShowOrderPopup(true);
+      setOrderCreated(true); // Установить значение orderCreated в true
+      localStorage.setItem('orderCreated', 'true'); // Сохранить информацию в localStorage
       console.log('Order placed successfully');
     } catch (error) {
       console.error(error);
     }
-
   };
+
+  useEffect(() => {
+    const orderCreatedLocalStorage = localStorage.getItem('orderCreated');
+    if (orderCreatedLocalStorage === 'true' && !orderCreated) {
+      setOrderCreated(true);
+      localStorage.removeItem('orderCreated'); // Очистить информацию из localStorage
+      navigate('/settings/orders'); // Перенаправить пользователя на главную страницу
+    }
+  }, [orderCreated, navigate]);
+
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -154,6 +168,7 @@ const Checkout = () => {
 
   return (
     <div className="container">
+          {items.length > 0 ? (
       <div className="checkout__page-inner">
         <div className="checkout__section">
           <h1 className="checkout__title">Checkout</h1>
@@ -438,7 +453,12 @@ const Checkout = () => {
           </aside>
         </section>
       </div>
+      ) : (
+        <EmptyCart /> // Отобразить EmptyCart, если корзина пуста
+      )}
       {showOrderPopup && <OrderPopup onCloseOrderPopup={closeOrderPopup}/>}
+
+                
     </div>
   );
 };
