@@ -95,7 +95,13 @@ function Card({ name, img, category, price, onAddToCart, onAddToWishlist, discou
           <span className="product__title">{name}</span>
           <div className="product__prices">
           {discountPrice && <span className="product__price-old">{price.toFixed(2)}$</span>}
+          {discountPrice ? 
+          (
           <span className="product__price">{(discountPrice || price).toFixed(2)}$</span>
+          ) : (
+          <span className="product__price-nodiscount">{price.toFixed(2)}$</span>
+          )
+}
           </div>
           {!isAddedToCart ?
             (

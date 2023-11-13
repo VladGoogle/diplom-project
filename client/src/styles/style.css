@@ -245,7 +245,12 @@ input::placeholder {
   color: #1C7FF3;
 }
 
-.goods__price-new--text.red {
+.goods__price-new--text_red {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 39px;
   color: rgba(228, 40, 40, 0.7);
 }
 

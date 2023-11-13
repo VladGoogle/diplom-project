@@ -67,3 +67,27 @@
   pointer-events: none;
   touch-action: pan-y;
 }
+
+@media (max-width: 1350px) {
+  .carousel-title {
+    font-size: 40px;
+    line-height: 64px;
+    margin-top: 60px;
+  }
+}
+
+@media (max-width: 950px) {
+  .carousel-title {
+    font-size: 26px;
+    line-height: 42px;
+    margin-top: 60px;
+  }
+}
+
+@media (max-width: 750px) {
+  .carousel-title {
+    font-size: 16px;
+    line-height: 28px;
+    margin-top: 50px;
+  }
+}

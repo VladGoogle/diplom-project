@@ -56,6 +56,7 @@ const Catalog = () => {
   const [selectedSubcategories, setSelectedSubcategories] = useState(
     initialSelectedSubcategory ? [initialSelectedSubcategory] : [],
   );
+  
 
   const selectedCategoryName = categories.find(
     (category) => category.id === selectedCategory,
@@ -92,6 +93,7 @@ const Catalog = () => {
         console.log(error);
       }
     };
+    
 
     fetchData();
   }, [
@@ -130,6 +132,10 @@ const Catalog = () => {
     if (selectedCategory !== null) {
       navigate(`/catalog?category=${selectedCategory}`);
     }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    setSelectedSubcategories([]);
   }, [selectedCategory]);
 
   const handleAddToCart = async (item) => {
@@ -173,7 +179,7 @@ const Catalog = () => {
         <h1 className="catalog__title">
           {selectedSubcategoryName ? (
             <>
-              {selectedCategoryName} - {selectedSubcategoryName}
+              {selectedCategoryName}
             </>
           ) : (
             selectedCategoryName

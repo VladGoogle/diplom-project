@@ -32,8 +32,7 @@ const Product = () => {
         }
   
         // Сохраняем данные в localStorage
-        localStorage.setItem(`productInfo_${id}`, JSON.stringify(response.data.product));
-        localStorage.setItem(`productImages_${id}`, JSON.stringify(response.data.product.productImages));
+
       } catch (error) {
         console.log(error);
       }
@@ -241,7 +240,7 @@ const Product = () => {
                   }
                   {productInfo.discountPrice ?
                     (
-                      <span className="goods__price-new--text.red">{(productInfo.discountPrice ? productInfo.discountPrice.toFixed(2) : productInfo.price)}$</span>
+                      <span className="goods__price-new--text_red">{(productInfo.discountPrice ? productInfo.discountPrice.toFixed(2) : productInfo.price)}$</span>
                     ) : (
                       <span className="goods__price-new--text">{(productInfo.discountPrice ? productInfo.discountPrice.toFixed(2) : productInfo.price)}$</span>
                     )}

@@ -60,10 +60,9 @@
   line-height: 24px;
   color: #050630;
   border: 1px solid #d9d9d9;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 5px;
   padding: 18px 0 18px 20px;
   width: 100%;
-  
 }
 
 .input__field-sign_up--small {
@@ -109,6 +108,7 @@
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  width: 100%;
 }
 
 .google__login-button,
@@ -251,6 +251,7 @@
 
 .input__field-sign_up--password {
   border-right: none;
+  border-radius: 5px 0 0 5px;
 }
 
 .invalid {
@@ -259,4 +260,18 @@
 
 .valid {
   border-color: #57DC19;
+}
+
+@media (max-width: 1024px) {
+  .popup-signup {
+    width: 100%;
+    height: 100%;
+  }
+  .sign__up-name {
+    flex-direction: column;
+    width: 100%;
+  }
+  .input__field-sign_up--small {
+    width: 100%;
+  }
 }
